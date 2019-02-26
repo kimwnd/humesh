@@ -1,3 +1,5 @@
+#-*- coding: utf-8 -*-
+
 """
 Django settings for humesh project.
 
@@ -11,13 +13,19 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+env = environ.Env(DEBUG=(bool, False),)
+environ.Env.read_env() # reading .env file
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
+# 한글 사용
+
+# print(env('DBNAME'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '3n3vwt711))lgh$d^buxo&$dh+llg2^6p)!p^7q=t&r&u8c0l!'
@@ -73,13 +81,23 @@ WSGI_APPLICATION = 'humesh.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
