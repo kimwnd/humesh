@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.http import HttpResponse
 # from .models import MeshDataModel
 
+import datetime
 import logging
 logger = logging.getLogger(__name__)
 
@@ -62,7 +63,16 @@ def mesh_notification(request):
         coreid = data['coreid']
         device_name = data['device_name']
 
-        # mesh = MeshDataModel(event=event,
+        year = int(created[:4])
+        mon = int(created[5:7])
+        day = int(created[8:10])
+        hour = int(created[11:13])
+        min = int(created[14:16])
+        sec = int(created[17:19])
+
+        published = datetime.datetime(year,mon,day,hour,min,sec)
+
+    # mesh = MeshDataModel(event=event,
         #                      data = value,
         #                      created = created,
         #                      coreid = coreid,
@@ -74,6 +84,7 @@ def mesh_notification(request):
         f.write('POST data is added\n\n')
         f.write(str(data))
         f.write('published_at : {}'.format(data['published_at']))
+        f.write('published : {}'.format(str(published)))
         f.close()
 
     except Exception as e:
