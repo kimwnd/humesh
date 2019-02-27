@@ -58,7 +58,7 @@ def mesh_notification(request):
         data = request.POST
         event = data['event']
         value = data['data']
-        created = data['created']
+        created = data['published_at']
         coreid = data['coreid']
         device_name = data['device_name']
 
