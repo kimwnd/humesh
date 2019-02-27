@@ -28,12 +28,16 @@ class ReceiveMeshDataView(View):
         return super(ReceiveMeshDataView, self).dispatch(request, *args, **kwargs)
 
     def get(selfself, request):
-        logger.debug("hello get")
-        logger.info("hello get")
-        f = open('demo.txt', 'a')
-        f.write('hello get\n')
-        return HttpResponse('Hello get')
+        logger.debug("POST Only")
+        logger.info("POST Only")
+        return HttpResponse('POST Only')
 
     def post(self, request):
 
-        return HttpResponse('Hello Post')
+        data = request.POST
+        f = open('demo.txt', 'a')
+        f.write('POST data is added\n\n')
+        f.write(data)
+        f.close()
+
+        return HttpResponse('SUCCESS')
