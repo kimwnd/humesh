@@ -30,10 +30,12 @@ class ReceiveMeshDataView(View):
     def get(selfself, request):
         logger.debug("POST Only")
         logger.info("POST Only")
+        f = open('demo.txt', 'a')
+        f.write('GET data is added\n\n')
+        f.close()
         return HttpResponse('POST Only')
 
     def post(self, request):
-
         data = request.POST
         f = open('demo.txt', 'a')
         f.write('POST data is added\n\n')
