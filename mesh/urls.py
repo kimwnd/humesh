@@ -8,4 +8,5 @@ from django.urls import path
 
 urlpatterns = [
     path('', views.HomePageView.as_view(), name='home'),
+    path('mesh/', views.ReceiveMeshDataView.as_view(), name='mesh'),
 ]
