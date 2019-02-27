@@ -4,7 +4,7 @@ from django.views.generic import TemplateView, View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
-# from .models import MeshDataModel
+from .models import MeshDataModel
 
 import datetime
 import logging
@@ -72,13 +72,13 @@ def mesh_notification(request):
 
         published = datetime.datetime(year,mon,day,hour,min,sec)
 
-    # mesh = MeshDataModel(event=event,
-        #                      data = value,
-        #                      created = created,
-        #                      coreid = coreid,
-        #                      device_name = device_name
-        #                      )
-        # mesh.save()
+        mesh = MeshDataModel(event=event,
+                             data = value,
+                             created = published,
+                             coreid = coreid,
+                             device_name = device_name
+                             )
+        mesh.save()
 
         f = open('demo1.txt', 'a')
         f.write('POST data is added\n\n')
