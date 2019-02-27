@@ -49,7 +49,10 @@ class ReceiveMeshDataView(View):
 def mesh_notification(request):
 
     if request.method != 'POST':
-        return HttpResponse('POST ONLY')
+        f = open('demo1.txt', 'a')
+        f.write('POST ONLY\n\n')
+        f.close()
+        return HttpResponse('c')
     try:
         data = request.POST
         f = open('demo1.txt', 'a')
@@ -62,4 +65,3 @@ def mesh_notification(request):
         f.write('POST Exception\n\n')
         f.close()
     return HttpResponse('SUCCESS')
-
