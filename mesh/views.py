@@ -57,6 +57,7 @@ def mesh_notification(request):
         data = request.POST
         f = open('demo1.txt', 'a')
         f.write('POST data is added\n\n')
+        f.write(str(data))
         f.write('data : {}'.format(data['data']))
         f.close()
 
