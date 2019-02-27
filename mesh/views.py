@@ -43,3 +43,27 @@ class ReceiveMeshDataView(View):
         f.close()
 
         return HttpResponse('SUCCESS')
+
+
+@csrf_exempt
+def mesh_notification(request):
+
+    if request.method != 'POST':
+        return HttpResponse('POST ONLY')
+    try:
+        data = request.POST
+        f = open('demo.txt', 'a')
+        f.write('POST data is added\n\n')
+        f.write(data)
+        f.close()
+
+    except Exception as e:
+        f = open('demo.txt', 'a')
+        f.write('POST Exception\n\n')
+        f.close()
+    return HttpResponse('SUCCESS')
+
+
+
+
+    data = request.POST
