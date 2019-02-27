@@ -4,6 +4,7 @@ from django.views.generic import TemplateView, View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
+# from .models import MeshDataModel
 
 import logging
 logger = logging.getLogger(__name__)
@@ -55,10 +56,24 @@ def mesh_notification(request):
         return HttpResponse('c')
     try:
         data = request.POST
+        event = data['event']
+        value = data['data']
+        created = data['created']
+        coreid = data['coreid']
+        device_name = data['device_name']
+
+        # mesh = MeshDataModel(event=event,
+        #                      data = value,
+        #                      created = created,
+        #                      coreid = coreid,
+        #                      device_name = device_name
+        #                      )
+        # mesh.save()
+
         f = open('demo1.txt', 'a')
         f.write('POST data is added\n\n')
         f.write(str(data))
-        f.write('data : {}'.format(data['data']))
+        f.write('published_at : {}'.format(data['published_at']))
         f.close()
 
     except Exception as e:
@@ -67,4 +82,9 @@ def mesh_notification(request):
         f.close()
     return HttpResponse('SUCCESS')
 
-# {'event': ['temp'], 'data': ['77'], 'published_at': ['2019-02-27T11:14:20.263Z'], 'coreid': ['e00fce680760748ba970571d']}
+# {
+#   'event': ['xenon_temp'],
+#   'data': ['91'],
+#   'published_at': ['2019-02-27T11:46:24.250Z'],
+#   'coreid': ['e00fce68d5131176d95998b4'],
+#   'device_name': ['xenon1']}
