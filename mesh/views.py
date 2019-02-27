@@ -92,10 +92,3 @@ def mesh_notification(request):
         f.write('POST Exception\n\n')
         f.close()
     return HttpResponse('SUCCESS')
-
-# {
-#   'event': ['xenon_temp'],
-#   'data': ['91'],
-#   'published_at': ['2019-02-27T11:46:24.250Z'],
-#   'coreid': ['e00fce68d5131176d95998b4'],
-#   'device_name': ['xenon1']}
