@@ -11,16 +11,16 @@ import logging
 logger = logging.getLogger(__name__)
 
 class HomePageView(TemplateView):
-    template_name = 'home.html'
+    template_name = 'index.html'
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        logger.error("home image is loaded")
+        logger.debug("home image is loaded")
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        logger.error("home image is loaded")
+        logger.debug("home image is loaded")
         return context
 
 class ReceiveMeshDataView(View):
@@ -57,6 +57,7 @@ def mesh_notification(request):
         return HttpResponse('POST Only')
     try:
         data = request.POST
+        logger.debug("data: {}".format(data))
         event = data['event']
         value = data['data']
         created = data['published_at']
