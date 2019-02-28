@@ -54,7 +54,7 @@ def mesh_notification(request):
         f = open('demo1.txt', 'a')
         f.write('POST ONLY\n\n')
         f.close()
-        return HttpResponse('c')
+        return HttpResponse('POST Only')
     try:
         data = request.POST
         event = data['event']
