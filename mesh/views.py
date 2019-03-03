@@ -5,9 +5,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
 from .models import MeshDataModel
+from django.db import connection
 
 import datetime
 import logging
+import pandas as pd
+
 logger = logging.getLogger(__name__)
 
 class HomePageView(TemplateView):
@@ -93,3 +96,65 @@ def mesh_notification(request):
         f.write('POST Exception\n\n')
         f.close()
     return HttpResponse('SUCCESS')
+
+
+class ChartView(TemplateView):
+    template_name = 'chart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meshes = MeshDataModel.objects.order_by('created').all()
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, event, data, created from mesh_meshdatamodel order by created asc")
+            meshdata = cursor.fetchall()
+
+        df = pd.DataFrame(meshdata)
+        df.columns = ['id', 'event', 'data', 'created']
+        df['datetime'] = pd.to_datetime(df['created'])
+        df=df.set_index(pd.DatetimeIndex(df['datetime']))
+
+        mesh_argon = []
+        mesh_xenon = []
+        for mesh in meshes :
+            if mesh.event == 'temp':
+                mesh.argon = mesh.data
+                mesh.xenon = 0
+            else:
+                mesh.argon = 0
+                mesh.xenon = mesh.data
+
+            mesh_argon.append(mesh.argon)
+            mesh_xenon.append(mesh.xenon)
+
+        df["argon"] =  mesh_argon
+        df["xenon"] =  mesh_xenon
+
+        df_argon = df['argon'].resample("300s").max().fillna(0)
+        df_argon = df_argon.reset_index()
+        df_xenon = df['xenon'].resample("300s").max().fillna(0)
+        df_xenon = df_xenon.reset_index()
+
+        df_dts= df_argon['datetime'].tolist()
+
+        datetime = []
+
+        for dt in df_dts :
+            datetime.append(str(dt)[:19])
+
+        arg_labels = []
+        arg_data = []
+        xen_data = []
+        for mesh in meshes :
+            arg_labels.append(str(mesh.created)[:16])
+            arg_data.append(mesh.data)
+            xen_data.append(mesh.xenon)
+
+        argon_data = df_argon['argon'].tolist()
+
+        context['dataset1'] = df_argon['argon'].tolist()
+        context['dataset2'] = df_xenon['xenon'].tolist()
+        context['data_labels'] = datetime
+
+        return context
+
