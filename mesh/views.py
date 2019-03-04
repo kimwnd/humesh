@@ -130,9 +130,13 @@ class ChartView(TemplateView):
         df["argon"] =  mesh_argon
         df["xenon"] =  mesh_xenon
 
-        df_argon = df['argon'].resample("300s").max().fillna(0)
+        df = df[df['datetime']>'2019-03-04']
+
+        print(df[df['datetime']>'2019-03-04'].head())
+
+        df_argon = df['argon'].resample("60s").max().fillna(0)
         df_argon = df_argon.reset_index()
-        df_xenon = df['xenon'].resample("300s").max().fillna(0)
+        df_xenon = df['xenon'].resample("60s").max().fillna(0)
         df_xenon = df_xenon.reset_index()
 
         df_dts= df_argon['datetime'].tolist()
