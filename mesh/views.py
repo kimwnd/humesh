@@ -3,7 +3,7 @@
 from django.views.generic import TemplateView, View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import MeshDataModel
 from django.db import connection
 
@@ -134,9 +134,9 @@ class ChartView(TemplateView):
 
         print(df[df['datetime']>'2019-03-04'].head())
 
-        df_argon = df['argon'].resample("60s").max().fillna(0)
+        df_argon = df['argon'].resample("120s").max().fillna(0)
         df_argon = df_argon.reset_index()
-        df_xenon = df['xenon'].resample("60s").max().fillna(0)
+        df_xenon = df['xenon'].resample("120s").max().fillna(0)
         df_xenon = df_xenon.reset_index()
 
         df_dts= df_argon['datetime'].tolist()
@@ -162,3 +162,308 @@ class ChartView(TemplateView):
 
         return context
 
+class LineChartView(TemplateView):
+    template_name = 'line_chart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meshes = MeshDataModel.objects.order_by('created').all()
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, event, data, created from mesh_meshdatamodel order by created asc")
+            meshdata = cursor.fetchall()
+
+        df = pd.DataFrame(meshdata)
+        df.columns = ['id', 'event', 'data', 'created']
+        df['datetime'] = pd.to_datetime(df['created'])
+        df=df.set_index(pd.DatetimeIndex(df['datetime']))
+
+        mesh_argon = []
+        mesh_xenon = []
+        for mesh in meshes :
+            if mesh.event == 'temp':
+                mesh.argon = mesh.data
+                mesh.xenon = 0
+            else:
+                mesh.argon = 0
+                mesh.xenon = mesh.data
+
+            mesh_argon.append(mesh.argon)
+            mesh_xenon.append(mesh.xenon)
+
+        df["argon"] =  mesh_argon
+        df["xenon"] =  mesh_xenon
+
+        df = df[df['datetime']>'2019-03-04 14:10']
+
+        print(df[df['datetime']>'2019-03-04 14:10'].head())
+
+        df_argon = df['argon'].resample("30s").max().fillna(0)
+        df_argon = df_argon.reset_index()
+        df_xenon = df['xenon'].resample("30s").max().fillna(0)
+        df_xenon = df_xenon.reset_index()
+
+        df_dts= df_argon['datetime'].tolist()
+
+        datetime = []
+
+        for dt in df_dts :
+            datetime.append(str(dt)[:19])
+
+        arg_labels = []
+        arg_data = []
+        xen_data = []
+        for mesh in meshes :
+            arg_labels.append(str(mesh.created)[:16])
+            arg_data.append(mesh.data)
+            xen_data.append(mesh.xenon)
+
+        argon_data = df_argon['argon'].tolist()
+
+        context['dataset1'] = df_argon['argon'].tolist()
+        context['dataset2'] = df_xenon['xenon'].tolist()
+        context['data_labels'] = datetime
+
+        return context
+
+
+class NewLineChartView(TemplateView):
+    template_name = 'line_chart_new.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # meshes = MeshDataModel.objects.order_by('created').all()
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, event, data, created from mesh_meshdatamodel where event = 'temp' order by created asc")
+            argon_meshes = cursor.fetchall()
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, event, data, created from mesh_meshdatamodel where event = 'xenon_temp' order by created asc")
+            xenon_meshes = cursor.fetchall()
+
+        df_argon = pd.DataFrame(argon_meshes)
+        df_argon.columns = ['id', 'event', 'data', 'created']
+        df_argon['datetime'] = pd.to_datetime(df_argon['created'])
+        df_argon=df_argon.set_index(pd.DatetimeIndex(df_argon['datetime']))
+
+        df_xenon = pd.DataFrame(xenon_meshes)
+        df_xenon.columns = ['id', 'event', 'data', 'created']
+        df_xenon['datetime'] = pd.to_datetime(df_xenon['created'])
+        df_xenon=df_xenon.set_index(pd.DatetimeIndex(df_xenon['datetime']))
+
+
+        df_argon = df_argon[df_argon['datetime']>'2019-03-04 16:30']
+        df_xenon = df_xenon[df_xenon['datetime']>'2019-03-04 16:30']
+
+        # print(df_argon[df_argon['datetime']>'2019-03-04 14:10'].head())
+
+        df_argon = df_argon['data'].resample("30s").max().fillna(0)
+        df_argon = df_argon.reset_index()
+        df_xenon = df_xenon['data'].resample("30s").max().fillna(0)
+        df_xenon = df_xenon.reset_index()
+
+        argon_dts= df_argon['datetime'].tolist()
+        xenon_dts= df_xenon['datetime'].tolist()
+
+        argon_labels = []
+        xenon_labels = []
+
+        for label in argon_dts :
+            argon_labels.append(str(label)[:19])
+
+        for label in xenon_dts :
+            xenon_labels.append(str(label)[:19])
+
+        # arg_labels = []
+        # arg_data = []
+        # xen_data = []
+        # for mesh in meshes :
+        #     arg_labels.append(str(mesh.created)[:16])
+        #     arg_data.append(mesh.data)
+        #     xen_data.append(mesh.xenon)
+        #
+        # argon_data = df_argon['argon'].tolist()
+        print('----------------------')
+        print(df_argon['data'].tolist())
+        print(argon_labels)
+
+        context['argon_data'] = df_argon['data'].tolist()
+        context['xenon_data'] = df_xenon['data'].tolist()
+        context['argon_labels'] = argon_labels
+        context['xenon_labels'] = xenon_labels
+
+        return context
+
+class MultiChartView(TemplateView):
+    template_name = 'multi_chart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        meshes = MeshDataModel.objects.order_by('created').all()
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, event, data, created from mesh_meshdatamodel order by created asc")
+            meshdata = cursor.fetchall()
+
+        df = pd.DataFrame(meshdata)
+        df.columns = ['id', 'event', 'data', 'created']
+        df['datetime'] = pd.to_datetime(df['created'])
+        df=df.set_index(pd.DatetimeIndex(df['datetime']))
+
+        mesh_argon = []
+        mesh_xenon = []
+        for mesh in meshes :
+            if mesh.event == 'temp':
+                mesh.argon = mesh.data
+                mesh.xenon = 0
+            else:
+                mesh.argon = 0
+                mesh.xenon = mesh.data
+
+            mesh_argon.append(mesh.argon)
+            mesh_xenon.append(mesh.xenon)
+
+        df["argon"] =  mesh_argon
+        df["xenon"] =  mesh_xenon
+
+        df = df[df['datetime']>'2019-03-04 14:10']
+
+        print(df[df['datetime']>'2019-03-04 14:10'].head())
+
+        df_argon = df['argon'].resample("30s").max().fillna(0)
+        df_argon = df_argon.reset_index()
+        df_xenon = df['xenon'].resample("30s").max().fillna(0)
+        df_xenon = df_xenon.reset_index()
+
+        df_dts= df_argon['datetime'].tolist()
+
+        datetime = []
+
+        for dt in df_dts :
+            datetime.append(str(dt)[:19])
+
+        arg_labels = []
+        arg_data = []
+        xen_data = []
+        for mesh in meshes :
+            arg_labels.append(str(mesh.created)[:16])
+            arg_data.append(mesh.data)
+            xen_data.append(mesh.xenon)
+
+        argon_data = df_argon['argon'].tolist()
+
+        context['dataset1'] = df_argon['argon'].tolist()
+        context['dataset2'] = df_xenon['xenon'].tolist()
+        context['data_labels'] = datetime
+
+        return context
+
+class GetLineDataView(View):
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+
+            meshes = MeshDataModel.objects.order_by('-created').all()
+            meshes = meshes[:5]
+
+            with connection.cursor() as cursor:
+                cursor.execute("select id, event, data, created from mesh_meshdatamodel order by created desc limit 5")
+                meshdata = cursor.fetchall()
+
+            df = pd.DataFrame(meshdata)
+            df.columns = ['id', 'event', 'data', 'created']
+            df['datetime'] = pd.to_datetime(df['created'])
+            df = df.set_index(pd.DatetimeIndex(df['datetime']))
+
+            mesh_argon = []
+            mesh_xenon = []
+            for mesh in meshes:
+                if mesh.event == 'temp':
+                    mesh.argon = mesh.data
+                    mesh.xenon = 0
+                else:
+                    mesh.argon = 0
+                    mesh.xenon = mesh.data
+
+                mesh_argon.append(mesh.argon)
+                mesh_xenon.append(mesh.xenon)
+
+            df["argon"] = mesh_argon
+            df["xenon"] = mesh_xenon
+
+            df = df[df['datetime'] > '2019-03-04 14:10']
+
+            # print(df[df['datetime'] > '2019-03-04'].head())
+
+            df_argon = df['argon'].resample("30s").max().fillna(0)
+            df_argon = df_argon.reset_index()
+            df_xenon = df['xenon'].resample("30s").max().fillna(0)
+            df_xenon = df_xenon.reset_index()
+
+            df_dts = df_argon['datetime'].tolist()
+
+            datetime = []
+
+            for dt in df_dts:
+                datetime.append(str(dt)[:19])
+
+            arg_labels = []
+            arg_data = []
+            xen_data = []
+            for mesh in meshes:
+                arg_labels.append(str(mesh.created)[:16])
+                arg_data.append(mesh.data)
+                xen_data.append(mesh.xenon)
+
+            argon_data = df_argon['argon'].tolist()
+
+            dataset1 = df_argon['argon'].tolist()
+            dataset2 = df_xenon['xenon'].tolist()
+            data_labels = datetime
+
+            print(data_labels[-1])
+            print(dataset1[-1])
+
+            data = {'datetime': data_labels[-1], "data1": dataset1[-1], "data2": dataset2[-1] }
+
+            return JsonResponse(data)
+
+class GetMeshDataView(View):
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "select id, event, data, created from mesh_meshdatamodel where event = 'temp' order by created desc limit 5")
+                argon_meshes = cursor.fetchall()
+
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "select id, event, data, created from mesh_meshdatamodel where event = 'xenon_temp' order by created desc limit 5")
+                xenon_meshes = cursor.fetchall()
+
+            df_argon = pd.DataFrame(argon_meshes)
+            df_argon.columns = ['id', 'event', 'data', 'created']
+            df_argon['datetime'] = pd.to_datetime(df_argon['created'])
+            df_argon = df_argon.set_index(pd.DatetimeIndex(df_argon['datetime']))
+
+            df_xenon = pd.DataFrame(xenon_meshes)
+            df_xenon.columns = ['id', 'event', 'data', 'created']
+            df_xenon['datetime'] = pd.to_datetime(df_xenon['created'])
+            df_xenon = df_xenon.set_index(pd.DatetimeIndex(df_xenon['datetime']))
+
+            df_argon = df_argon[df_argon['datetime'] > '2019-03-04 16:30']
+            df_xenon = df_xenon[df_xenon['datetime'] > '2019-03-04 16:30']
+
+            df_argon = df_argon['data'].resample("30s").max().fillna(0)
+            df_argon = df_argon.reset_index()
+            df_xenon = df_xenon['data'].resample("30s").max().fillna(0)
+            df_xenon = df_xenon.reset_index()
+
+            argon_dts = df_argon['datetime'].tolist()
+            xenon_dts = df_xenon['datetime'].tolist()
+
+            data = {'argon_label': str(argon_dts[-1]), 'xenon_label': str(xenon_dts[-1]), 'argon_data': df_argon['data'].tolist()[-1], 'xenon_data': df_xenon['data'].tolist()[-1]}
+
+            return JsonResponse(data)
