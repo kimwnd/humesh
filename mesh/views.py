@@ -12,6 +12,7 @@ from django.db import connection
 import datetime
 import logging
 import pandas as pd
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -600,3 +601,17 @@ class ControlLEDView(FormView):
     template_name = 'control_led.html'
     form_class = ControlLEDForm
     success_url = 'control/led/'
+
+
+class ControlSwitchView(View):
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('POST Only')
+
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            state = request.POST.get('state', 'off')
+            req = requests.post("https://api.particle.io/v1/devices/e00fce68d5131176d95998b4/led?access_token=1845bd04a1bbc86c7cb18984337243f78a5cc265", data={'command': state})
+            data = {'state': state}
+
+            return JsonResponse(data)

@@ -20,4 +20,5 @@ urlpatterns = [
     path('get/mesh/data/', views.GetMeshDataView.as_view(), name='get_mesh_data'),
     path('get/wifi/update/', views.GetWifiDataUpdateView.as_view(), name='get_wifi_data_update'),
     path('control/led/', views.ControlLEDView.as_view(), name='control_led'),
+    path('control/switch/', views.ControlSwitchView.as_view(), name='control_switch'),
 ]
