@@ -554,6 +554,8 @@ class GetMeshDataView(View):
 
             data = {'argon_label': str(argon_dts[-1]), 'xenon_label': str(xenon_dts[-1]), 'argon_data': df_argon['data'].tolist()[-1], 'xenon_data': df_xenon['data'].tolist()[-1]}
 
+            # print(data)
+
             return JsonResponse(data)
 
 
