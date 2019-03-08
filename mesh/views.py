@@ -314,6 +314,73 @@ class NewLineChartView(TemplateView):
 
         return context
 
+class WifiCheckChartView(TemplateView):
+    template_name = 'wifi_check_view.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, temp, created from mesh_wifidatamodel order by created asc")
+            wifi_data = cursor.fetchall()
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, event, data, created from mesh_meshdatamodel where event = 'xenon_temp' order by created asc")
+            xenon_meshes = cursor.fetchall()
+
+        df_wifi = pd.DataFrame(wifi_data)
+        df_wifi.columns = ['id', 'temp', 'created']
+        df_wifi['datetime'] = pd.to_datetime(df_wifi['created'])
+        df_wifi=df_wifi.set_index(pd.DatetimeIndex(df_wifi['datetime']))
+
+        df_xenon = pd.DataFrame(xenon_meshes)
+        df_xenon.columns = ['id', 'event', 'data', 'created']
+        df_xenon['datetime'] = pd.to_datetime(df_xenon['created'])
+        df_xenon=df_xenon.set_index(pd.DatetimeIndex(df_xenon['datetime']))
+
+
+        df_wifi = df_wifi[df_wifi['datetime']>'2019-03-08 10:00']
+        df_xenon = df_xenon[df_xenon['datetime']>'2019-03-08 10:00']
+
+        # print(df_argon[df_argon['datetime']>'2019-03-04 14:10'].head())
+
+        df_wifi = df_wifi['temp'].resample("30s").max().fillna(0)
+        df_wifi = df_wifi.reset_index()
+        df_xenon = df_xenon['data'].resample("30s").max().fillna(0)
+        df_xenon = df_xenon.reset_index()
+
+        wifi_dts= df_wifi['datetime'].tolist()
+        xenon_dts= df_xenon['datetime'].tolist()
+
+        wifi_labels = []
+        xenon_labels = []
+
+        for label in wifi_dts :
+            wifi_labels.append(str(label)[:19])
+
+        for label in xenon_dts :
+            xenon_labels.append(str(label)[:19])
+
+        # arg_labels = []
+        # arg_data = []
+        # xen_data = []
+        # for mesh in meshes :
+        #     arg_labels.append(str(mesh.created)[:16])
+        #     arg_data.append(mesh.data)
+        #     xen_data.append(mesh.xenon)
+        #
+        # argon_data = df_argon['argon'].tolist()
+        print('----------------------')
+        print(df_wifi['temp'].tolist())
+        print(wifi_labels)
+
+        context['wifi_data'] = df_wifi['temp'].tolist()
+        context['xenon_data'] = df_xenon['data'].tolist()
+        context['wifi_labels'] = wifi_labels
+        context['xenon_labels'] = xenon_labels
+
+        return context
+
 class MultiChartView(TemplateView):
     template_name = 'multi_chart.html'
 
@@ -448,6 +515,7 @@ class GetLineDataView(View):
 
             return JsonResponse(data)
 
+
 class GetMeshDataView(View):
 
     def get(self, request, *args, **kwargs):
@@ -486,6 +554,47 @@ class GetMeshDataView(View):
             data = {'argon_label': str(argon_dts[-1]), 'xenon_label': str(xenon_dts[-1]), 'argon_data': df_argon['data'].tolist()[-1], 'xenon_data': df_xenon['data'].tolist()[-1]}
 
             return JsonResponse(data)
+
+
+class GetWifiDataUpdateView(View):
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "select id, temp, created from mesh_wifidatamodel order by created desc limit 5")
+                wifi_meshes = cursor.fetchall()
+
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "select id, event, data, created from mesh_meshdatamodel where event = 'xenon_temp' order by created desc limit 5")
+                xenon_meshes = cursor.fetchall()
+
+            df_wifi = pd.DataFrame(wifi_meshes)
+            df_wifi.columns = ['id', 'temp', 'created']
+            df_wifi['datetime'] = pd.to_datetime(df_wifi['created'])
+            df_wifi = df_wifi.set_index(pd.DatetimeIndex(df_wifi['datetime']))
+
+            df_xenon = pd.DataFrame(xenon_meshes)
+            df_xenon.columns = ['id', 'event', 'data', 'created']
+            df_xenon['datetime'] = pd.to_datetime(df_xenon['created'])
+            df_xenon = df_xenon.set_index(pd.DatetimeIndex(df_xenon['datetime']))
+
+            df_wifi = df_wifi[df_wifi['datetime'] > '2019-03-08 10:00']
+            df_xenon = df_xenon[df_xenon['datetime'] > '2019-03-08 10:00']
+
+            df_wifi = df_wifi['temp'].resample("30s").max().fillna(0)
+            df_wifi = df_wifi.reset_index()
+            df_xenon = df_xenon['data'].resample("30s").max().fillna(0)
+            df_xenon = df_xenon.reset_index()
+
+            wifi_dts = df_wifi['datetime'].tolist()
+            xenon_dts = df_xenon['datetime'].tolist()
+
+            data = {'wifi_label': str(wifi_dts[-1]), 'xenon_label': str(xenon_dts[-1]), 'wifi_data': df_wifi['temp'].tolist()[-1], 'xenon_data': df_xenon['data'].tolist()[-1]}
+
+            return JsonResponse(data)
+
 
 class ControlLEDView(FormView):
     template_name = 'control_led.html'
