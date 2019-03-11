@@ -273,8 +273,8 @@ class NewLineChartView(TemplateView):
         df_xenon=df_xenon.set_index(pd.DatetimeIndex(df_xenon['datetime']))
 
 
-        df_argon = df_argon[df_argon['datetime']>'2019-03-08 10:00']
-        df_xenon = df_xenon[df_xenon['datetime']>'2019-03-08 10:00']
+        df_argon = df_argon[df_argon['datetime']>'2019-03-11 09:00']
+        df_xenon = df_xenon[df_xenon['datetime']>'2019-03-11 09:00']
 
         # print(df_argon[df_argon['datetime']>'2019-03-04 14:10'].head())
 
@@ -340,8 +340,8 @@ class WifiCheckChartView(TemplateView):
         df_xenon=df_xenon.set_index(pd.DatetimeIndex(df_xenon['datetime']))
 
 
-        df_wifi = df_wifi[df_wifi['datetime']>'2019-03-08 10:00']
-        df_xenon = df_xenon[df_xenon['datetime']>'2019-03-08 10:00']
+        df_wifi = df_wifi[df_wifi['datetime']>'2019-03-11 09:00']
+        df_xenon = df_xenon[df_xenon['datetime']>'2019-03-11 09:00']
 
         # print(df_argon[df_argon['datetime']>'2019-03-04 14:10'].head())
 
@@ -541,8 +541,8 @@ class GetMeshDataView(View):
             df_xenon['datetime'] = pd.to_datetime(df_xenon['created'])
             df_xenon = df_xenon.set_index(pd.DatetimeIndex(df_xenon['datetime']))
 
-            df_argon = df_argon[df_argon['datetime'] > '2019-03-08 10:00']
-            df_xenon = df_xenon[df_xenon['datetime'] > '2019-03-08 10:00']
+            df_argon = df_argon[df_argon['datetime'] > '2019-03-11 09:00']
+            df_xenon = df_xenon[df_xenon['datetime'] > '2019-03-11 09:00']
 
             df_argon = df_argon['data'].resample("30s").max().fillna(0)
             df_argon = df_argon.reset_index()
@@ -552,9 +552,9 @@ class GetMeshDataView(View):
             argon_dts = df_argon['datetime'].tolist()
             xenon_dts = df_xenon['datetime'].tolist()
 
-            data = {'argon_label': str(argon_dts[-1]), 'xenon_label': str(xenon_dts[-1]), 'argon_data': df_argon['data'].tolist()[-1], 'xenon_data': df_xenon['data'].tolist()[-1]}
+            data = {'argon_label': str(argon_dts[-1])[:19], 'xenon_label': str(xenon_dts[-1])[:19], 'argon_data': df_argon['data'].tolist()[-1], 'xenon_data': df_xenon['data'].tolist()[-1]}
 
-            # print(data)
+            print(data)
 
             return JsonResponse(data)
 
@@ -583,8 +583,8 @@ class GetWifiDataUpdateView(View):
             df_xenon['datetime'] = pd.to_datetime(df_xenon['created'])
             df_xenon = df_xenon.set_index(pd.DatetimeIndex(df_xenon['datetime']))
 
-            df_wifi = df_wifi[df_wifi['datetime'] > '2019-03-08 10:00']
-            df_xenon = df_xenon[df_xenon['datetime'] > '2019-03-08 10:00']
+            df_wifi = df_wifi[df_wifi['datetime'] > '2019-03-11 09:00']
+            df_xenon = df_xenon[df_xenon['datetime'] > '2019-03-11 09:00']
 
             df_wifi = df_wifi['temp'].resample("30s").max().fillna(0)
             df_wifi = df_wifi.reset_index()

@@ -106,11 +106,11 @@
 
         <div class="row about-container">
 
-          <div class="col-lg-10 content order-lg-1 order-2">
+          <div class="col-lg-9 content order-lg-1 order-2">
               <div id="argon_graph"></div> 
               <div id="xenon_graph"></div>
           </div>
-            <div class="col-lg-2 content order-lg-1 order-2">
+            <div class="col-lg-3 content order-lg-1 order-2">
                 <br/>
                 <br/>
                 <br/>
@@ -124,6 +124,11 @@
                         <option>센서위치3</option>
                     </select><br/>
                     <input id="switch_state" type="checkbox" name="switch" onchange="checkSwitch();" />
+                </div>
+                <br/>
+                <br/>
+                <div style="text-align: center; width:250px;margin-left:-60px;">
+                    <div id="myDiv"></div>
                 </div>
 
             </div>
@@ -271,7 +276,7 @@
 
         var argon_layout ={
             title: {
-                text: "Argon Data",
+                text: "Sensor #1",
                 font: {
                     size: 24
                 }
@@ -286,7 +291,7 @@
             },
             yaxis: {
                 title: {
-                    text: 'Temperature',
+                    text: 'ppm',
                     font: {
                         size: 18
                     }
@@ -297,7 +302,7 @@
 
         var xenon_layout ={
             title: {
-                text: "Xenon Data",
+                text: "Sensor #2",
                 font: {
                     size: 24
                 }
@@ -312,7 +317,7 @@
             },
             yaxis: {
                 title: {
-                    text: 'Temperature',
+                    text: 'ppm',
                     font: {
                         size: 18
                     }
@@ -342,12 +347,15 @@
                     error: function(error_data){
                         console.log('error');
                     },
-                })
-              var update = {
-               x:  [[argon_label]],
-               y: [[argon_data]]
-              }
-          return update;
+                });
+
+                var update = {
+                           x:  [[argon_label]],
+                           y: [[argon_data]]
+                          }
+
+                return update;
+
         }
 
         function xenon_update() {
@@ -430,6 +438,75 @@
                 }
             });
         }
+
+    </script>
+    <script>
+        // Enter a speed between 0 and 180
+    var level = 105;
+
+    // Trig to calc meter point
+    var degrees = 180 - level,
+         radius = .5;
+    var radians = degrees * Math.PI / 180;
+    var x = radius * Math.cos(radians);
+    var y = radius * Math.sin(radians);
+
+    // Path: may have to change to create a better triangle
+    var mainPath = 'M -.0 -0.025 L .0 0.025 L ',
+         pathX = String(x),
+         space = ' ',
+         pathY = String(y),
+         pathEnd = ' Z';
+    var path = mainPath.concat(pathX,space,pathY,pathEnd);
+
+    var data = [{ type: 'scatter',
+       x: [0], y:[0],
+        marker: {size: 12, color:'850000'},
+        showlegend: false,
+        name: 'speed',
+        text: level,
+        hoverinfo: 'text+name'},
+      { values: [50/6, 50/6, 50/6, 50/6, 50/6, 50/6, 50],
+      rotation: 90,
+      text: ['Best', 'Better', 'Good', 'Normal',
+                'Bad', 'Worst', ''],
+      textinfo: 'text',
+      textposition:'inside',
+      marker: {colors:['rgba(000, 102, 051, .9)', 'rgba(051, 153, 102, .7)',
+                             'rgba(102, 204, 153, .5)', 'rgba(255, 153, 102, .5)',
+                             'rgba(204, 102, 051, .7)', 'rgba(204, 051, 000, .9)',
+                             'rgba(204, 000, 051, 0)']},
+      labels: ['0-30', '31-60', '61-90', '91-120', '121-150', '151-180', ''],
+      hoverinfo: 'label',
+      hole: .4,
+      type: 'pie',
+      showlegend: false
+    }];
+
+    var layout = {
+      shapes:[{
+          type: 'path',
+          path: path,
+          fillcolor: '850000',
+          line: {
+            color: '850000'
+          }
+        }],
+      title: {
+          text: '가스검출상태',
+          font: {
+              size: 26
+          }
+      },
+      height: 400,
+      width: 400,
+      xaxis: {zeroline:false, showticklabels:false,
+                 showgrid: false, range: [-1, 1]},
+      yaxis: {zeroline:false, showticklabels:false,
+                 showgrid: false, range: [-1, 1]}
+    };
+
+    Plotly.newPlot('myDiv', data, layout, {displayModeBar:false});
 
     </script>
 
