@@ -117,7 +117,7 @@
                 <br/>
 
                 <div style="text-align: center;">
-                    <h3>LED 제어</h3>
+                    <h3>경보발송</h3>
                     <select class="form-control">
                         <option>센서위치1</option>
                         <option>센서위치2</option>
@@ -326,8 +326,8 @@
             }
         }
 
-        Plotly.plot('argon_graph', argon_data, argon_layout, {responsive: true});
-        Plotly.plot('xenon_graph', xenon_data, xenon_layout, {responsive: true});
+        Plotly.plot('argon_graph', argon_data, argon_layout, {responsive: true, displaylogo:false});
+        Plotly.plot('xenon_graph', xenon_data, xenon_layout, {responsive: true, displaylogo:false});
 
         var cnt = 0;
 
@@ -507,6 +507,14 @@
     };
 
     Plotly.newPlot('myDiv', data, layout, {displayModeBar:false});
+
+    function myFunction() {
+
+        setInterval(function () {
+            Plotly.newPlot('myDiv', data, layout, {displayModeBar:false});
+            alert('test');
+        }, 3000);
+    }
 
     </script>
 
