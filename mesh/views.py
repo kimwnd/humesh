@@ -84,21 +84,6 @@ def mesh_notification(request):
                              )
         mesh.save()
 
-        # multi_mesh = MultipleMeshDataMdodel(event = event,
-        #                                     device_name = device_name,
-        #                                     data_co = 50,
-        #                                     data_h2s = 50,
-        #                                     data_o2 = 50,
-        #                                     data_ch4 = 50,
-        #                                     doc_name = 'doc1',
-        #                                     ship_name = 'lng1',
-        #                                     set_no = 's1',
-        #                                     location = 'work1',
-        #                                     node_no = 'n1',
-        #                                     created = published,
-        #                                     coreid = coreid)
-        # multi_mesh.save()
-        #
         # f = open('demo1.txt', 'a')
         # f.write('POST data is added\n\n')
         # f.write(str(data))
@@ -119,9 +104,6 @@ def multiple_notification(request):
     try:
         data = request.POST
         logger.debug("data: {}".format(data))
-        # "{'event': ['doc1_lng1_s1_sn_rooma_n1'], 'data': ['25|34|30|41'], " \
-        # "'published_at': ['2019-03-28T10:37:08.740Z'], " \
-        # "'coreid': ['e00fce68928495172c3a2c39'], 'device_name': ['xenon1']}"
         event_name = data['event']
         events = event_name.split('_')
         doc_name = events[0]
@@ -164,12 +146,12 @@ def multiple_notification(request):
                                             coreid=coreid)
         multi_mesh.save()
 
-        f = open('demo1.txt', 'a')
-        f.write('POST data is added\n\n')
-        f.write(str(data))
-        f.write('published_at : {}'.format(data['published_at']))
-        f.write('published : {}'.format(str(published)))
-        f.close()
+        # f = open('demo1.txt', 'a')
+        # f.write('POST data is added\n\n')
+        # f.write(str(data))
+        # f.write('published_at : {}'.format(data['published_at']))
+        # f.write('published : {}'.format(str(published)))
+        # f.close()
 
     except Exception as e:
             f = open('demo1.txt', 'a')
