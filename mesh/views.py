@@ -97,6 +97,7 @@ def mesh_notification(request):
         f.close()
     return HttpResponse('SUCCESS')
 
+
 @csrf_exempt
 def multiple_notification(request):
 
@@ -136,12 +137,12 @@ def multiple_notification(request):
                              )
         mesh.save()
 
-        f = open('demo1.txt', 'a')
-        f.write('POST data is added\n\n')
-        f.write(str(data))
-        f.write('published_at : {}'.format(data['published_at']))
-        f.write('published : {}'.format(str(published)))
-        f.close()
+        # f = open('demo1.txt', 'a')
+        # f.write('POST data is added\n\n')
+        # f.write(str(data))
+        # f.write('published_at : {}'.format(data['published_at']))
+        # f.write('published : {}'.format(str(published)))
+        # f.close()
 
     except Exception as e:
             f = open('demo1.txt', 'a')
