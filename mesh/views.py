@@ -122,14 +122,14 @@ def multiple_notification(request):
         # "{'event': ['doc1_lng1_s1_sn_rooma_n1'], 'data': ['25|34|30|41'], " \
         # "'published_at': ['2019-03-28T10:37:08.740Z'], " \
         # "'coreid': ['e00fce68928495172c3a2c39'], 'device_name': ['xenon1']}"
-        events = data['event']
+        events = data['event'].split('_')
         doc_name = events[0]
         ship_name = events[1]
         set_no = events[2]
         node_role = events[3]
         location = events[4]
         node_no = events[5]
-        values = data['data']
+        values = data['data'].split('|')
         co = values[0]
         h2s = values[1]
         o2 = values[2]
