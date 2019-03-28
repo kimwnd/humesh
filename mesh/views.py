@@ -114,7 +114,6 @@ def mesh_notification(request):
 
 @csrf_exempt
 def multiple_notification(request):
-
     if request.method != 'POST':
         return HttpResponse('POST Only')
     try:
@@ -153,8 +152,8 @@ def multiple_notification(request):
         f = open('demo1.txt', 'a')
         f.write('POST data is added\n\n')
         f.write(str(data))
-        # f.write('published_at : {}'.format(data['published_at']))
-        # f.write('published : {}'.format(str(published)))
+        f.write('published_at : {}'.format(data['published_at']))
+        f.write('published : {}'.format(str(published)))
         f.close()
 
     except Exception as e:
