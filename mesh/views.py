@@ -4,7 +4,7 @@ from django.views.generic import TemplateView, View, FormView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse, JsonResponse
-from .models import MeshDataModel, WifiDataModel
+from .models import MeshDataModel, WifiDataModel, MultipleMeshDataMdodel
 from .forms import ControlLEDForm
 
 from django.db import connection
@@ -57,9 +57,6 @@ class ReceiveMeshDataView(View):
 def mesh_notification(request):
 
     if request.method != 'POST':
-        f = open('demo1.txt', 'a')
-        f.write('POST ONLY\n\n')
-        f.close()
         return HttpResponse('POST Only')
     try:
         data = request.POST
@@ -99,6 +96,61 @@ def mesh_notification(request):
         f.write('POST Exception\n\n')
         f.close()
     return HttpResponse('SUCCESS')
+
+@csrf_exempt
+def multiple_notification(request):
+
+    if request.method != 'POST':
+        return HttpResponse('POST Only')
+    try:
+        data = request.POST
+        logger.debug("data: {}".format(data))
+        event = data['event']
+        value = data['data']
+        created = data['published_at']
+        coreid = data['coreid']
+        device_name = data['device_name']
+
+        year = int(created[:4])
+        mon = int(created[5:7])
+        day = int(created[8:10])
+        hour = int(created[11:13])
+        min = int(created[14:16])
+        sec = int(created[17:19])
+
+        published = datetime.datetime(year, mon, day, hour, min, sec) + datetime.timedelta(hours=18)
+
+        mesh = MultipleMeshDataMdodel(event=event,
+                                      device_name=str(data),
+                                      data_co=50,
+                                      data_h2s=50,
+                                      data_o2=50,
+                                      data_ch4=50,
+                                      doc_name='doc1',
+                                      ship_name='lng1',
+                                      set_no='s1',
+                                      location='work1',
+                                      node_no='n1',
+                                      created=published,
+                                      coreid=coreid
+                             )
+        mesh.save()
+
+        f = open('demo1.txt', 'a')
+        f.write('POST data is added\n\n')
+        f.write(str(data))
+        f.write('published_at : {}'.format(data['published_at']))
+        f.write('published : {}'.format(str(published)))
+        f.close()
+
+    except Exception as e:
+            f = open('demo1.txt', 'a')
+            f.write('POST Exception\n\n')
+            f.close()
+
+    return HttpResponse('SUCCESS')
+
+
 
 @csrf_exempt
 def wifi_notification(request):
@@ -273,14 +325,14 @@ class NewLineChartView(TemplateView):
         df_xenon=df_xenon.set_index(pd.DatetimeIndex(df_xenon['datetime']))
 
 
-        df_argon = df_argon[df_argon['datetime']>'2019-03-12 09:00']
-        df_xenon = df_xenon[df_xenon['datetime']>'2019-03-12 09:00']
+        df_argon = df_argon[df_argon['datetime']>'2019-03-26 13:50']
+        df_xenon = df_xenon[df_xenon['datetime']>'2019-03-10 09:00']
 
         # print(df_argon[df_argon['datetime']>'2019-03-04 14:10'].head())
 
-        df_argon = df_argon['data'].resample("30s").max().fillna(0)
+        df_argon = df_argon['data'].resample("12s").max().fillna(0)
         df_argon = df_argon.reset_index()
-        df_xenon = df_xenon['data'].resample("30s").max().fillna(0)
+        df_xenon = df_xenon['data'].resample("12s").max().fillna(0)
         df_xenon = df_xenon.reset_index()
 
         argon_dts= df_argon['datetime'].tolist()
@@ -414,13 +466,13 @@ class MultiChartView(TemplateView):
         df["argon"] =  mesh_argon
         df["xenon"] =  mesh_xenon
 
-        df = df[df['datetime']>'2019-03-08 10:00']
+        df = df[df['datetime']>'2019-03-26 10:00']
 
-        print(df[df['datetime']>'2019-03-08 10:00'].head())
+        print(df[df['datetime']>'2019-03-26 10:00'].head())
 
-        df_argon = df['argon'].resample("30s").max().fillna(0)
+        df_argon = df['argon'].resample("20s").max().fillna(0)
         df_argon = df_argon.reset_index()
-        df_xenon = df['xenon'].resample("30s").max().fillna(0)
+        df_xenon = df['xenon'].resample("20s").max().fillna(0)
         df_xenon = df_xenon.reset_index()
 
         df_dts= df_argon['datetime'].tolist()
@@ -479,13 +531,13 @@ class GetLineDataView(View):
             df["argon"] = mesh_argon
             df["xenon"] = mesh_xenon
 
-            df = df[df['datetime'] > '2019-03-08 10:00']
+            df = df[df['datetime'] > '2019-03-26 10:00']
 
             # print(df[df['datetime'] > '2019-03-04'].head())
 
-            df_argon = df['argon'].resample("30s").max().fillna(0)
+            df_argon = df['argon'].resample("20s").max().fillna(0)
             df_argon = df_argon.reset_index()
-            df_xenon = df['xenon'].resample("30s").max().fillna(0)
+            df_xenon = df['xenon'].resample("20s").max().fillna(0)
             df_xenon = df_xenon.reset_index()
 
             df_dts = df_argon['datetime'].tolist()
@@ -541,12 +593,12 @@ class GetMeshDataView(View):
             df_xenon['datetime'] = pd.to_datetime(df_xenon['created'])
             df_xenon = df_xenon.set_index(pd.DatetimeIndex(df_xenon['datetime']))
 
-            df_argon = df_argon[df_argon['datetime'] > '2019-03-12 09:00']
-            df_xenon = df_xenon[df_xenon['datetime'] > '2019-03-12 09:00']
+            df_argon = df_argon[df_argon['datetime'] > '2019-03-26 13:50']
+            df_xenon = df_xenon[df_xenon['datetime'] > '2019-03-10 09:00']
 
-            df_argon = df_argon['data'].resample("30s").max().fillna(0)
+            df_argon = df_argon['data'].resample("12s").max().fillna(0)
             df_argon = df_argon.reset_index()
-            df_xenon = df_xenon['data'].resample("30s").max().fillna(0)
+            df_xenon = df_xenon['data'].resample("12s").max().fillna(0)
             df_xenon = df_xenon.reset_index()
 
             argon_dts = df_argon['datetime'].tolist()
@@ -583,12 +635,12 @@ class GetWifiDataUpdateView(View):
             df_xenon['datetime'] = pd.to_datetime(df_xenon['created'])
             df_xenon = df_xenon.set_index(pd.DatetimeIndex(df_xenon['datetime']))
 
-            df_wifi = df_wifi[df_wifi['datetime'] > '2019-03-12 09:00']
-            df_xenon = df_xenon[df_xenon['datetime'] > '2019-03-12 09:00']
+            df_wifi = df_wifi[df_wifi['datetime'] > '2019-03-26 09:00']
+            df_xenon = df_xenon[df_xenon['datetime'] > '2019-03-26 09:00']
 
-            df_wifi = df_wifi['temp'].resample("30s").max().fillna(0)
+            df_wifi = df_wifi['temp'].resample("20s").max().fillna(0)
             df_wifi = df_wifi.reset_index()
-            df_xenon = df_xenon['data'].resample("30s").max().fillna(0)
+            df_xenon = df_xenon['data'].resample("20s").max().fillna(0)
             df_xenon = df_xenon.reset_index()
 
             wifi_dts = df_wifi['datetime'].tolist()
@@ -617,3 +669,8 @@ class ControlSwitchView(View):
             data = {'state': state}
 
             return JsonResponse(data)
+
+
+class MultipleLineChartView(TemplateView):
+    template_name = 'multiple_line_chart.html'
+

@@ -27,13 +27,12 @@ environ.Env.read_env() # reading .env file
 # 한글 사용
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = '3n3vwt711))lgh$d^buxo&$dh+llg2^6p)!p^7q=t&r&u8c0l!'
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.8.5', '15.164.47.154', '172.30.1.17', '0.0.0.0']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.8.9', '15.164.47.154', '172.30.1.17', '0.0.0.0']
 
 # Application definition
 

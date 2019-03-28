@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{%  load static %}
+{% block title %}
+  <title>Hucon IOT 대시보드</title>
+{% endblock %}
+
+{% block link %}
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="{% static 'lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/ionicons/css/ionicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/bootstrap-switch.css' %}" rel="stylesheet">
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <!-- Main Stylesheet File -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+  <main id="main">
+
+    <!--==========================
+      Chart Section
+    ============================-->
+    <section>
+      <div class="container">
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+
+
+        <header class="section-header">
+          <h3>Mesh Data Chart</h3>
+        </header>
+
+        <div class="row about-container">
+
+          <div class="col-lg-9 content order-lg-1 order-2">
+              <div id="graph"></div>
+          </div>
+            <div class="col-lg-3 content order-lg-1 order-2">
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+
+                <div style="text-align: center;">
+                    <h3>경보발송</h3>
+                    <select class="form-control">
+                        <option>센서위치1</option>
+                        <option>센서위치2</option>
+                        <option>센서위치3</option>
+                    </select><br/>
+                    <input id="switch_state" type="checkbox" name="switch" onchange="checkSwitch();" />
+                </div>
+                <br/>
+                <br/>
+                <div style="text-align: center; width:250px;margin-left:-60px;">
+                    <div id="myDiv"></div>
+                </div>
+
+            </div>
+
+        </div>
+      </div>
+    </section><!-- #about -->
+
+  </main>
+{% endblock %}
+
+{% block footerjs %}
+
+  <!-- JavaScript Libraries -->
+  <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/jquery/jquery-migrate.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+  <script src="{% static 'lib/mobile-nav/mobile-nav.js' %}"></script>
+  <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+  <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+  <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
+  <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'lib/isotope/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'lib/lightbox/js/lightbox.min.js' %}"></script>
+  <!-- Contact Form JavaScript File -->
+  <script src="{% static 'contactform/contactform.js' %}"></script>
+  <script src="{% static 'js/highlight.js' %}"></script>
+  <script src="{% static 'js/bootstrap-switch.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="{% static 'js/main1.js' %}"></script>
+
+  <script type="text/javascript">
+
+  	var time = new Date();
+
+	var trace1 = {
+		x: [time],
+		y: [Math.random() + 1],
+		mode: 'line',
+        name: 'Co2',
+        line: {
+		    color: 'blue'
+        }
+	};
+
+	var trace2 = {
+		x: [time],
+		y: [Math.random()],
+		yaxis: 'y',
+		mode: 'line',
+        name: 'H2s',
+        line: {
+		    color: 'green'
+        }
+	};
+
+	var trace3 = {
+		x: [time],
+		y: [Math.random()],
+		yaxis: 'y',
+		mode: 'line',
+        name: 'Co',
+        line: {
+		    color: 'purple'
+        }
+	};
+
+	var trace4 = {
+		x: [time],
+		y: [Math.random()],
+		yaxis: 'y',
+		mode: 'line',
+        name: 'O2',
+        line: {
+		    color: 'black'
+        }
+	};
+
+	var toPlot = [trace1, trace2, trace3, trace4];
+
+	var layout = {
+	showlegend: true,
+	yaxis: {
+    title: 'ppm'
+    },
+    shapes: [{
+	    type:'line',
+        xref: 'paper',
+        x0: 0,
+        x1: 1,
+        yref:'y',
+        y0: 7,
+        y1: 7,
+        {#fillcolor: 'red',#}
+        {#opacity: 0.2,#}
+        line: {
+	        color: 'red',
+            width: 2,
+        },
+    }]
+	};
+
+	Plotly.plot('graph', toPlot, layout);
+
+	var interval = setInterval(function() {
+
+		var time = new Date();
+
+		Plotly.extendTraces('graph', {
+      x: [[time], [time], [time], [time]],
+      y: [[Math.random()+2], [Math.random()+5], [Math.random()+7], [Math.random()+10]]
+    }, [0, 1, 2, 3])
+  }, 1000)
+  </script>
+
+{% endblock %}
+
+{% block footer %}
+    <br>
+    <br>
+    <br>
+{% endblock %}
