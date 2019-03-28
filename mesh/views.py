@@ -119,8 +119,21 @@ def multiple_notification(request):
     try:
         data = request.POST
         logger.debug("data: {}".format(data))
-        event = data['event']
-        value = data['data']
+        # "{'event': ['doc1_lng1_s1_sn_rooma_n1'], 'data': ['25|34|30|41'], " \
+        # "'published_at': ['2019-03-28T10:37:08.740Z'], " \
+        # "'coreid': ['e00fce68928495172c3a2c39'], 'device_name': ['xenon1']}"
+        events = data['event']
+        doc_name = events[0]
+        ship_name = events[1]
+        set_no = events[2]
+        node_role = events[3]
+        location = events[4]
+        node_no = events[5]
+        values = data['data']
+        co = values[0]
+        h2s = values[1]
+        o2 = values[2]
+        ch4 = values[3]
         created = data['published_at']
         coreid = data['coreid']
         device_name = data['device_name']
@@ -134,17 +147,18 @@ def multiple_notification(request):
 
         published = datetime.datetime(year, mon, day, hour, min, sec) + datetime.timedelta(hours=18)
 
-        multi_mesh = MultipleMeshDataMdodel(event=event,
+        multi_mesh = MultipleMeshDataMdodel(event=events,
                                             device_name=device_name,
-                                            data_co=50,
-                                            data_h2s=50,
-                                            data_o2=50,
-                                            data_ch4=50,
-                                            doc_name='doc1',
-                                            ship_name='lng1',
-                                            set_no='s1',
-                                            location='work1',
-                                            node_no='n1',
+                                            data_co=co,
+                                            data_h2s=h2s,
+                                            data_o2=o2,
+                                            data_ch4=ch4,
+                                            doc_name=doc_name,
+                                            ship_name=ship_name,
+                                            set_no=set_no,
+                                            node_role=node_role,
+                                            location=location,
+                                            node_no=node_no,
                                             created=published,
                                             coreid=coreid)
         multi_mesh.save()

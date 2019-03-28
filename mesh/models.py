@@ -24,6 +24,7 @@ class MultipleMeshDataMdodel(models.Model):
     doc_name = models.CharField(max_length=128, null=False, blank=False, verbose_name='도크명')
     ship_name = models.CharField(max_length=128, null=False, blank=False, verbose_name='선박명')
     set_no = models.CharField(max_length=128, null=False, blank=False, verbose_name='세트순번')
+    node_role = models.CharField(max_length=128, null=False, blank=False, verbose_name='노드역할')
     location = models.CharField(max_length=128, null=False, blank=False, verbose_name='설치위치')
     node_no = models.CharField(max_length=128, null=False, blank=False, verbose_name='노드순번')
     created = models.DateTimeField(default=timezone.now, verbose_name='등록일자')
