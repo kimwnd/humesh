@@ -119,30 +119,30 @@ def multiple_notification(request):
         min = int(created[14:16])
         sec = int(created[17:19])
 
-        published = datetime.datetime(year, mon, day, hour, min, sec) + datetime.timedelta(hours=18)
+        # published = datetime.datetime(year, mon, day, hour, min, sec) + datetime.timedelta(hours=18)
+        #
+        # mesh = MultipleMeshDataMdodel(event=event,
+        #                               device_name=device_name,
+        #                               data_co=50,
+        #                               data_h2s=50,
+        #                               data_o2=50,
+        #                               data_ch4=50,
+        #                               doc_name='doc1',
+        #                               ship_name='lng1',
+        #                               set_no='s1',
+        #                               location='work1',
+        #                               node_no='n1',
+        #                               created=published,
+        #                               coreid=coreid
+        #                      )
+        # mesh.save()
 
-        mesh = MultipleMeshDataMdodel(event=event,
-                                      device_name=device_name,
-                                      data_co=50,
-                                      data_h2s=50,
-                                      data_o2=50,
-                                      data_ch4=50,
-                                      doc_name='doc1',
-                                      ship_name='lng1',
-                                      set_no='s1',
-                                      location='work1',
-                                      node_no='n1',
-                                      created=published,
-                                      coreid=coreid
-                             )
-        mesh.save()
-
-        # f = open('demo1.txt', 'a')
-        # f.write('POST data is added\n\n')
-        # f.write(str(data))
+        f = open('demo1.txt', 'a')
+        f.write('POST data is added\n\n')
+        f.write(str(data))
         # f.write('published_at : {}'.format(data['published_at']))
         # f.write('published : {}'.format(str(published)))
-        # f.close()
+        f.close()
 
     except Exception as e:
             f = open('demo1.txt', 'a')
