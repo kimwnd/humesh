@@ -83,6 +83,21 @@ def mesh_notification(request):
                              device_name = device_name
                              )
         mesh.save()
+
+        multi_mesh = MultipleMeshDataMdodel(event = event,
+                                            device_name = device_name,
+                                            data_co = 50,
+                                            data_h2s = 50,
+                                            data_o2 = 50,
+                                            data_ch4 = 50,
+                                            doc_name = 'doc1',
+                                            ship_name = 'lng1',
+                                            set_no = 's1',
+                                            location = 'work1',
+                                            node_no = 'n1',
+                                            created = published,
+                                            coreid = coreid)
+        multi_mesh.save()
         #
         # f = open('demo1.txt', 'a')
         # f.write('POST data is added\n\n')
@@ -96,7 +111,6 @@ def mesh_notification(request):
         f.write('POST Exception\n\n')
         f.close()
     return HttpResponse('SUCCESS')
-
 
 @csrf_exempt
 def multiple_notification(request):
@@ -119,23 +133,22 @@ def multiple_notification(request):
         min = int(created[14:16])
         sec = int(created[17:19])
 
-        # published = datetime.datetime(year, mon, day, hour, min, sec) + datetime.timedelta(hours=18)
-        #
-        # mesh = MultipleMeshDataMdodel(event=event,
-        #                               device_name=device_name,
-        #                               data_co=50,
-        #                               data_h2s=50,
-        #                               data_o2=50,
-        #                               data_ch4=50,
-        #                               doc_name='doc1',
-        #                               ship_name='lng1',
-        #                               set_no='s1',
-        #                               location='work1',
-        #                               node_no='n1',
-        #                               created=published,
-        #                               coreid=coreid
-        #                      )
-        # mesh.save()
+        published = datetime.datetime(year, mon, day, hour, min, sec) + datetime.timedelta(hours=18)
+
+        multi_mesh = MultipleMeshDataMdodel(event=event,
+                                      device_name=device_name,
+                                      data_co=50,
+                                      data_h2s=50,
+                                      data_o2=50,
+                                      data_ch4=50,
+                                      doc_name='doc1',
+                                      ship_name='lng1',
+                                      set_no='s1',
+                                      location='work1',
+                                      node_no='n1',
+                                      created=published,
+                                      coreid=coreid)
+        multi_mesh.save()
 
         f = open('demo1.txt', 'a')
         f.write('POST data is added\n\n')
@@ -150,8 +163,6 @@ def multiple_notification(request):
             f.close()
 
     return HttpResponse('SUCCESS')
-
-
 
 @csrf_exempt
 def wifi_notification(request):
