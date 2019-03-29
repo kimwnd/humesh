@@ -105,7 +105,7 @@ def multiple_notification(request):
         node_role = events[3]
         location = events[4]
         node_no = events[5]
-        volt = round(events[6],2)
+        volt = round(float(events[6],2))
         values = data['data'].split('|')
         co = values[0]
         h2s = values[1]
