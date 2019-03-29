@@ -29,6 +29,7 @@ class MultipleMeshDataMdodel(models.Model):
     node_no = models.CharField(max_length=128, null=False, blank=False, verbose_name='노드순번')
     created = models.DateTimeField(default=timezone.now, verbose_name='등록일자')
     coreid = models.CharField(max_length=128, null=False, blank=False, verbose_name='coreid')
+    volt = models.FloatField(null=False, blank=False, default=0.0, verbose_name='Voltage')
 
     class Meta:
         db_table = 'multiple_mesh_data'

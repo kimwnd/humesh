@@ -1,0 +1,637 @@
+{% extends 'base.html' %}
+{%  load static %}
+{% block title %}
+  <title>Hucon HICT IOT 대시보드</title>
+{% endblock %}
+
+{% block link %}
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="{% static 'lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/ionicons/css/ionicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/bootstrap-switch.css' %}" rel="stylesheet">
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <!-- Main Stylesheet File -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+  <main id="main">
+
+    <!--==========================
+      Chart Section
+    ============================-->
+    <section>
+      <div class="container">
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+
+
+        <header class="section-header">
+          <h3>Mesh Data Dashboard</h3>
+        </header>
+
+        <div class="row about-container">
+
+          <div class="col-lg-6 content order-lg-1 order-2">
+              <div id="graph_co"></div>
+          </div>
+            <div class="col-lg-6 content order-lg-1 order-2">
+                <div id="graph_h2s"></div>
+            </div>
+
+          <div class="col-lg-6 content order-lg-1 order-2">
+              <div id="graph_o2"></div>
+          </div>
+            <div class="col-lg-6 content order-lg-1 order-2">
+                <div id="graph_ch4"></div>
+            </div>
+
+        </div>
+      </div>
+    </section><!-- #about -->
+
+  </main>
+{% endblock %}
+
+{% block footerjs %}
+
+  <!-- JavaScript Libraries -->
+  <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/jquery/jquery-migrate.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+  <script src="{% static 'lib/mobile-nav/mobile-nav.js' %}"></script>
+  <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+  <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+  <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
+  <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'lib/isotope/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'lib/lightbox/js/lightbox.min.js' %}"></script>
+  <!-- Contact Form JavaScript File -->
+  <script src="{% static 'contactform/contactform.js' %}"></script>
+  <script src="{% static 'js/highlight.js' %}"></script>
+  <script src="{% static 'js/bootstrap-switch.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="{% static 'js/main1.js' %}"></script>
+
+  <script type="text/javascript">
+
+    var xenon1_dates = [];
+    var xenon2_dates = [];
+    var xenon3_dates = [];
+    var xenon4_dates = [];
+
+        {% for label in xenon1_labels %}
+            xenon1_dates[xenon1_dates.length] = '{{ label }}';
+        {% endfor %}
+
+        {% for label in xenon2_labels %}
+            xenon2_dates[xenon2_dates.length] = '{{ label }}';
+        {% endfor %}
+
+        {% for label in xenon3_labels %}
+            xenon3_dates[xenon3_dates.length] = '{{ label }}';
+        {% endfor %}
+
+        {% for label in xenon4_labels %}
+            xenon4_dates[xenon4_dates.length] = '{{ label }}';
+        {% endfor %}
+
+	var co_trace1 = {
+		x: xenon1_dates,
+		y: {{ xenon1_data_co }},
+		mode: 'line',
+        name: 'sensor1',
+        line: {
+		    color: 'blue'
+        }
+	};
+
+	var co_trace2 = {
+		x: xenon2_dates,
+		y: {{ xenon2_data_co }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor2',
+        line: {
+		    color: 'green'
+        }
+	};
+
+	var co_trace3 = {
+		x: xenon3_dates,
+		y: {{ xenon3_data_co }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor3',
+        line: {
+		    color: 'purple'
+        }
+	};
+
+	var co_trace4 = {
+		x: xenon4_dates,
+		y: {{ xenon4_data_co }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor4',
+        line: {
+		    color: 'black'
+        }
+	};
+
+	var toPlot_co = [co_trace1, co_trace2, co_trace3, co_trace4];
+
+	var layout_co = {
+        title: {
+            text: 'Co Gas Chart',
+            font: {
+                size: 24
+            },
+            xref: 'paper',
+            {#x: 0.05,#}
+        },
+        showlegend: true,
+        yaxis: {
+        title: 'ppm'
+        },
+        shapes: [{
+            type:'line',
+            xref: 'paper',
+            x0: 0,
+            x1: 1,
+            yref:'y',
+            y0: 25,
+            y1: 25,
+            line: {
+                color: 'red',
+                width: 2,
+            },
+        }]
+	};
+
+	Plotly.plot('graph_co', toPlot_co, layout_co);
+
+    var cnt = 0;
+
+    function co_update() {
+
+          var endpoint = '/dashboard/update/';
+
+            $.ajax({
+                method: "GET",
+                url : endpoint,
+                success: function(data){
+                    xenon1_label = data['xenon1_label'];
+                    xenon2_label = data['xenon2_label'];
+                    xenon3_label = data['xenon3_label'];
+                    xenon4_label = data['xenon4_label'];
+                    xenon1_data_co = data['xenon1_data_co'];
+                    xenon1_data_h2s = data['xenon1_data_h2s'];
+                    xenon1_data_o2 = data['xenon1_data_o2'];
+                    xenon1_data_ch4 = data['xenon1_data_ch4'];
+                    xenon2_data_co = data['xenon2_data_co'];
+                    xenon2_data_h2s = data['xenon2_data_h2s'];
+                    xenon2_data_o2 = data['xenon2_data_o2'];
+                    xenon2_data_ch4 = data['xenon2_data_ch4'];
+                    xenon3_data_co = data['xenon3_data_co'];
+                    xenon3_data_h2s = data['xenon3_data_h2s'];
+                    xenon3_data_o2 = data['xenon3_data_o2'];
+                    xenon3_data_ch4 = data['xenon3_data_ch4'];
+                    xenon4_data_co = data['xenon4_data_co'];
+                    xenon4_data_h2s = data['xenon4_data_h2s'];
+                    xenon4_data_o2 = data['xenon4_data_o2'];
+                    xenon4_data_ch4 = data['xenon4_data_ch4'];
+                },
+                error: function(error_data){
+                    console.log('error');
+                },
+            });
+
+            var update = {
+                       x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],
+                       y: [[xenon1_data_co], [xenon2_data_co], [xenon3_data_co], [xenon4_data_co]]
+                      }
+
+            return update;
+
+    }
+
+    var interval = setInterval(function() {
+        Plotly.extendTraces('graph_co', co_update(), [0, 1, 2, 3])
+    }, 20000)
+
+  </script>
+
+  <script type="text/javascript">
+    	var h2s_trace1 = {
+		x: xenon1_dates,
+		y: {{ xenon1_data_h2s }},
+		mode: 'line',
+        name: 'sensor1',
+        line: {
+		    color: 'blue'
+        }
+	};
+
+	var h2s_trace2 = {
+		x: xenon2_dates,
+		y: {{ xenon2_data_h2s }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor2',
+        line: {
+		    color: 'green'
+        }
+	};
+
+	var h2s_trace3 = {
+		x: xenon3_dates,
+		y: {{ xenon3_data_h2s }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor3',
+        line: {
+		    color: 'purple'
+        }
+	};
+
+	var h2s_trace4 = {
+		x: xenon4_dates,
+		y: {{ xenon4_data_h2s }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor4',
+        line: {
+		    color: 'black'
+        }
+	};
+
+	var toPlot_h2s = [h2s_trace1, h2s_trace2, h2s_trace3, h2s_trace4];
+
+	var layout_h2s = {
+        title: {
+            text: 'H2S Gas Chart',
+            font: {
+                size: 24
+            },
+            xref: 'paper',
+            {#x: 0.05,#}
+        },
+        showlegend: true,
+        yaxis: {
+        title: 'ppm'
+        },
+        shapes: [{
+            type:'line',
+            xref: 'paper',
+            x0: 0,
+            x1: 1,
+            yref:'y',
+            y0: 32,
+            y1: 32,
+            line: {
+                color: 'red',
+                width: 2,
+            },
+        }]
+	};
+
+	Plotly.plot('graph_h2s', toPlot_h2s, layout_h2s);
+
+    var cnt = 0;
+
+    function h2s_update() {
+
+          var endpoint = '/dashboard/update/';
+
+            $.ajax({
+                method: "GET",
+                url : endpoint,
+                success: function(data){
+                    xenon1_label = data['xenon1_label'];
+                    xenon2_label = data['xenon2_label'];
+                    xenon3_label = data['xenon3_label'];
+                    xenon4_label = data['xenon4_label'];
+                    xenon1_data_co = data['xenon1_data_co'];
+                    xenon1_data_h2s = data['xenon1_data_h2s'];
+                    xenon1_data_o2 = data['xenon1_data_o2'];
+                    xenon1_data_ch4 = data['xenon1_data_ch4'];
+                    xenon2_data_co = data['xenon2_data_co'];
+                    xenon2_data_h2s = data['xenon2_data_h2s'];
+                    xenon2_data_o2 = data['xenon2_data_o2'];
+                    xenon2_data_ch4 = data['xenon2_data_ch4'];
+                    xenon3_data_co = data['xenon3_data_co'];
+                    xenon3_data_h2s = data['xenon3_data_h2s'];
+                    xenon3_data_o2 = data['xenon3_data_o2'];
+                    xenon3_data_ch4 = data['xenon3_data_ch4'];
+                    xenon4_data_co = data['xenon4_data_co'];
+                    xenon4_data_h2s = data['xenon4_data_h2s'];
+                    xenon4_data_o2 = data['xenon4_data_o2'];
+                    xenon4_data_ch4 = data['xenon4_data_ch4'];
+                },
+                error: function(error_data){
+                    console.log('error');
+                },
+            });
+
+            var update = {
+                       x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],
+                       y: [[xenon1_data_h2s], [xenon2_data_h2s], [xenon3_data_h2s], [xenon4_data_h2s]]
+                      }
+
+            return update;
+
+    }
+
+    var interval = setInterval(function() {
+        Plotly.extendTraces('graph_h2s', h2s_update(), [0, 1, 2, 3])
+    }, 20000)
+
+</script>
+
+<script type="text/javascript">
+
+    var o2_trace1 = {
+		x: xenon1_dates,
+		y: {{ xenon1_data_o2 }},
+		mode: 'line',
+        name: 'sensor1',
+        line: {
+		    color: 'blue'
+        }
+	};
+
+	var o2_trace2 = {
+		x: xenon2_dates,
+		y: {{ xenon2_data_o2 }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor2',
+        line: {
+		    color: 'green'
+        }
+	};
+
+	var o2_trace3 = {
+		x: xenon3_dates,
+		y: {{ xenon3_data_o2 }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor3',
+        line: {
+		    color: 'purple'
+        }
+	};
+
+	var o2_trace4 = {
+		x: xenon4_dates,
+		y: {{ xenon4_data_o2 }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor4',
+        line: {
+		    color: 'black'
+        }
+	};
+
+	var toPlot_o2 = [o2_trace1, o2_trace2, o2_trace3, o2_trace4];
+
+	var layout_o2 = {
+        title: {
+            text: 'O2 Gas Chart',
+            font: {
+                size: 24
+            },
+            xref: 'paper',
+            {#x: 0.05,#}
+        },
+        showlegend: true,
+        yaxis: {
+        title: 'ppm'
+        },
+        shapes: [{
+            type:'line',
+            xref: 'paper',
+            x0: 0,
+            x1: 1,
+            yref:'y',
+            y0: 36,
+            y1: 36,
+            line: {
+                color: 'red',
+                width: 2,
+            },
+        }]
+	};
+
+	Plotly.plot('graph_o2', toPlot_o2, layout_o2);
+
+    var cnt = 0;
+
+    function o2_update() {
+
+          var endpoint = '/dashboard/update/';
+
+            $.ajax({
+                method: "GET",
+                url : endpoint,
+                success: function(data){
+                    xenon1_label = data['xenon1_label'];
+                    xenon2_label = data['xenon2_label'];
+                    xenon3_label = data['xenon3_label'];
+                    xenon4_label = data['xenon4_label'];
+                    xenon1_data_co = data['xenon1_data_co'];
+                    xenon1_data_h2s = data['xenon1_data_h2s'];
+                    xenon1_data_o2 = data['xenon1_data_o2'];
+                    xenon1_data_ch4 = data['xenon1_data_ch4'];
+                    xenon2_data_co = data['xenon2_data_co'];
+                    xenon2_data_h2s = data['xenon2_data_h2s'];
+                    xenon2_data_o2 = data['xenon2_data_o2'];
+                    xenon2_data_ch4 = data['xenon2_data_ch4'];
+                    xenon3_data_co = data['xenon3_data_co'];
+                    xenon3_data_h2s = data['xenon3_data_h2s'];
+                    xenon3_data_o2 = data['xenon3_data_o2'];
+                    xenon3_data_ch4 = data['xenon3_data_ch4'];
+                    xenon4_data_co = data['xenon4_data_co'];
+                    xenon4_data_h2s = data['xenon4_data_h2s'];
+                    xenon4_data_o2 = data['xenon4_data_o2'];
+                    xenon4_data_ch4 = data['xenon4_data_ch4'];
+                },
+                error: function(error_data){
+                    console.log('error');
+                },
+            });
+
+            var update = {
+                       x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],
+                       y: [[xenon1_data_o2], [xenon2_data_o2], [xenon3_data_o2], [xenon4_data_o2]]
+                      }
+
+            return update;
+
+    }
+
+    var interval = setInterval(function() {
+        Plotly.extendTraces('graph_o2', o2_update(), [0, 1, 2, 3])
+    }, 5000)
+
+</script>
+
+<script type="text/javascript">
+
+    var ch4_trace1 = {
+		x: xenon1_dates,
+		y: {{ xenon1_data_ch4 }},
+		mode: 'line',
+        name: 'sensor1',
+        line: {
+		    color: 'blue'
+        }
+	};
+
+	var ch4_trace2 = {
+		x: xenon2_dates,
+		y: {{ xenon2_data_ch4 }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor2',
+        line: {
+		    color: 'green'
+        }
+	};
+
+	var ch4_trace3 = {
+		x: xenon3_dates,
+		y: {{ xenon3_data_ch4 }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor3',
+        line: {
+		    color: 'purple'
+        }
+	};
+
+	var ch4_trace4 = {
+		x: xenon4_dates,
+		y: {{ xenon4_data_ch4 }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor4',
+        line: {
+		    color: 'black'
+        }
+	};
+
+	var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3, ch4_trace4];
+
+	var layout_ch4 = {
+        title: {
+            text: 'CH4 Gas Chart',
+            font: {
+                size: 24
+            },
+            xref: 'paper',
+            {#x: 0.05,#}
+        },
+        showlegend: true,
+        yaxis: {
+        title: 'ppm'
+        },
+        shapes: [{
+            type:'line',
+            xref: 'paper',
+            x0: 0,
+            x1: 1,
+            yref:'y',
+            y0: 45,
+            y1: 45,
+            line: {
+                color: 'red',
+                width: 2,
+            },
+        }]
+	};
+
+	Plotly.plot('graph_ch4', toPlot_ch4, layout_ch4);
+
+    var cnt = 0;
+
+    function ch4_update() {
+
+          var endpoint = '/dashboard/update/';
+
+            $.ajax({
+                method: "GET",
+                url : endpoint,
+                success: function(data){
+                    xenon1_label = data['xenon1_label'];
+                    xenon2_label = data['xenon2_label'];
+                    xenon3_label = data['xenon3_label'];
+                    xenon4_label = data['xenon4_label'];
+                    xenon1_data_co = data['xenon1_data_co'];
+                    xenon1_data_h2s = data['xenon1_data_h2s'];
+                    xenon1_data_o2 = data['xenon1_data_o2'];
+                    xenon1_data_ch4 = data['xenon1_data_ch4'];
+                    xenon2_data_co = data['xenon2_data_co'];
+                    xenon2_data_h2s = data['xenon2_data_h2s'];
+                    xenon2_data_o2 = data['xenon2_data_o2'];
+                    xenon2_data_ch4 = data['xenon2_data_ch4'];
+                    xenon3_data_co = data['xenon3_data_co'];
+                    xenon3_data_h2s = data['xenon3_data_h2s'];
+                    xenon3_data_o2 = data['xenon3_data_o2'];
+                    xenon3_data_ch4 = data['xenon3_data_ch4'];
+                    xenon4_data_co = data['xenon4_data_co'];
+                    xenon4_data_h2s = data['xenon4_data_h2s'];
+                    xenon4_data_o2 = data['xenon4_data_o2'];
+                    xenon4_data_ch4 = data['xenon4_data_ch4'];
+                },
+                error: function(error_data){
+                    console.log('error');
+                },
+            });
+
+            var update = {
+                       x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],
+                       y: [[xenon1_data_ch4], [xenon2_data_ch4], [xenon3_data_ch4], [xenon4_data_ch4]]
+                      }
+
+            return update;
+
+    }
+
+    var interval = setInterval(function() {
+        Plotly.extendTraces('graph_ch4', ch4_update(), [0, 1, 2, 3])
+    }, 20000)
+
+</script>
+
+
+{% endblock %}
+
+{% block footer %}
+    <br>
+    <br>
+    <br>
+{% endblock %}
