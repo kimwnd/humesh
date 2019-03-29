@@ -110,7 +110,7 @@ def multiple_notification(request):
         h2s = values[1]
         o2 = values[2]
         ch4 = values[3]
-        volt = values[4]
+        volt = round(values[4],2)
         created = data['published_at']
         coreid = data['coreid']
         device_name = data['device_name']
