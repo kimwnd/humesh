@@ -105,12 +105,12 @@ def multiple_notification(request):
         node_role = events[3]
         location = events[4]
         node_no = events[5]
-        volt = round(float(events[6],2))
         values = data['data'].split('|')
         co = values[0]
         h2s = values[1]
         o2 = values[2]
         ch4 = values[3]
+        volt = values[4]
         created = data['published_at']
         coreid = data['coreid']
         device_name = data['device_name']
