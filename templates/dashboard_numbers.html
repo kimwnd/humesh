@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+{%  load static %}
+{% block title %}
+  <title>Hucon HICT IOT 대시보드</title>
+{% endblock %}
+
+{% block link %}
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="{% static 'lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/ionicons/css/ionicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/bootstrap-switch.css' %}" rel="stylesheet">
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <!-- Main Stylesheet File -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+  <main id="main">
+
+    <!--==========================
+      Chart Section
+    ============================-->
+    <section>
+      <div class="container">
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+
+
+        <header class="section-header">
+          <h3>Realtime Data Board</h3>
+        </header>
+
+        <div class="row about-container">
+
+          <div class="col-lg-6 content order-lg-1 order-2" style="border-bottom: #1d2124 dashed 1px">
+              <br/>
+              <h1 style="text-align: center;font-weight:bold;">Room #1</h1>
+              <table class="table table-striped">
+
+                <tbody>
+                  <tr>
+                    <td style="text-align:center;font-size:28px;">CO</td>
+                    <td style="text-align:center;font-size:28px;">H2S</td>
+                  </tr>
+                  <tr>
+                    <th id="xenon1_co" style="text-align:center;font-size:36px;">{{ xenon1_data_co }}</th>
+                    <th id="xenon1_h2s" style="text-align:center;font-size:36px;">{{ xenon1_data_h2s }}</th>
+                  </tr>
+                  <tr>
+                    <td style="text-align:center;font-size:28px;">O2</td>
+                    <td style="text-align:center;font-size:28px;">CH4</td>
+                  </tr>
+                  <tr>
+                    <th id="xenon1_o2" style="text-align:center;font-size:36px;">{{ xenon1_data_o2 }}</th>
+                    <th id="xenon1_ch4" style="text-align:center;font-size:36px;">{{ xenon1_data_ch4 }}</th>
+                  </tr>
+                </tbody>
+              </table>
+
+          </div>
+            <div class="col-lg-6 content order-lg-1 order-2" style="border-left: #1d2124 dashed 1px; border-bottom: #1d2124 dashed 1px">
+                <br/>
+               <h1 style="text-align: center;font-weight:bold;">Room #2</h1>
+               <table class="table table-striped">
+
+                    <tbody>
+                      <tr>
+                        <td style="text-align:center;font-size:28px;">CO</td>
+                        <td style="text-align:center;font-size:28px;">H2S</td>
+                      </tr>
+                      <tr>
+                        <th id="xenon2_co" style="text-align:center;font-size:36px;">{{ xenon2_data_co }}</th>
+                        <th id="xenon2_h2s" style="text-align:center;font-size:36px;">{{ xenon2_data_h2s }}</th>
+                      </tr>
+                      <tr>
+                        <td style="text-align:center;font-size:28px;">O2</td>
+                        <td style="text-align:center;font-size:28px;">CH4</td>
+                      </tr>
+                      <tr>
+                        <th id="xenon2_o2" style="text-align:center;font-size:36px;">{{ xenon2_data_o2 }}</th>
+                        <th id="xenon2_ch4" style="text-align:center;font-size:36px;">{{ xenon2_data_ch4 }}</th>
+                      </tr>
+                    </tbody>
+               </table>
+            </div>
+
+          <div class="col-lg-6 content order-lg-1 order-2">
+              <br/>
+               <h1 style="text-align: center;font-weight:bold;">Room #3</h1>
+               <table class="table table-striped">
+
+                    <tbody>
+                      <tr>
+                        <td style="text-align:center;font-size:28px;">CO</td>
+                        <td style="text-align:center;font-size:28px;">H2S</td>
+                      </tr>
+                      <tr>
+                        <th id="xenon3_co" style="text-align:center;font-size:36px;">{{ xenon3_data_co }}</th>
+                        <th id="xenon3_h2s" style="text-align:center;font-size:36px;">{{ xenon3_data_h2s }}</th>
+                      </tr>
+                      <tr>
+                        <td style="text-align:center;font-size:28px;">O2</td>
+                        <td style="text-align:center;font-size:28px;">CH4</td>
+                      </tr>
+                      <tr>
+                        <th id="xenon3_o2" style="text-align:center;font-size:36px;">{{ xenon3_data_o2 }}</th>
+                        <th id="xenon3_ch4"  style="text-align:center;font-size:36px;">{{ xenon3_data_ch4 }}</th>
+                      </tr>
+                    </tbody>
+               </table>
+          </div>
+            <div class="col-lg-6 content order-lg-1 order-2" style="border-left: #1d2124 dashed 1px;">
+                <br/>
+               <h1 style="text-align: center;font-weight:bold;">Room #4</h1>
+               <table class="table table-striped">
+
+                    <tbody>
+                      <tr>
+                        <td style="text-align:center;font-size:28px;">CO</td>
+                        <td style="text-align:center;font-size:28px;">H2S</td>
+                      </tr>
+                      <tr>
+                        <th id="xenon4_co" style="text-align:center;font-size:36px;">{{ xenon4_data_co }}</th>
+                        <th id="xenon4_h2s" style="text-align:center;font-size:36px;">{{ xenon4_data_h2s }}</th>
+                      </tr>
+                      <tr>
+                        <td style="text-align:center;font-size:28px;">O2</td>
+                        <td style="text-align:center;font-size:28px;">CH4</td>
+                      </tr>
+                      <tr>
+                        <th id="xenon4_o2"  style="text-align:center;font-size:36px;">{{ xenon4_data_o2 }}</th>
+                        <th id="xenon4_ch4"  style="text-align:center;font-size:36px;">{{ xenon4_data_ch4 }}</th>
+                      </tr>
+                    </tbody>
+               </table>
+            </div>
+
+        </div>
+      </div>
+    </section><!-- #about -->
+
+  </main>
+{% endblock %}
+
+{% block footerjs %}
+
+  <!-- JavaScript Libraries -->
+  <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/jquery/jquery-migrate.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+  <script src="{% static 'lib/mobile-nav/mobile-nav.js' %}"></script>
+  <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+  <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+  <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
+  <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'lib/isotope/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'lib/lightbox/js/lightbox.min.js' %}"></script>
+  <!-- Contact Form JavaScript File -->
+  <script src="{% static 'contactform/contactform.js' %}"></script>
+  <script src="{% static 'js/highlight.js' %}"></script>
+  <script src="{% static 'js/bootstrap-switch.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="{% static 'js/main1.js' %}"></script>
+
+
+ <script type="text/javascript">
+    function data_update() {
+
+              var endpoint = '/dashboard/numbers/update/';
+
+                $.ajax({
+                    method: "GET",
+                    url : endpoint,
+                    success: function(data){
+                        xenon1_data_co = data['xenon1_data_co'];
+                        xenon1_data_h2s = data['xenon1_data_h2s'];
+                        xenon1_data_o2 = data['xenon1_data_o2'];
+                        xenon1_data_ch4 = data['xenon1_data_ch4'];
+                        xenon2_data_co = data['xenon2_data_co'];
+                        xenon2_data_h2s = data['xenon2_data_h2s'];
+                        xenon2_data_o2 = data['xenon2_data_o2'];
+                        xenon2_data_ch4 = data['xenon2_data_ch4'];
+                        xenon3_data_co = data['xenon3_data_co'];
+                        xenon3_data_h2s = data['xenon3_data_h2s'];
+                        xenon3_data_o2 = data['xenon3_data_o2'];
+                        xenon3_data_ch4 = data['xenon3_data_ch4'];
+                        xenon4_data_co = data['xenon4_data_co'];
+                        xenon4_data_h2s = data['xenon4_data_h2s'];
+                        xenon4_data_o2 = data['xenon4_data_o2'];
+                        xenon4_data_ch4 = data['xenon4_data_ch4'];
+
+                        {#alert(parseFloat(xenon1_data_co)); #}
+
+                        document.getElementById('xenon1_co').innerText = xenon1_data_co;
+                        document.getElementById('xenon1_h2s').innerText = xenon1_data_h2s;
+                        document.getElementById('xenon1_o2').innerText = xenon1_data_o2;
+                        document.getElementById('xenon1_ch4').innerText = xenon1_data_ch4;
+
+                        document.getElementById('xenon2_co').innerText = xenon2_data_co;
+                        document.getElementById('xenon2_h2s').innerText = xenon2_data_h2s;
+                        document.getElementById('xenon2_o2').innerText = xenon2_data_o2;
+                        document.getElementById('xenon2_ch4').innerText = xenon2_data_ch4;
+
+                        document.getElementById('xenon3_co').innerText = xenon3_data_co;
+                        document.getElementById('xenon3_h2s').innerText = xenon3_data_h2s;
+                        document.getElementById('xenon3_o2').innerText = xenon3_data_o2;
+                        document.getElementById('xenon3_ch4').innerText = xenon3_data_ch4;
+
+                        document.getElementById('xenon4_co').innerText = xenon4_data_co;
+                        document.getElementById('xenon4_h2s').innerText = xenon4_data_h2s;
+                        document.getElementById('xenon4_o2').innerText = xenon4_data_o2;
+                        document.getElementById('xenon4_ch4').innerText = xenon4_data_ch4;
+
+
+                    },
+                    error: function(error_data){
+                        console.log('error');
+                    },
+                });
+                return true;
+        }
+
+        var interval = setInterval(function() {
+            data_update();
+        }, 15000)
+
+ </script>
+
+
+{% endblock %}
+
+{% block footer %}
+    <br>
+    <br>
+    <br>
+{% endblock %}

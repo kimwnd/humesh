@@ -44,14 +44,16 @@
       <div class="logo float-left">
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <h1 class="text-light"><a href="#header"><span>NewBiz</span></a></h1> -->
-        <a href="#intro" class="scrollto"><img src="{% static 'img/hc_logo.png' %}" alt="" class="img-fluid"></a>
+          <a href="#intro" class="scrollto"><h4 style="color: #333;font-weight: bold;">HICT 휴컨 밀폐통신 관제시스템</h4>
+{#              <img src="{% static 'img/hc_logo.png' %}" alt="" class="img-fluid">#}
+          </a>
       </div>
 
       <nav class="main-nav float-right d-none d-lg-block">
         <ul>
           <li class="active"><a href="#intro">Home</a></li>
-          <li><a href="{% url 'line_chart_new' %}">대시보드</a></li>
-          <li><a href="#s">운용상황</a></li>
+          <li><a href="{% url 'multiple_dash_board' %}">대시보드</a></li>
+          <li><a href="{% url 'dashboard_numbers' %}">운용상황</a></li>
           <li><a href="#">관리이력</a></li>
           <li><a href="#">공지사항</a></li>
         </ul>
