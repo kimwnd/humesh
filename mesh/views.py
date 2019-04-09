@@ -97,6 +97,12 @@ def multiple_notification(request):
     try:
         data = request.POST
         logger.debug("data: {}".format(data))
+        f = open('demo1.txt', 'a')
+        f.write('POST data is added\n\n')
+        f.write(str(data))
+        f.write('published_at : {}'.format(data['published_at']))
+        f.close()
+
         event_name = data['event']
         events = event_name.split('_')
         doc_name = events[0]
