@@ -97,11 +97,11 @@ def multiple_notification(request):
     try:
         data = request.POST
         logger.debug("data: {}".format(data))
-        f = open('demo1.txt', 'a')
-        f.write('POST data is added\n\n')
-        f.write(str(data))
-        f.write('published_at : {}'.format(data['published_at']))
-        f.close()
+        # f = open('demo1.txt', 'a')
+        # f.write('POST data is added\n\n')
+        # f.write(str(data))
+        # f.write('published_at : {}'.format(data['published_at']))
+        # f.close()
 
         event_name = data['event']
         events = event_name.split('_')
@@ -112,10 +112,10 @@ def multiple_notification(request):
         location = events[4]
         node_no = events[5]
         values = data['data'].split('|')
-        co = int(values[0])
-        h2s = int(values[1])
-        o2 = int(values[2])
-        ch4 = int(values[3])
+        co = int(float(values[0]))
+        h2s = int(float(values[1]))
+        o2 = int(float(values[2]))
+        ch4 = int(float(values[3]))
         volt = round(float(values[4]),2)
         created = data['published_at']
         coreid = data['coreid']
