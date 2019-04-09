@@ -112,10 +112,10 @@ def multiple_notification(request):
         location = events[4]
         node_no = events[5]
         values = data['data'].split('|')
-        co = values[0]
-        h2s = values[1]
-        o2 = values[2]
-        ch4 = values[3]
+        co = int(values[0])
+        h2s = int(values[1])
+        o2 = int(values[2])
+        ch4 = int(values[3])
         volt = round(float(values[4]),2)
         created = data['published_at']
         coreid = data['coreid']
