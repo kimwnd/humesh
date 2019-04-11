@@ -727,10 +727,10 @@ class MultipleDashboardView(TemplateView):
         df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
         df_xenon4=df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-01 10:00']
-        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-01 10:00']
-        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-01 10:00']
-        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-01 10:00']
+        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-09 21:30']
+        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-09 21:30']
+        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-09 21:30']
+        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-09 21:30']
 
         # For Xenon1
         df_xenon1_co = df_xenon1['data_co'].resample("20s").max().fillna(0)
@@ -1034,8 +1034,10 @@ class DashboardUpdateView(View):
             df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
             df_xenon4 = df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-01 10:00']
-            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-01 10:00']
+            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-09 21:30']
+            # df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-09 21:30']
+            # df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-09 21:30']
+            # df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-09 21:30']
 
             # For Xenon1
             df_xenon1_co = df_xenon1['data_co'].resample("20s").max().fillna(0)
