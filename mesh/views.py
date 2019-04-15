@@ -114,14 +114,14 @@ def multiple_notification(request):
         values = data['data'].split('|')
 
         if device_name == 'xenon1' :
-            co = int(float(values[0])) - 970
-            h2s = int(float(values[1])) - 1900
+            co = int(float(values[0])) - 1500
+            h2s = int(float(values[1])) - 2700
         elif device_name == 'xenon2' :
-            co = int(float(values[0])) - 1600
-            h2s = int(float(values[1])) - 2400
+            co = int(float(values[0])) - 1500
+            h2s = int(float(values[1])) - 2100
         elif device_name == 'xenon3' :
-            co = int(float(values[0])) - 1200
-            h2s = int(float(values[1])) - 2400
+            co = int(float(values[0])) - 1600
+            h2s = int(float(values[1])) - 2600
 
         # h2s = int(float(values[1]))
         o2 = int(float(values[2]))
@@ -714,7 +714,7 @@ class MultipleDashboardView(TemplateView):
             xenon3_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon4' order by created asc")
+            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
             xenon4_meshes = cursor.fetchall()
 
         df_xenon1 = pd.DataFrame(xenon1_meshes)
@@ -972,28 +972,28 @@ class DashboardNumbersView(TemplateView):
         # print(df_xenon2_co['data_co'].tolist())
         # print(xenon2_labels)
 
-        context['xenon1_data_co'] = df_xenon1_co['data_co'].tolist()[0]
-        context['xenon1_data_h2s'] = df_xenon1_h2s['data_h2s'].tolist()[0]
-        context['xenon1_data_o2'] = df_xenon1_o2['data_o2'].tolist()[0]
-        context['xenon1_data_ch4'] = df_xenon1_ch4['data_ch4'].tolist()[0]
+        context['xenon1_data_co'] = df_xenon1_co['data_co'].tolist()[-1]
+        context['xenon1_data_h2s'] = df_xenon1_h2s['data_h2s'].tolist()[-1]
+        context['xenon1_data_o2'] = df_xenon1_o2['data_o2'].tolist()[-1]
+        context['xenon1_data_ch4'] = df_xenon1_ch4['data_ch4'].tolist()[-1]
         # context['xenon1_labels'] = xenon1_labels
 
-        context['xenon2_data_co'] = df_xenon2_co['data_co'].tolist()[0]
-        context['xenon2_data_h2s'] = df_xenon2_h2s['data_h2s'].tolist()[0]
-        context['xenon2_data_o2'] = df_xenon2_o2['data_o2'].tolist()[0]
-        context['xenon2_data_ch4'] = df_xenon2_ch4['data_ch4'].tolist()[0]
+        context['xenon2_data_co'] = df_xenon2_co['data_co'].tolist()[-1]
+        context['xenon2_data_h2s'] = df_xenon2_h2s['data_h2s'].tolist()[-1]
+        context['xenon2_data_o2'] = df_xenon2_o2['data_o2'].tolist()[-1]
+        context['xenon2_data_ch4'] = df_xenon2_ch4['data_ch4'].tolist()[-1]
         # context['xenon2_labels'] = xenon2_labels
 
-        context['xenon3_data_co'] = df_xenon3_co['data_co'].tolist()[0]
-        context['xenon3_data_h2s'] = df_xenon3_h2s['data_h2s'].tolist()[0]
-        context['xenon3_data_o2'] = df_xenon3_o2['data_o2'].tolist()[0]
-        context['xenon3_data_ch4'] = df_xenon3_ch4['data_ch4'].tolist()[0]
+        context['xenon3_data_co'] = df_xenon3_co['data_co'].tolist()[-1]
+        context['xenon3_data_h2s'] = df_xenon3_h2s['data_h2s'].tolist()[-1]
+        context['xenon3_data_o2'] = df_xenon3_o2['data_o2'].tolist()[-1]
+        context['xenon3_data_ch4'] = df_xenon3_ch4['data_ch4'].tolist()[-1]
         # context['xenon3_labels'] = xenon3_labels
 
-        context['xenon4_data_co'] = df_xenon4_co['data_co'].tolist()[0]
-        context['xenon4_data_h2s'] = df_xenon4_h2s['data_h2s'].tolist()[0]
-        context['xenon4_data_o2'] = df_xenon4_o2['data_o2'].tolist()[0]
-        context['xenon4_data_ch4'] = df_xenon4_ch4['data_ch4'].tolist()[0]
+        context['xenon4_data_co'] = df_xenon4_co['data_co'].tolist()[-1]
+        context['xenon4_data_h2s'] = df_xenon4_h2s['data_h2s'].tolist()[-1]
+        context['xenon4_data_o2'] = df_xenon4_o2['data_o2'].tolist()[-1]
+        context['xenon4_data_ch4'] = df_xenon4_ch4['data_ch4'].tolist()[-1]
         # context['xenon4_labels'] = xenon4_labels
 
         print(context)
@@ -1045,10 +1045,10 @@ class DashboardUpdateView(View):
             df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
             df_xenon4 = df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-15 20:30']
-            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-15 20:30']
-            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-15 20:30']
-            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-15 20:30']
+            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-15 12:30']
+            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-15 12:30']
+            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-15 12:30']
+            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-15 12:30']
 
             # For Xenon1
             df_xenon1_co = df_xenon1['data_co'].resample("15s").max().fillna(0)
@@ -1108,8 +1108,6 @@ class DashboardUpdateView(View):
                     'xenon4_data_co': df_xenon4_co['data_co'].tolist()[-1], 'xenon4_data_h2s': df_xenon4_h2s['data_h2s'].tolist()[-1],
                     'xenon4_data_o2': df_xenon4_o2['data_o2'].tolist()[-1], 'xenon4_data_ch4': df_xenon4_ch4['data_ch4'].tolist()[-1],
                     }
-
-            # print(data)
 
             return JsonResponse(data)
 
@@ -1210,9 +1208,6 @@ class DashboardNumnersUpdateView(View):
             xenon3_dts = df_xenon3_co['datetime'].tolist()
             xenon4_dts = df_xenon4_co['datetime'].tolist()
 
-            xenon1_data_co = df_xenon1_co['data_co'].tolist()[-1]
-            print(float(xenon1_data_co))
-
             data = {'xenon1_label': str(xenon1_dts[-1])[:19],
                     'xenon1_data_co': df_xenon1_co['data_co'].tolist()[-1], 'xenon1_data_h2s': df_xenon1_h2s['data_h2s'].tolist()[-1],
                     'xenon1_data_o2': df_xenon1_o2['data_o2'].tolist()[-1], 'xenon1_data_ch4': df_xenon1_ch4['data_ch4'].tolist()[-1],
@@ -1226,6 +1221,8 @@ class DashboardNumnersUpdateView(View):
                     'xenon4_data_co': df_xenon4_co['data_co'].tolist()[-1], 'xenon4_data_h2s': df_xenon4_h2s['data_h2s'].tolist()[-1],
                     'xenon4_data_o2': df_xenon4_o2['data_o2'].tolist()[-1], 'xenon4_data_ch4': df_xenon4_ch4['data_ch4'].tolist()[-1],
                     }
+
+            # print(data)
 
             return JsonResponse(data)
 
