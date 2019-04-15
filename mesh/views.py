@@ -115,10 +115,10 @@ def multiple_notification(request):
 
         if device_name == 'xenon1' :
             co = int(float(values[0])) - 1700
-            h2s = int(float(values[1])) - 2700
+            h2s = int(float(values[1])) - 2650
         elif device_name == 'xenon2' :
             co = int(float(values[0])) - 1450
-            h2s = int(float(values[1])) - 2100
+            h2s = int(float(values[1])) - 2020
         elif device_name == 'xenon3' :
             co = int(float(values[0])) - 1600
             h2s = int(float(values[1])) - 2600
