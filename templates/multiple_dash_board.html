@@ -161,7 +161,8 @@
         }
 	};
 
-	var toPlot_co = [co_trace1, co_trace2, co_trace3, co_trace4];
+	{#var toPlot_co = [co_trace1, co_trace2, co_trace3, co_trace4];#}
+	var toPlot_co = [co_trace1, co_trace2, co_trace3];
 
 	var layout_co = {
         title: {
@@ -240,7 +241,7 @@
 
     var interval = setInterval(function() {
         Plotly.extendTraces('graph_co', co_update(), [0, 1, 2, 3])
-    }, 20000)
+    }, 15000)
 
   </script>
 
@@ -288,7 +289,8 @@
         }
 	};
 
-	var toPlot_h2s = [h2s_trace1, h2s_trace2, h2s_trace3, h2s_trace4];
+	{#var toPlot_h2s = [h2s_trace1, h2s_trace2, h2s_trace3, h2s_trace4];#}
+	var toPlot_h2s = [h2s_trace1, h2s_trace2, h2s_trace3];
 
 	var layout_h2s = {
         title: {
@@ -367,7 +369,7 @@
 
     var interval = setInterval(function() {
         Plotly.extendTraces('graph_h2s', h2s_update(), [0, 1, 2, 3])
-    }, 20000)
+    }, 15000)
 
 </script>
 
@@ -416,7 +418,8 @@
         }
 	};
 
-	var toPlot_o2 = [o2_trace1, o2_trace2, o2_trace3, o2_trace4];
+	{#var toPlot_o2 = [o2_trace1, o2_trace2, o2_trace3, o2_trace4];#}
+	var toPlot_o2 = [o2_trace1, o2_trace2, o2_trace3];
 
 	var layout_o2 = {
         title: {
@@ -495,7 +498,7 @@
 
     var interval = setInterval(function() {
         Plotly.extendTraces('graph_o2', o2_update(), [0, 1, 2, 3])
-    }, 5000)
+    }, 15000)
 
 </script>
 
@@ -544,7 +547,8 @@
         }
 	};
 
-	var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3, ch4_trace4];
+	var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3];
+	{#var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3, ch4_trace4];#}
 
 	var layout_ch4 = {
         title: {
@@ -623,7 +627,7 @@
 
     var interval = setInterval(function() {
         Plotly.extendTraces('graph_ch4', ch4_update(), [0, 1, 2, 3])
-    }, 20000)
+    }, 15000)
 
 </script>
 
