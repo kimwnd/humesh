@@ -1159,7 +1159,7 @@ class DashboardNumnersUpdateView(View):
             df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-16 1:30']
             df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-16 1:30']
             df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-16 1:30']
-            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-17 1:30']
+            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-16 1:30']
 
             # For Xenon1
             df_xenon1_co = df_xenon1['data_co'].resample("10s").max().fillna(0)
