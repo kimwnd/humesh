@@ -114,14 +114,14 @@ def multiple_notification(request):
         values = data['data'].split('|')
 
         if device_name == 'xenon1' :
-            co = int(float(values[0])) - 1700
-            h2s = int(float(values[1])) - 2650
+            co = int(float(values[0])) - 1650
+            h2s = int(float(values[1])) - 2550
         elif device_name == 'xenon2' :
-            co = int(float(values[0])) - 1450
-            h2s = int(float(values[1])) - 2020
+            co = int(float(values[0])) - 1400
+            h2s = int(float(values[1])) - 2000
         elif device_name == 'xenon3' :
-            co = int(float(values[0])) - 1600
-            h2s = int(float(values[1])) - 2600
+            co = int(float(values[0])) - 1950
+            h2s = int(float(values[1])) - 2560
 
         # h2s = int(float(values[1]))
         o2 = int(float(values[2]))
@@ -710,11 +710,11 @@ class MultipleDashboardView(TemplateView):
             xenon2_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
             xenon3_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
             xenon4_meshes = cursor.fetchall()
 
         df_xenon1 = pd.DataFrame(xenon1_meshes)
@@ -737,46 +737,46 @@ class MultipleDashboardView(TemplateView):
         df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
         df_xenon4=df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-15 22:30']
-        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-15 22:30']
-        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-15 22:30']
-        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-15 22:30']
+        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-16 1:30']
+        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-16 1:30']
+        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-16 1:30']
+        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-16 1:30']
 
         # For Xenon1
-        df_xenon1_co = df_xenon1['data_co'].resample("15s").max().fillna(0)
-        df_xenon1_h2s = df_xenon1['data_h2s'].resample("15s").max().fillna(0)
-        df_xenon1_o2 = df_xenon1['data_o2'].resample("15s").max().fillna(0)
-        df_xenon1_ch4 = df_xenon1['data_ch4'].resample("15s").max().fillna(0)
+        df_xenon1_co = df_xenon1['data_co'].resample("10s").max().fillna(0)
+        df_xenon1_h2s = df_xenon1['data_h2s'].resample("10s").max().fillna(0)
+        df_xenon1_o2 = df_xenon1['data_o2'].resample("10s").max().fillna(0)
+        df_xenon1_ch4 = df_xenon1['data_ch4'].resample("10s").max().fillna(0)
         df_xenon1_co = df_xenon1_co.reset_index()
         df_xenon1_h2s = df_xenon1_h2s.reset_index()
         df_xenon1_o2 = df_xenon1_o2.reset_index()
         df_xenon1_ch4 = df_xenon1_ch4.reset_index()
 
         # For Xenon2
-        df_xenon2_co = df_xenon2['data_co'].resample("15s").max().fillna(0)
-        df_xenon2_h2s = df_xenon2['data_h2s'].resample("15s").max().fillna(0)
-        df_xenon2_o2 = df_xenon2['data_o2'].resample("15s").max().fillna(0)
-        df_xenon2_ch4 = df_xenon2['data_ch4'].resample("15s").max().fillna(0)
+        df_xenon2_co = df_xenon2['data_co'].resample("10s").max().fillna(0)
+        df_xenon2_h2s = df_xenon2['data_h2s'].resample("10s").max().fillna(0)
+        df_xenon2_o2 = df_xenon2['data_o2'].resample("10s").max().fillna(0)
+        df_xenon2_ch4 = df_xenon2['data_ch4'].resample("10s").max().fillna(0)
         df_xenon2_co = df_xenon2_co.reset_index()
         df_xenon2_h2s = df_xenon2_h2s.reset_index()
         df_xenon2_o2 = df_xenon2_o2.reset_index()
         df_xenon2_ch4 = df_xenon2_ch4.reset_index()
 
         # For Xenon3
-        df_xenon3_co = df_xenon3['data_co'].resample("15s").max().fillna(0)
-        df_xenon3_h2s = df_xenon3['data_h2s'].resample("15s").max().fillna(0)
-        df_xenon3_o2 = df_xenon3['data_o2'].resample("15s").max().fillna(0)
-        df_xenon3_ch4 = df_xenon3['data_ch4'].resample("15s").max().fillna(0)
+        df_xenon3_co = df_xenon3['data_co'].resample("10s").max().fillna(0)
+        df_xenon3_h2s = df_xenon3['data_h2s'].resample("10s").max().fillna(0)
+        df_xenon3_o2 = df_xenon3['data_o2'].resample("10s").max().fillna(0)
+        df_xenon3_ch4 = df_xenon3['data_ch4'].resample("10s").max().fillna(0)
         df_xenon3_co = df_xenon3_co.reset_index()
         df_xenon3_h2s = df_xenon3_h2s.reset_index()
         df_xenon3_o2 = df_xenon3_o2.reset_index()
         df_xenon3_ch4 = df_xenon3_ch4.reset_index()
 
         # For Xenon4
-        df_xenon4_co = df_xenon4['data_co'].resample("15s").max().fillna(0)
-        df_xenon4_h2s = df_xenon4['data_h2s'].resample("15s").max().fillna(0)
-        df_xenon4_o2 = df_xenon4['data_o2'].resample("15s").max().fillna(0)
-        df_xenon4_ch4 = df_xenon4['data_ch4'].resample("15s").max().fillna(0)
+        df_xenon4_co = df_xenon4['data_co'].resample("10s").max().fillna(0)
+        df_xenon4_h2s = df_xenon4['data_h2s'].resample("10s").max().fillna(0)
+        df_xenon4_o2 = df_xenon4['data_o2'].resample("10s").max().fillna(0)
+        df_xenon4_ch4 = df_xenon4['data_ch4'].resample("10s").max().fillna(0)
         df_xenon4_co = df_xenon4_co.reset_index()
         df_xenon4_h2s = df_xenon4_h2s.reset_index()
         df_xenon4_o2 = df_xenon4_o2.reset_index()
@@ -889,46 +889,46 @@ class DashboardNumbersView(TemplateView):
         df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
         df_xenon4=df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-15 22:30']
-        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-15 22:30']
-        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-15 22:30']
-        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-15 22:30']
+        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-16 1:30']
+        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-16 1:30']
+        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-16 1:30']
+        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-16 1:30']
 
         # For Xenon1
-        df_xenon1_co = df_xenon1['data_co'].resample("15s").max().fillna(0)
-        df_xenon1_h2s = df_xenon1['data_h2s'].resample("15s").max().fillna(0)
-        df_xenon1_o2 = df_xenon1['data_o2'].resample("15s").max().fillna(0)
-        df_xenon1_ch4 = df_xenon1['data_ch4'].resample("15s").max().fillna(0)
+        df_xenon1_co = df_xenon1['data_co'].resample("10s").max().fillna(0)
+        df_xenon1_h2s = df_xenon1['data_h2s'].resample("10s").max().fillna(0)
+        df_xenon1_o2 = df_xenon1['data_o2'].resample("10s").max().fillna(0)
+        df_xenon1_ch4 = df_xenon1['data_ch4'].resample("10s").max().fillna(0)
         df_xenon1_co = df_xenon1_co.reset_index()
         df_xenon1_h2s = df_xenon1_h2s.reset_index()
         df_xenon1_o2 = df_xenon1_o2.reset_index()
         df_xenon1_ch4 = df_xenon1_ch4.reset_index()
 
         # For Xenon2
-        df_xenon2_co = df_xenon2['data_co'].resample("15s").max().fillna(0)
-        df_xenon2_h2s = df_xenon2['data_h2s'].resample("15s").max().fillna(0)
-        df_xenon2_o2 = df_xenon2['data_o2'].resample("15s").max().fillna(0)
-        df_xenon2_ch4 = df_xenon2['data_ch4'].resample("15s").max().fillna(0)
+        df_xenon2_co = df_xenon2['data_co'].resample("10s").max().fillna(0)
+        df_xenon2_h2s = df_xenon2['data_h2s'].resample("10s").max().fillna(0)
+        df_xenon2_o2 = df_xenon2['data_o2'].resample("10s").max().fillna(0)
+        df_xenon2_ch4 = df_xenon2['data_ch4'].resample("10s").max().fillna(0)
         df_xenon2_co = df_xenon2_co.reset_index()
         df_xenon2_h2s = df_xenon2_h2s.reset_index()
         df_xenon2_o2 = df_xenon2_o2.reset_index()
         df_xenon2_ch4 = df_xenon2_ch4.reset_index()
 
         # For Xenon3
-        df_xenon3_co = df_xenon3['data_co'].resample("15s").max().fillna(0)
-        df_xenon3_h2s = df_xenon3['data_h2s'].resample("15s").max().fillna(0)
-        df_xenon3_o2 = df_xenon3['data_o2'].resample("15s").max().fillna(0)
-        df_xenon3_ch4 = df_xenon3['data_ch4'].resample("15s").max().fillna(0)
+        df_xenon3_co = df_xenon3['data_co'].resample("10s").max().fillna(0)
+        df_xenon3_h2s = df_xenon3['data_h2s'].resample("10s").max().fillna(0)
+        df_xenon3_o2 = df_xenon3['data_o2'].resample("10s").max().fillna(0)
+        df_xenon3_ch4 = df_xenon3['data_ch4'].resample("10s").max().fillna(0)
         df_xenon3_co = df_xenon3_co.reset_index()
         df_xenon3_h2s = df_xenon3_h2s.reset_index()
         df_xenon3_o2 = df_xenon3_o2.reset_index()
         df_xenon3_ch4 = df_xenon3_ch4.reset_index()
 
         # For Xenon4
-        df_xenon4_co = df_xenon4['data_co'].resample("15s").max().fillna(0)
-        df_xenon4_h2s = df_xenon4['data_h2s'].resample("15s").max().fillna(0)
-        df_xenon4_o2 = df_xenon4['data_o2'].resample("15s").max().fillna(0)
-        df_xenon4_ch4 = df_xenon4['data_ch4'].resample("15s").max().fillna(0)
+        df_xenon4_co = df_xenon4['data_co'].resample("10s").max().fillna(0)
+        df_xenon4_h2s = df_xenon4['data_h2s'].resample("10s").max().fillna(0)
+        df_xenon4_o2 = df_xenon4['data_o2'].resample("10s").max().fillna(0)
+        df_xenon4_ch4 = df_xenon4['data_ch4'].resample("10s").max().fillna(0)
         df_xenon4_co = df_xenon4_co.reset_index()
         df_xenon4_h2s = df_xenon4_h2s.reset_index()
         df_xenon4_o2 = df_xenon4_o2.reset_index()
@@ -1017,12 +1017,12 @@ class DashboardUpdateView(View):
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon3_meshes = cursor.fetchall()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon4_meshes = cursor.fetchall()
 
             df_xenon1 = pd.DataFrame(xenon1_meshes)
@@ -1045,46 +1045,46 @@ class DashboardUpdateView(View):
             df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
             df_xenon4 = df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-15 12:30']
-            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-15 12:30']
-            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-15 12:30']
-            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-15 12:30']
+            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-16 1:30']
+            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-16 1:30']
+            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-16 1:30']
+            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-16 1:30']
 
             # For Xenon1
-            df_xenon1_co = df_xenon1['data_co'].resample("15s").max().fillna(0)
-            df_xenon1_h2s = df_xenon1['data_h2s'].resample("15s").max().fillna(0)
-            df_xenon1_o2 = df_xenon1['data_o2'].resample("15s").max().fillna(0)
-            df_xenon1_ch4 = df_xenon1['data_ch4'].resample("15s").max().fillna(0)
+            df_xenon1_co = df_xenon1['data_co'].resample("10s").max().fillna(0)
+            df_xenon1_h2s = df_xenon1['data_h2s'].resample("10s").max().fillna(0)
+            df_xenon1_o2 = df_xenon1['data_o2'].resample("10s").max().fillna(0)
+            df_xenon1_ch4 = df_xenon1['data_ch4'].resample("10s").max().fillna(0)
             df_xenon1_co = df_xenon1_co.reset_index()
             df_xenon1_h2s = df_xenon1_h2s.reset_index()
             df_xenon1_o2 = df_xenon1_o2.reset_index()
             df_xenon1_ch4 = df_xenon1_ch4.reset_index()
 
             # For Xenon2
-            df_xenon2_co = df_xenon2['data_co'].resample("15s").max().fillna(0)
-            df_xenon2_h2s = df_xenon2['data_h2s'].resample("15s").max().fillna(0)
-            df_xenon2_o2 = df_xenon2['data_o2'].resample("15s").max().fillna(0)
-            df_xenon2_ch4 = df_xenon2['data_ch4'].resample("15s").max().fillna(0)
+            df_xenon2_co = df_xenon2['data_co'].resample("10s").max().fillna(0)
+            df_xenon2_h2s = df_xenon2['data_h2s'].resample("10s").max().fillna(0)
+            df_xenon2_o2 = df_xenon2['data_o2'].resample("10s").max().fillna(0)
+            df_xenon2_ch4 = df_xenon2['data_ch4'].resample("10s").max().fillna(0)
             df_xenon2_co = df_xenon2_co.reset_index()
             df_xenon2_h2s = df_xenon2_h2s.reset_index()
             df_xenon2_o2 = df_xenon2_o2.reset_index()
             df_xenon2_ch4 = df_xenon2_ch4.reset_index()
 
             # For Xenon3
-            df_xenon3_co = df_xenon3['data_co'].resample("15s").max().fillna(0)
-            df_xenon3_h2s = df_xenon3['data_h2s'].resample("15s").max().fillna(0)
-            df_xenon3_o2 = df_xenon3['data_o2'].resample("15s").max().fillna(0)
-            df_xenon3_ch4 = df_xenon3['data_ch4'].resample("15s").max().fillna(0)
+            df_xenon3_co = df_xenon3['data_co'].resample("10s").max().fillna(0)
+            df_xenon3_h2s = df_xenon3['data_h2s'].resample("10s").max().fillna(0)
+            df_xenon3_o2 = df_xenon3['data_o2'].resample("10s").max().fillna(0)
+            df_xenon3_ch4 = df_xenon3['data_ch4'].resample("10s").max().fillna(0)
             df_xenon3_co = df_xenon3_co.reset_index()
             df_xenon3_h2s = df_xenon3_h2s.reset_index()
             df_xenon3_o2 = df_xenon3_o2.reset_index()
             df_xenon3_ch4 = df_xenon3_ch4.reset_index()
 
             # For Xenon4
-            df_xenon4_co = df_xenon4['data_co'].resample("15s").max().fillna(0)
-            df_xenon4_h2s = df_xenon4['data_h2s'].resample("15s").max().fillna(0)
-            df_xenon4_o2 = df_xenon4['data_o2'].resample("15s").max().fillna(0)
-            df_xenon4_ch4 = df_xenon4['data_ch4'].resample("15s").max().fillna(0)
+            df_xenon4_co = df_xenon4['data_co'].resample("10s").max().fillna(0)
+            df_xenon4_h2s = df_xenon4['data_h2s'].resample("10s").max().fillna(0)
+            df_xenon4_o2 = df_xenon4['data_o2'].resample("10s").max().fillna(0)
+            df_xenon4_ch4 = df_xenon4['data_ch4'].resample("10s").max().fillna(0)
             df_xenon4_co = df_xenon4_co.reset_index()
             df_xenon4_h2s = df_xenon4_h2s.reset_index()
             df_xenon4_o2 = df_xenon4_o2.reset_index()
@@ -1128,12 +1128,12 @@ class DashboardNumnersUpdateView(View):
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon3_meshes = cursor.fetchall()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon4_meshes = cursor.fetchall()
 
             df_xenon1 = pd.DataFrame(xenon1_meshes)
@@ -1156,46 +1156,46 @@ class DashboardNumnersUpdateView(View):
             df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
             df_xenon4 = df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-15 20:30']
-            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-15 20:30']
-            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-15 20:30']
-            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-15 20:30']
+            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-16 1:30']
+            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-16 1:30']
+            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-16 1:30']
+            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-17 1:30']
 
             # For Xenon1
-            df_xenon1_co = df_xenon1['data_co'].resample("15s").max().fillna(0)
-            df_xenon1_h2s = df_xenon1['data_h2s'].resample("15s").max().fillna(0)
-            df_xenon1_o2 = df_xenon1['data_o2'].resample("15s").max().fillna(0)
-            df_xenon1_ch4 = df_xenon1['data_ch4'].resample("15s").max().fillna(0)
+            df_xenon1_co = df_xenon1['data_co'].resample("10s").max().fillna(0)
+            df_xenon1_h2s = df_xenon1['data_h2s'].resample("10s").max().fillna(0)
+            df_xenon1_o2 = df_xenon1['data_o2'].resample("10s").max().fillna(0)
+            df_xenon1_ch4 = df_xenon1['data_ch4'].resample("10s").max().fillna(0)
             df_xenon1_co = df_xenon1_co.reset_index()
             df_xenon1_h2s = df_xenon1_h2s.reset_index()
             df_xenon1_o2 = df_xenon1_o2.reset_index()
             df_xenon1_ch4 = df_xenon1_ch4.reset_index()
 
             # For Xenon2
-            df_xenon2_co = df_xenon2['data_co'].resample("15s").max().fillna(0)
-            df_xenon2_h2s = df_xenon2['data_h2s'].resample("15s").max().fillna(0)
-            df_xenon2_o2 = df_xenon2['data_o2'].resample("15s").max().fillna(0)
-            df_xenon2_ch4 = df_xenon2['data_ch4'].resample("15s").max().fillna(0)
+            df_xenon2_co = df_xenon2['data_co'].resample("10s").max().fillna(0)
+            df_xenon2_h2s = df_xenon2['data_h2s'].resample("10s").max().fillna(0)
+            df_xenon2_o2 = df_xenon2['data_o2'].resample("10s").max().fillna(0)
+            df_xenon2_ch4 = df_xenon2['data_ch4'].resample("10s").max().fillna(0)
             df_xenon2_co = df_xenon2_co.reset_index()
             df_xenon2_h2s = df_xenon2_h2s.reset_index()
             df_xenon2_o2 = df_xenon2_o2.reset_index()
             df_xenon2_ch4 = df_xenon2_ch4.reset_index()
 
             # For Xenon3
-            df_xenon3_co = df_xenon3['data_co'].resample("15s").max().fillna(0)
-            df_xenon3_h2s = df_xenon3['data_h2s'].resample("15s").max().fillna(0)
-            df_xenon3_o2 = df_xenon3['data_o2'].resample("15s").max().fillna(0)
-            df_xenon3_ch4 = df_xenon3['data_ch4'].resample("15s").max().fillna(0)
+            df_xenon3_co = df_xenon3['data_co'].resample("10s").max().fillna(0)
+            df_xenon3_h2s = df_xenon3['data_h2s'].resample("10s").max().fillna(0)
+            df_xenon3_o2 = df_xenon3['data_o2'].resample("10s").max().fillna(0)
+            df_xenon3_ch4 = df_xenon3['data_ch4'].resample("10s").max().fillna(0)
             df_xenon3_co = df_xenon3_co.reset_index()
             df_xenon3_h2s = df_xenon3_h2s.reset_index()
             df_xenon3_o2 = df_xenon3_o2.reset_index()
             df_xenon3_ch4 = df_xenon3_ch4.reset_index()
 
             # For Xenon4
-            df_xenon4_co = df_xenon4['data_co'].resample("15s").max().fillna(0)
-            df_xenon4_h2s = df_xenon4['data_h2s'].resample("15s").max().fillna(0)
-            df_xenon4_o2 = df_xenon4['data_o2'].resample("15s").max().fillna(0)
-            df_xenon4_ch4 = df_xenon4['data_ch4'].resample("15s").max().fillna(0)
+            df_xenon4_co = df_xenon4['data_co'].resample("10s").max().fillna(0)
+            df_xenon4_h2s = df_xenon4['data_h2s'].resample("10s").max().fillna(0)
+            df_xenon4_o2 = df_xenon4['data_o2'].resample("10s").max().fillna(0)
+            df_xenon4_ch4 = df_xenon4['data_ch4'].resample("10s").max().fillna(0)
             df_xenon4_co = df_xenon4_co.reset_index()
             df_xenon4_h2s = df_xenon4_h2s.reset_index()
             df_xenon4_o2 = df_xenon4_o2.reset_index()
@@ -1221,8 +1221,6 @@ class DashboardNumnersUpdateView(View):
                     'xenon4_data_co': df_xenon4_co['data_co'].tolist()[-1], 'xenon4_data_h2s': df_xenon4_h2s['data_h2s'].tolist()[-1],
                     'xenon4_data_o2': df_xenon4_o2['data_o2'].tolist()[-1], 'xenon4_data_ch4': df_xenon4_ch4['data_ch4'].tolist()[-1],
                     }
-
-            # print(data)
 
             return JsonResponse(data)
 
