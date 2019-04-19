@@ -113,15 +113,15 @@ def multiple_notification(request):
         node_no = events[5]
         values = data['data'].split('|')
 
-        if device_name == 'xenon1' :
-            co = int(float(values[0])) - 1650
-            h2s = int(float(values[1])) - 2550
-        elif device_name == 'xenon2' :
-            co = int(float(values[0])) - 1400
-            h2s = int(float(values[1])) - 1850
-        elif device_name == 'xenon3' :
-            co = int(float(values[0])) - 1750
-            h2s = int(float(values[1])) - 2560
+        # if device_name == 'xenon1' :
+        #     co = int(float(values[0])) - 1650
+        #     h2s = int(float(values[1])) - 2550
+        # elif device_name == 'xenon2' :
+        #     co = int(float(values[0])) - 1400
+        #     h2s = int(float(values[1])) - 1850
+        # elif device_name == 'xenon3' :
+        #     co = int(float(values[0])) - 1750
+        #     h2s = int(float(values[1])) - 2560
 
         # h2s = int(float(values[1]))
         o2 = int(float(values[2]))
@@ -737,10 +737,10 @@ class MultipleDashboardView(TemplateView):
         df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
         df_xenon4=df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-16 2:20']
-        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-16 2:20']
-        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-16 2:20']
-        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-16 2:20']
+        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-18 15:00']
+        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-18 15:00']
+        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-18 15:00']
+        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-18 15:00']
 
         # For Xenon1
         df_xenon1_co = df_xenon1['data_co'].resample("10s").max().fillna(0)
@@ -889,10 +889,10 @@ class DashboardNumbersView(TemplateView):
         df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
         df_xenon4=df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-16 1:30']
-        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-16 1:30']
-        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-16 1:30']
-        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-16 1:30']
+        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-16 2:35']
+        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-16 2:35']
+        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-16 2:35']
+        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-16 2:35']
 
         # For Xenon1
         df_xenon1_co = df_xenon1['data_co'].resample("10s").max().fillna(0)
@@ -1045,10 +1045,10 @@ class DashboardUpdateView(View):
             df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
             df_xenon4 = df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-16 2:20']
-            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-16 2:20']
-            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-16 2:20']
-            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-16 2:20']
+            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-18 15:00']
+            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-18 15:00']
+            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-18 15:00']
+            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-18 15:00']
 
             # For Xenon1
             df_xenon1_co = df_xenon1['data_co'].resample("10s").max().fillna(0)
@@ -1156,10 +1156,10 @@ class DashboardNumnersUpdateView(View):
             df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
             df_xenon4 = df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-16 1:30']
-            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-16 1:30']
-            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-16 1:30']
-            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-16 1:30']
+            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-16 2:35']
+            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-16 2:35']
+            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-16 2:35']
+            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-16 2:35']
 
             # For Xenon1
             df_xenon1_co = df_xenon1['data_co'].resample("10s").max().fillna(0)
