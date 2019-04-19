@@ -113,15 +113,15 @@ def multiple_notification(request):
         node_no = events[5]
         values = data['data'].split('|')
 
-        # if device_name == 'xenon1' :
-        #     co = int(float(values[0])) - 1650
-        #     h2s = int(float(values[1])) - 2550
-        # elif device_name == 'xenon2' :
-        #     co = int(float(values[0])) - 1400
-        #     h2s = int(float(values[1])) - 1850
-        # elif device_name == 'xenon3' :
-        #     co = int(float(values[0])) - 1750
-        #     h2s = int(float(values[1])) - 2560
+        if device_name == 'xenon1' :
+            co = int(float(values[0])) - 1650
+            h2s = int(float(values[1])) - 2550
+        elif device_name == 'xenon2' :
+            co = int(float(values[0])) - 1400
+            h2s = int(float(values[1])) - 1850
+        elif device_name == 'xenon3' :
+            co = int(float(values[0])) - 1750
+            h2s = int(float(values[1])) - 2560
 
         # h2s = int(float(values[1]))
         o2 = int(float(values[2]))
@@ -1017,12 +1017,12 @@ class DashboardUpdateView(View):
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon3_meshes = cursor.fetchall()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon4_meshes = cursor.fetchall()
 
             df_xenon1 = pd.DataFrame(xenon1_meshes)
@@ -1128,12 +1128,12 @@ class DashboardNumnersUpdateView(View):
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon3_meshes = cursor.fetchall()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon4_meshes = cursor.fetchall()
 
             df_xenon1 = pd.DataFrame(xenon1_meshes)
