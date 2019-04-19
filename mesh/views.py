@@ -113,17 +113,18 @@ def multiple_notification(request):
         node_no = events[5]
         values = data['data'].split('|')
 
-        if device_name == 'xenon1' :
-            co = int(float(values[0])) - 1650
-            h2s = int(float(values[1])) - 2550
-        elif device_name == 'xenon2' :
-            co = int(float(values[0])) - 1400
-            h2s = int(float(values[1])) - 1850
-        elif device_name == 'xenon3' :
-            co = int(float(values[0])) - 1750
-            h2s = int(float(values[1])) - 2560
+        # if device_name == 'xenon1' :
+        #     co = int(float(values[0])) - 1650
+        #     h2s = int(float(values[1])) - 2550
+        # elif device_name == 'xenon2' :
+        #     co = int(float(values[0])) - 1400
+        #     h2s = int(float(values[1])) - 1850
+        # elif device_name == 'xenon3' :
+        #     co = int(float(values[0])) - 1750
+        #     h2s = int(float(values[1])) - 2560
 
-        # h2s = int(float(values[1]))
+        co = int(float(values[0]))
+        h2s = int(float(values[1]))
         o2 = int(float(values[2]))
         ch4 = int(float(values[3]))
         volt = round(float(values[4]),2)
