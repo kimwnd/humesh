@@ -131,10 +131,10 @@ def multiple_notification(request):
         created = data['published_at']
         coreid = data['coreid']
 
-        co_m_inv = 4762.0
-        vref = volt/3.3*0.5*4096.0
-        co_ppm = co_m_inv*(co-vref - 550.0)
-        co_ppm = int(co_ppm)
+        # co_m_inv = 4762.0
+        # vref = volt/3.3*0.5*4096.0
+        # co_ppm = co_m_inv*(co-vref - 550.0)
+        # co_ppm = int(co_ppm)
 
         year = int(created[:4])
         mon = int(created[5:7])
@@ -147,7 +147,7 @@ def multiple_notification(request):
 
         multi_mesh = MultipleMeshDataMdodel(event=event_name,
                                             device_name=device_name,
-                                            data_co=co_ppm,
+                                            data_co=co,
                                             data_h2s=h2s,
                                             data_o2=o2,
                                             data_ch4=ch4,
