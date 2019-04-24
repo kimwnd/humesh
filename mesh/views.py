@@ -135,6 +135,17 @@ def multiple_notification(request):
         # vref = volt/3.3*0.5*4096.0
         # co_ppm = co_m_inv*(co-vref - 550.0)
         # co_ppm = int(co_ppm)
+        if device_name == 'xenon1' :
+            if co < 1900.0 :
+                co = 1900.0
+
+            co_voff = 1900.0 * 0.0011224
+            co_v_diff = 3.3 - co_voff
+            co_ppm = 1000.0 / co_v_diff*(co*0.0011224 - co_voff)
+        else:
+            co_ppm = 0.0
+
+        h2s = 0
 
         year = int(created[:4])
         mon = int(created[5:7])
@@ -147,7 +158,7 @@ def multiple_notification(request):
 
         multi_mesh = MultipleMeshDataMdodel(event=event_name,
                                             device_name=device_name,
-                                            data_co=co,
+                                            data_co=co_ppm,
                                             data_h2s=h2s,
                                             data_o2=o2,
                                             data_ch4=ch4,
@@ -715,11 +726,11 @@ class MultipleDashboardView(TemplateView):
             xenon2_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
             xenon3_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon4' order by created asc")
+            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
             xenon4_meshes = cursor.fetchall()
 
         df_xenon1 = pd.DataFrame(xenon1_meshes)
@@ -742,10 +753,10 @@ class MultipleDashboardView(TemplateView):
         df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
         df_xenon4=df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-23 15:00']
-        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-23 15:00']
-        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-23 15:00']
-        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-23 15:00']
+        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-24 15:00']
+        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-24 15:00']
+        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-24 15:00']
+        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-24 15:00']
 
         # For Xenon1
         df_xenon1_co = df_xenon1['data_co'].resample("15s").max().fillna(0)
@@ -904,11 +915,11 @@ class DashboardNumbersView(TemplateView):
             xenon2_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
             xenon3_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon4' order by created asc")
+            cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
             xenon4_meshes = cursor.fetchall()
 
         df_xenon1 = pd.DataFrame(xenon1_meshes)
@@ -931,10 +942,10 @@ class DashboardNumbersView(TemplateView):
         df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
         df_xenon4=df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-16 2:35']
-        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-16 2:35']
-        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-16 2:35']
-        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-16 2:35']
+        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-24 16:35']
+        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-24 16:35']
+        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-24 16:35']
+        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-24 16:35']
 
         # For Xenon1
         df_xenon1_co = df_xenon1['data_co'].resample("10s").max().fillna(0)
@@ -1070,12 +1081,12 @@ class DashboardUpdateView(View):
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon3_meshes = cursor.fetchall()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon4' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon4_meshes = cursor.fetchall()
 
             df_xenon1 = pd.DataFrame(xenon1_meshes)
@@ -1098,10 +1109,10 @@ class DashboardUpdateView(View):
             df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
             df_xenon4 = df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-23 15:00']
-            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-23 15:00']
-            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-23 15:00']
-            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-23 15:00']
+            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-24 15:00']
+            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-24 15:00']
+            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-24 15:00']
+            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-24 15:00']
 
             # For Xenon1
             df_xenon1_co = df_xenon1['data_co'].resample("15s").max().fillna(0)
@@ -1190,12 +1201,12 @@ class DashboardNumnersUpdateView(View):
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon3_meshes = cursor.fetchall()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_h2s, data_o2, data_ch4, created from multiple_mesh_data where device_name = 'xenon2' order by created asc")
                 xenon4_meshes = cursor.fetchall()
 
             df_xenon1 = pd.DataFrame(xenon1_meshes)
@@ -1218,10 +1229,10 @@ class DashboardNumnersUpdateView(View):
             df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
             df_xenon4 = df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-23 2:35']
-            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-23 2:35']
-            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-23 2:35']
-            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-23 2:35']
+            df_xenon1 = df_xenon1[df_xenon1['datetime'] > '2019-04-24 2:35']
+            df_xenon2 = df_xenon2[df_xenon2['datetime'] > '2019-04-24 2:35']
+            df_xenon3 = df_xenon3[df_xenon3['datetime'] > '2019-04-24 2:35']
+            df_xenon4 = df_xenon4[df_xenon4['datetime'] > '2019-04-24 2:35']
 
             # For Xenon1
             df_xenon1_co = df_xenon1['data_co'].resample("10s").max().fillna(0)
