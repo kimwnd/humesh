@@ -157,7 +157,7 @@ def multiple_notification(request):
         published = datetime.datetime(year, mon, day, hour, min, sec) + datetime.timedelta(hours=18)
 
         multi_mesh = MultipleMeshDataMdodel(event=event_name,
-                                            device_name=device_name,
+                                            device_name=data['device_name'],
                                             data_co=co,
                                             data_h2s=h2s,
                                             data_o2=o2,
@@ -753,10 +753,10 @@ class MultipleDashboardView(TemplateView):
         df_xenon4['datetime'] = pd.to_datetime(df_xenon4['created'])
         df_xenon4=df_xenon4.set_index(pd.DatetimeIndex(df_xenon4['datetime']))
 
-        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-24 15:00']
-        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-24 15:00']
-        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-24 15:00']
-        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-24 15:00']
+        df_xenon1 = df_xenon1[df_xenon1['datetime']>'2019-04-24 17:00']
+        df_xenon2 = df_xenon2[df_xenon2['datetime']>'2019-04-24 17:00']
+        df_xenon3 = df_xenon3[df_xenon3['datetime']>'2019-04-24 17:00']
+        df_xenon4 = df_xenon4[df_xenon4['datetime']>'2019-04-24 17:00']
 
         # For Xenon1
         df_xenon1_co = df_xenon1['data_co'].resample("15s").max().fillna(0)
@@ -860,6 +860,36 @@ class MultipleDashboardView(TemplateView):
             xenon4_o2_per = df_xenon4['data_o2'][i] *20.9/2400.0
             xenon4_o2_list.append(round(xenon4_o2_per,1))
 
+        xenon1_co_list = []
+        xenon2_co_list = []
+        xenon1_len_co = len(df_xenon1['data_co'])
+        xenon2_len_co = len(df_xenon2['data_co'])
+
+        for i in range(xenon1_len_co) :
+            co_val = df_xenon1['data_co'][i]
+            if co_val < 1900 :
+                co_val = 1900
+
+            co_voff = 1900.0 * 0.0011224
+            co_v_diff = 3.3 - co_voff
+            co_ppm = 1000.0 / co_v_diff * (co_val * 0.0011224 - co_voff)
+
+            xenon1_co_list.append(int(co_ppm))
+
+        # print(xenon1_co_list)
+
+        # for i in range(xenon2_len_co) :
+        #     co_val = df_xenon2['data_co'][i]
+        #     if co_val < 1900 :
+        #         co_val = 0.0
+        #
+        #     co_voff = 1900.0 * 0.0011224
+        #     co_v_diff = 3.3 - co_voff
+        #     co_ppm = 1000.0 / co_v_diff * (co_val * 0.0011224 - co_voff)
+        #
+        #     xenon2_co_list.append(int(co_ppm))
+
+
             # xenon2_o2_per = df_xenon2['data_o2'][i] *20.9/2400.0
             # xenon3_o2_per = df_xenon3['data_o2'][i] *20.9/2400.0
             # xenon4_o2_per = df_xenon4['data_o2'][i] *20.9/2400.0
@@ -867,15 +897,18 @@ class MultipleDashboardView(TemplateView):
             # xenon3_o2_list.append(round(xenon3_o2_per,1))
             # xenon4_o2_list.append(round(xenon4_o2_per,1))
 
+
         # print(o2_list)
         # print(df_xenon1['data_o2'].tolist())
-        context['xenon1_data_co'] = df_xenon1_co['data_co'].tolist()
+        # context['xenon1_data_co'] = df_xenon1_co['data_co'].tolist()
+        context['xenon1_data_co'] = xenon1_co_list
         context['xenon1_data_h2s'] = df_xenon1_h2s['data_h2s'].tolist()
         # context['xenon1_data_o2'] = df_xenon1_o2['data_o2'].tolist()
         context['xenon1_data_o2'] = xenon1_o2_list
         context['xenon1_data_ch4'] = df_xenon1_ch4['data_ch4'].tolist()
         context['xenon1_labels'] = xenon1_labels
 
+        context['xenon2_data_co'] = df_xenon2_co['data_co'].tolist()
         context['xenon2_data_co'] = df_xenon2_co['data_co'].tolist()
         context['xenon2_data_h2s'] = df_xenon2_h2s['data_h2s'].tolist()
         # context['xenon2_data_o2'] = df_xenon2_o2['data_o2'].tolist()
@@ -1034,14 +1067,30 @@ class DashboardNumbersView(TemplateView):
         xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1]*20.9/2400.0
         xenon4_o2_per = round(xenon4_o2_per,1)
 
-        context['xenon1_data_co'] = df_xenon1_co['data_co'].tolist()[-1]
+        xenon1_co_val = df_xenon1_co['data_co'].tolist()[-1]
+        xenon2_co_val = df_xenon2_co['data_co'].tolist()[-1]
+
+        if xenon1_co_val < 1900 :
+            xenon1_co_val = 1900
+
+        if xenon2_co_val < 1900 :
+            xenon2_co_val = 1900
+
+        co_voff = 1900.0 * 0.0011224
+        co_v_diff = 3.3 - co_voff
+        xenon1_co_ppm = 1000.0 / co_v_diff * (xenon1_co_val * 0.0011224 - co_voff)
+        xenon2_co_ppm = 1000.0 / co_v_diff * (xenon2_co_val * 0.0011224 - co_voff)
+
+        context['xenon1_data_co'] = int(xenon1_co_ppm)
+        # context['xenon1_data_co'] = df_xenon1_co['data_co'].tolist()[-1]
         context['xenon1_data_h2s'] = df_xenon1_h2s['data_h2s'].tolist()[-1]
         # context['xenon1_data_o2'] = df_xenon1_o2['data_o2'].tolist()[-1]
         context['xenon1_data_o2'] = xenon1_o2_per
         context['xenon1_data_ch4'] = df_xenon1_ch4['data_ch4'].tolist()[-1]
         # context['xenon1_labels'] = xenon1_labels
 
-        context['xenon2_data_co'] = df_xenon2_co['data_co'].tolist()[-1]
+        # context['xenon2_data_co'] = df_xenon2_co['data_co'].tolist()[-1]
+        context['xenon2_data_co'] = int(xenon2_co_ppm)
         context['xenon2_data_h2s'] = df_xenon2_h2s['data_h2s'].tolist()[-1]
         # context['xenon2_data_o2'] = df_xenon2_o2['data_o2'].tolist()[-1]
         context['xenon2_data_o2'] = xenon2_o2_per
@@ -1168,8 +1217,18 @@ class DashboardUpdateView(View):
             xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1] * 20.9/2400.0
             xenon4_o2_per = round(xenon4_o2_per,1)
 
+            xenon1_co_val = df_xenon4_co['data_co'].tolist()[-1]
+
+            if xenon1_co_val < 1900 :
+                xenon1_co_val = 1900
+
+            co_voff = 1900.0 * 0.0011224
+            co_v_diff = 3.3 - co_voff
+            xenon1_co_ppm = 1000.0 / co_v_diff * (xenon1_co_val * 0.0011224 - co_voff)
+
+
             data = {'xenon1_label': str(xenon1_dts[-1])[:19],
-                    'xenon1_data_co': df_xenon1_co['data_co'].tolist()[-1], 'xenon1_data_h2s': df_xenon1_h2s['data_h2s'].tolist()[-1],
+                    'xenon1_data_co': int(xenon1_co_ppm), 'xenon1_data_h2s': df_xenon1_h2s['data_h2s'].tolist()[-1],
                     'xenon1_data_o2': xenon1_o2_per, 'xenon1_data_ch4': df_xenon1_ch4['data_ch4'].tolist()[-1],
                     'xenon2_label': str(xenon2_dts[-1])[:19],
                     'xenon2_data_co': df_xenon2_co['data_co'].tolist()[-1], 'xenon2_data_h2s': df_xenon2_h2s['data_h2s'].tolist()[-1],
@@ -1293,9 +1352,18 @@ class DashboardNumnersUpdateView(View):
             xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1]*20.9/2400.0
             xenon4_o2_per = round(xenon4_o2_per,1)
 
+            xenon1_co_val = df_xenon4_co['data_co'].tolist()[-1]
+
+            if xenon1_co_val < 1900:
+                xenon1_co_val = 1900
+
+            co_voff = 1900.0 * 0.0011224
+            co_v_diff = 3.3 - co_voff
+            xenon1_co_ppm = 1000.0 / co_v_diff * (xenon1_co_val * 0.0011224 - co_voff)
+
 
             data = {'xenon1_label': str(xenon1_dts[-1])[:19],
-                    'xenon1_data_co': df_xenon1_co['data_co'].tolist()[-1], 'xenon1_data_h2s': df_xenon1_h2s['data_h2s'].tolist()[-1],
+                    'xenon1_data_co': int(xenon1_co_ppm), 'xenon1_data_h2s': df_xenon1_h2s['data_h2s'].tolist()[-1],
                     'xenon1_data_o2': xenon1_o2_per, 'xenon1_data_ch4': df_xenon1_ch4['data_ch4'].tolist()[-1],
                     'xenon2_label': str(xenon2_dts[-1])[:19],
                     'xenon2_data_co': df_xenon2_co['data_co'].tolist()[-1], 'xenon2_data_h2s': df_xenon2_h2s['data_h2s'].tolist()[-1],
