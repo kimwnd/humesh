@@ -135,15 +135,15 @@ def multiple_notification(request):
         # vref = volt/3.3*0.5*4096.0
         # co_ppm = co_m_inv*(co-vref - 550.0)
         # co_ppm = int(co_ppm)
-        if device_name == 'xenon1' :
-            if co < 1900.0 :
-                co = 1900.0
-
-            co_voff = 1900.0 * 0.0011224
-            co_v_diff = 3.3 - co_voff
-            co_ppm = 1000.0 / co_v_diff*(co*0.0011224 - co_voff)
-        else:
-            co_ppm = 0.0
+        # if device_name == 'xenon1' :
+        #     if co < 1900.0 :
+        #         co = 1900.0
+        #
+        #     co_voff = 1900.0 * 0.0011224
+        #     co_v_diff = 3.3 - co_voff
+        #     co_ppm = 1000.0 / co_v_diff*(co*0.0011224 - co_voff)
+        # else:
+        #     co_ppm = 0.0
 
         h2s = 0
 
