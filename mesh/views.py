@@ -1319,7 +1319,5 @@ class DashboardNumnersUpdateView(View):
                     'xenon4_data_o2': xenon4_o2_per, 'xenon4_data_ch4': df_xenon4_ch4['data_ch4'].tolist()[-1],
                     }
 
-            # print(data,'***11')
-
             return JsonResponse(data)
 
