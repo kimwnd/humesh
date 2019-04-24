@@ -852,7 +852,7 @@ class MultipleDashboardView(TemplateView):
             xenon1_o2_list.append(round(xenon1_o2_per,1))
 
         for i in range(xenon2_len_o2) :
-            xenon2_o2_per = df_xenon2['data_o2'][i] *20.9/2400.0
+            xenon2_o2_per = df_xenon2['data_o2'][i] *20.9/2350.0
             xenon2_o2_list.append(round(xenon2_o2_per,1))
 
         for i in range(xenon3_len_o2) :
