@@ -1005,9 +1005,9 @@ class DashboardNumbersView(TemplateView):
         xenon1_o2_per = round(xenon1_o2_per,1)
         xenon2_o2_per = df_xenon2_o2['data_o2'].tolist()[-1]*20.9/2350.0
         xenon2_o2_per = round(xenon2_o2_per,1)
-        xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1]*20.9/2400.0
+        xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1]*20.9/2350.0
         xenon3_o2_per = round(xenon3_o2_per,1)
-        xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1]*20.9/2400.0
+        xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1]*20.9/2350.0
         xenon4_o2_per = round(xenon4_o2_per,1)
 
         xenon1_co_val = df_xenon1_co['data_co'].tolist()[-1]
@@ -1155,9 +1155,9 @@ class DashboardUpdateView(View):
             xenon1_o2_per = round(xenon1_o2_per,1)
             xenon2_o2_per = df_xenon2_o2['data_o2'].tolist()[-1] * 20.9/2350.0
             xenon2_o2_per = round(xenon2_o2_per,1)
-            xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1] * 20.9/2400.0
+            xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1] * 20.9/2350.0
             xenon3_o2_per = round(xenon3_o2_per,1)
-            xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1] * 20.9/2400.0
+            xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1] * 20.9/2350.0
             xenon4_o2_per = round(xenon4_o2_per,1)
 
             xenon1_co_val = df_xenon4_co['data_co'].tolist()[-1]
@@ -1290,10 +1290,10 @@ class DashboardNumnersUpdateView(View):
             xenon2_o2_per = df_xenon2_o2['data_o2'].tolist()[-1]*20.9/2350.0
             xenon2_o2_per = round(xenon2_o2_per,1)
 
-            xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1]*20.9/2400.0
+            xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1]*20.9/2350.0
             xenon3_o2_per = round(xenon3_o2_per,1)
 
-            xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1]*20.9/2400.0
+            xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1]*20.9/2350.0
             xenon4_o2_per = round(xenon4_o2_per,1)
 
             xenon1_co_val = df_xenon4_co['data_co'].tolist()[-1]
