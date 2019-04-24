@@ -122,8 +122,11 @@ def multiple_notification(request):
         # elif device_name == 'xenon3' :
         #     co = int(float(values[0])) - 1750
         #     h2s = int(float(values[1])) - 2560
+        if device_name == 'xenon2' :
+            co = 0
+        else:
+            co = int(float(values[0]))
 
-        co = int(float(values[0]))
         h2s = int(float(values[1]))
         o2 = int(float(values[2]))
         ch4 = int(float(values[3]))
@@ -157,7 +160,7 @@ def multiple_notification(request):
         published = datetime.datetime(year, mon, day, hour, min, sec) + datetime.timedelta(hours=18)
 
         multi_mesh = MultipleMeshDataMdodel(event=event_name,
-                                            device_name=data['device_name'],
+                                            device_name=device_name,
                                             data_co=co,
                                             data_h2s=h2s,
                                             data_o2=o2,
