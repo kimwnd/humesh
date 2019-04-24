@@ -158,7 +158,7 @@ def multiple_notification(request):
 
         multi_mesh = MultipleMeshDataMdodel(event=event_name,
                                             device_name=device_name,
-                                            data_co=co_ppm,
+                                            data_co=co,
                                             data_h2s=h2s,
                                             data_o2=o2,
                                             data_ch4=ch4,
