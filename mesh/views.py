@@ -848,19 +848,19 @@ class MultipleDashboardView(TemplateView):
         xenon4_len_o2 = len(df_xenon4['data_o2'])
 
         for i in range(xenon1_len_o2) :
-            xenon1_o2_per = df_xenon1['data_o2'][i] *20.9/2400.0
+            xenon1_o2_per = df_xenon1['data_o2'][i] *20.9/2370.0
             xenon1_o2_list.append(round(xenon1_o2_per,1))
 
         for i in range(xenon2_len_o2) :
-            xenon2_o2_per = df_xenon2['data_o2'][i] *20.9/2350.0
+            xenon2_o2_per = df_xenon2['data_o2'][i] *20.9/2320.0
             xenon2_o2_list.append(round(xenon2_o2_per,1))
 
         for i in range(xenon3_len_o2) :
-            xenon3_o2_per = df_xenon3['data_o2'][i] *20.9/2350.0
+            xenon3_o2_per = df_xenon3['data_o2'][i] *20.9/2320.0
             xenon3_o2_list.append(round(xenon3_o2_per,1))
 
         for i in range(xenon4_len_o2) :
-            xenon4_o2_per = df_xenon4['data_o2'][i] *20.9/2350.0
+            xenon4_o2_per = df_xenon4['data_o2'][i] *20.9/2320.0
             xenon4_o2_list.append(round(xenon4_o2_per,1))
 
         xenon1_co_list = []
@@ -1001,13 +1001,13 @@ class DashboardNumbersView(TemplateView):
         df_xenon4_o2 = df_xenon4_o2.reset_index()
         df_xenon4_ch4 = df_xenon4_ch4.reset_index()
 
-        xenon1_o2_per = df_xenon1_o2['data_o2'].tolist()[-1]*20.9/2400.0
+        xenon1_o2_per = df_xenon1_o2['data_o2'].tolist()[-1]*20.9/2370.0
         xenon1_o2_per = round(xenon1_o2_per,1)
-        xenon2_o2_per = df_xenon2_o2['data_o2'].tolist()[-1]*20.9/2350.0
+        xenon2_o2_per = df_xenon2_o2['data_o2'].tolist()[-1]*20.9/2320.0
         xenon2_o2_per = round(xenon2_o2_per,1)
-        xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1]*20.9/2350.0
+        xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1]*20.9/2320.0
         xenon3_o2_per = round(xenon3_o2_per,1)
-        xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1]*20.9/2350.0
+        xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1]*20.9/2320.0
         xenon4_o2_per = round(xenon4_o2_per,1)
 
         xenon1_co_val = df_xenon1_co['data_co'].tolist()[-1]
@@ -1151,13 +1151,13 @@ class DashboardUpdateView(View):
             xenon3_dts = df_xenon3_co['datetime'].tolist()
             xenon4_dts = df_xenon4_co['datetime'].tolist()
 
-            xenon1_o2_per = df_xenon1_o2['data_o2'].tolist()[-1] * 20.9/2400.0
+            xenon1_o2_per = df_xenon1_o2['data_o2'].tolist()[-1] * 20.9/2370.0
             xenon1_o2_per = round(xenon1_o2_per,1)
-            xenon2_o2_per = df_xenon2_o2['data_o2'].tolist()[-1] * 20.9/2350.0
+            xenon2_o2_per = df_xenon2_o2['data_o2'].tolist()[-1] * 20.9/2320.0
             xenon2_o2_per = round(xenon2_o2_per,1)
-            xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1] * 20.9/2350.0
+            xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1] * 20.9/2320.0
             xenon3_o2_per = round(xenon3_o2_per,1)
-            xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1] * 20.9/2350.0
+            xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1] * 20.9/2320.0
             xenon4_o2_per = round(xenon4_o2_per,1)
 
             xenon1_co_val = df_xenon4_co['data_co'].tolist()[-1]
@@ -1284,16 +1284,16 @@ class DashboardNumnersUpdateView(View):
             xenon3_dts = df_xenon3_co['datetime'].tolist()
             xenon4_dts = df_xenon4_co['datetime'].tolist()
 
-            xenon1_o2_per = df_xenon1_o2['data_o2'].tolist()[-1]*20.9/2400.0
+            xenon1_o2_per = df_xenon1_o2['data_o2'].tolist()[-1]*20.9/2370.0
             xenon1_o2_per = round(xenon1_o2_per,1)
 
-            xenon2_o2_per = df_xenon2_o2['data_o2'].tolist()[-1]*20.9/2350.0
+            xenon2_o2_per = df_xenon2_o2['data_o2'].tolist()[-1]*20.9/2320.0
             xenon2_o2_per = round(xenon2_o2_per,1)
 
-            xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1]*20.9/2350.0
+            xenon3_o2_per = df_xenon3_o2['data_o2'].tolist()[-1]*20.9/2320.0
             xenon3_o2_per = round(xenon3_o2_per,1)
 
-            xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1]*20.9/2350.0
+            xenon4_o2_per = df_xenon4_o2['data_o2'].tolist()[-1]*20.9/2320.0
             xenon4_o2_per = round(xenon4_o2_per,1)
 
             xenon1_co_val = df_xenon4_co['data_co'].tolist()[-1]
