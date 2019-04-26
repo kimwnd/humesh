@@ -161,8 +161,8 @@
         }
 	};
 
-	var toPlot_co = [co_trace1, co_trace2, co_trace3, co_trace4];
-	{#var toPlot_co = [co_trace1, co_trace2];#}
+	{#var toPlot_co = [co_trace1, co_trace2, co_trace3, co_trace4];#}
+	var toPlot_co = [co_trace1, co_trace2];
 
 	var layout_co = {
         title: {
@@ -231,10 +231,10 @@
             });
 
             var update = {
-                       x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],
-                       y: [[xenon1_data_co], [xenon2_data_co], [xenon3_data_co], [xenon4_data_co]]
-                       {#x:  [[xenon1_label], [xenon2_label]] ,#}
-                       {#y: [[xenon1_data_co], [xenon2_data_co]]#}
+                       {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
+                       {#y: [[xenon1_data_co], [xenon2_data_co], [xenon3_data_co], [xenon4_data_co]]#}
+                       x:  [[xenon1_label], [xenon2_label]] ,
+                       y: [[xenon1_data_co], [xenon2_data_co]]
                       }
 
             return update;
@@ -421,8 +421,8 @@
         }
 	};
 
-	var toPlot_o2 = [o2_trace1, o2_trace2, o2_trace3, o2_trace4];
-	{#var toPlot_o2 = [o2_trace1, o2_trace2];#}
+	{#var toPlot_o2 = [o2_trace1, o2_trace2, o2_trace3, o2_trace4];#}
+	var toPlot_o2 = [o2_trace1, o2_trace2];
 
 	var layout_o2 = {
         title: {
@@ -491,10 +491,10 @@
             });
 
             var update = {
-                       x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],
-                       y: [[xenon1_data_o2], [xenon2_data_o2], [xenon3_data_o2], [xenon4_data_o2]]
-                       {#x:  [[xenon1_label], [xenon2_label]],#}
-                       {#y: [[xenon1_data_o2], [xenon2_data_o2]]#}
+                       {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
+                       {#y: [[xenon1_data_o2], [xenon2_data_o2], [xenon3_data_o2], [xenon4_data_o2]]#}
+                       x:  [[xenon1_label], [xenon2_label]],
+                       y: [[xenon1_data_o2], [xenon2_data_o2]]
                       }
 
             return update;
@@ -552,8 +552,8 @@
         }
 	};
 
-	{#var toPlot_ch4 = [ch4_trace1, ch4_trace2];#}
-	var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3, ch4_trace4];
+	var toPlot_ch4 = [ch4_trace1, ch4_trace2];
+	{#var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3, ch4_trace4];#}
 
 	var layout_ch4 = {
         title: {
@@ -622,10 +622,10 @@
             });
 
             var update = {
-                       x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],
-                       y: [[xenon1_data_ch4], [xenon2_data_ch4], [xenon3_data_ch4], [xenon4_data_ch4]]
-                       {#x:  [[xenon1_label], [xenon2_label]],#}
-                       {#y: [[xenon1_data_ch4], [xenon2_data_ch4]]#}
+                       {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
+                       {#y: [[xenon1_data_ch4], [xenon2_data_ch4], [xenon3_data_ch4], [xenon4_data_ch4]]#}
+                       x:  [[xenon1_label], [xenon2_label]],
+                       y: [[xenon1_data_ch4], [xenon2_data_ch4]]
                       }
 
             return update;
