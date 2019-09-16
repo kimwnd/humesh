@@ -98,11 +98,11 @@ def cloud_notification(request):
     try:
         data = request.POST
         logger.debug("data: {}".format(data))
-        # f = open('demo1.txt', 'a')
-        # f.write('POST data is added\n\n')
-        # f.write(str(data))
-        # f.write('published_at : {}'.format(data['published_at']))
-        # f.close()
+        f = open('demo1.txt', 'a')
+        f.write('POST data is added\n\n')
+        f.write(str(data))
+        f.write('published_at : {}'.format(data['published_at']))
+        f.close()
         device_name = data['device_name']
         event_name = data['event']
         events = event_name.split('_')
