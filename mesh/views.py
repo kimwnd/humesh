@@ -4,7 +4,7 @@ from django.views.generic import TemplateView, View, FormView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse, JsonResponse
-from .models import MeshDataModel, WifiDataModel, MultipleMeshDataMdodel
+from .models import MeshDataModel, WifiDataModel, MultipleMeshDataMdodel, CloudMeshDataMdodel
 from .forms import ControlLEDForm
 
 from django.db import connection
@@ -98,11 +98,11 @@ def cloud_notification(request):
     try:
         data = request.POST
         logger.debug("data: {}".format(data))
-        f = open('demo1.txt', 'a')
-        f.write('POST data is added\n\n')
-        f.write(str(data))
-        f.write('published_at : {}'.format(data['published_at']))
-        f.close()
+        # f = open('demo1.txt', 'a')
+        # f.write('POST data is added\n\n')
+        # f.write(str(data))
+        # f.write('published_at : {}'.format(data['published_at']))
+        # f.close()
         device_name = data['device_name']
         event_name = data['event']
         events = event_name.split('_')
@@ -133,7 +133,7 @@ def cloud_notification(request):
 
         published = datetime.datetime(year, mon, day, hour, min, sec) + datetime.timedelta(hours=18)
 
-        multi_mesh = MultipleMeshDataMdodel(event=event_name,
+        cloud_mesh = CloudMeshDataMdodel(event=event_name,
                                             device_name=device_name,
                                             data_co=co,
                                             data_o2=o2,
@@ -149,7 +149,7 @@ def cloud_notification(request):
                                             created=published,
                                             coreid=coreid,
                                             volt=volt)
-        multi_mesh.save()
+        cloud_mesh.save()
 
         # f = open('demo1.txt', 'a')
         # f.write('POST data is added\n\n')
