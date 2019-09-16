@@ -90,6 +90,82 @@ def mesh_notification(request):
         f.close()
     return HttpResponse('SUCCESS')
 
+
+@csrf_exempt
+def cloud_notification(request):
+    if request.method != 'POST':
+        return HttpResponse('POST Only')
+    try:
+        data = request.POST
+        logger.debug("data: {}".format(data))
+        # f = open('demo1.txt', 'a')
+        # f.write('POST data is added\n\n')
+        # f.write(str(data))
+        # f.write('published_at : {}'.format(data['published_at']))
+        # f.close()
+        device_name = data['device_name']
+        event_name = data['event']
+        events = event_name.split('_')
+        doc_name = events[0]
+        ship_name = events[1]
+        set_no = events[2]
+        node_role = events[3]
+        location = events[4]
+        node_no = events[5]
+        values = data['data']
+
+        flag = values[0]
+        o2 = int(values[1:5],16)/10.0
+        co = int(values[5:9],16)
+        ch4 = int(values[9:11],16)
+        temp = int(values[11:15],16)/10.0
+        humid = int(values[15:17],16)
+        volt = int(values[17:21],16)/10.0
+        created = data['published_at']
+        coreid = data['coreid']
+
+        year = int(created[:4])
+        mon = int(created[5:7])
+        day = int(created[8:10])
+        hour = int(created[11:13])
+        min = int(created[14:16])
+        sec = int(created[17:19])
+
+        published = datetime.datetime(year, mon, day, hour, min, sec) + datetime.timedelta(hours=18)
+
+        multi_mesh = MultipleMeshDataMdodel(event=event_name,
+                                            device_name=device_name,
+                                            data_co=co,
+                                            data_o2=o2,
+                                            data_ch4=ch4,
+                                            data_humid=humid,
+                                            data_temp=temp,
+                                            doc_name=doc_name,
+                                            ship_name=ship_name,
+                                            set_no=set_no,
+                                            node_role=node_role,
+                                            location=location,
+                                            node_no=node_no,
+                                            created=published,
+                                            coreid=coreid,
+                                            volt=volt)
+        multi_mesh.save()
+
+        # f = open('demo1.txt', 'a')
+        # f.write('POST data is added\n\n')
+        # f.write(str(data))
+        # f.write('published_at : {}'.format(data['published_at']))
+        # f.write('published : {}'.format(str(published)))
+        # f.close()
+
+    except Exception as e:
+            f = open('demo1.txt', 'a')
+            f.write('POST Exception\n\n')
+            f.close()
+
+    return HttpResponse('SUCCESS')
+
+
 @csrf_exempt
 def multiple_notification(request):
     if request.method != 'POST':
