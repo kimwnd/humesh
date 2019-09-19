@@ -120,7 +120,7 @@ def cloud_notification(request):
         ch4 = int(values[9:11],16)
         temp = int(values[11:15],16)/10.0
         humid = int(values[15:17],16)
-        volt = int(values[17:21],16)/10.0
+        volt = int(values[17:21],16)/100.0
         created = data['published_at']
         coreid = data['coreid']
 
@@ -790,6 +790,244 @@ class MultipleLineChartView(TemplateView):
     template_name = 'multiple_line_chart.html'
 
 
+class CloudDashboardView(TemplateView):
+    template_name = 'cloud_dash_board.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created asc")
+            sensor1_meshes = cursor.fetchall()
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created asc")
+            sensor2_meshes = cursor.fetchall()
+
+        # with connection.cursor() as cursor:
+        #     cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created, volt from multiple_mesh_data where device_name = 'xenon2' order by created asc")
+        #     xenon3_meshes = cursor.fetchall()
+        #
+        # with connection.cursor() as cursor:
+        #     cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created, volt from multiple_mesh_data where device_name = 'xenon2' order by created asc")
+        #     xenon4_meshes = cursor.fetchall()
+
+        df_sensor1              = pd.DataFrame(sensor1_meshes)
+        df_sensor1.columns      = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt', 'created']
+        df_sensor1['datetime']  = pd.to_datetime(df_sensor1['created'])
+        df_sensor1              = df_sensor1.set_index(pd.DatetimeIndex(df_sensor1['datetime']))
+
+        df_sensor2              = pd.DataFrame(sensor2_meshes)
+        df_sensor2.columns      = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt', 'created']
+        df_sensor2['datetime']  = pd.to_datetime(df_sensor2['created'])
+        df_sensor2              = df_sensor2.set_index(pd.DatetimeIndex(df_sensor2['datetime']))
+
+        # df_sensor3 = pd.DataFrame(sensor3_meshes)
+        # df_sensor3.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt', 'created']
+        # df_sensor3['datetime'] = pd.to_datetime(df_sensor3['created'])
+        # df_sensor3=df_sensor3.set_index(pd.DatetimeIndex(df_sensor3['datetime']))
+        #
+        # df_sensor4 = pd.DataFrame(sensor4_meshes)
+        # df_sensor4.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt', 'created']
+        # df_sensor4['datetime'] = pd.to_datetime(df_sensor4['created'])
+        # df_sensor4=df_sensor4.set_index(pd.DatetimeIndex(df_sensor4['datetime']))
+
+        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-09-17 13:15']
+        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-09-17 13:15']
+        # df_sensor3 = df_sensor3[df_sensor3['datetime']>'2019-04-25 15:00']
+        # df_sensor4 = df_sensor4[df_sensor4['datetime']>'2019-04-25 15:00']
+
+        # For Sensor1
+        df_sensor1_co       = df_sensor1['data_co'].resample("10s").max().fillna(0)
+        df_sensor1_o2       = df_sensor1['data_o2'].resample("10s").max().fillna(0)
+        df_sensor1_ch4      = df_sensor1['data_ch4'].resample("10s").max().fillna(0)
+        df_sensor1_temp     = df_sensor1['data_temp'].resample("10s").max().fillna(0)
+        df_sensor1_humid    = df_sensor1['data_humid'].resample("10s").max().fillna(0)
+        df_sensor1_volt     = df_sensor1['volt'].resample("10s").max().fillna(0)
+
+        df_sensor1_co   = df_sensor1_co.reset_index()
+        df_sensor1_o2   = df_sensor1_o2.reset_index()
+        df_sensor1_ch4  = df_sensor1_ch4.reset_index()
+        df_sensor1_volt = df_sensor1_volt.reset_index()
+
+        # For Sensor2
+        df_sensor2_co       = df_sensor2['data_co'].resample("10s").max().fillna(0)
+        df_sensor2_o2       = df_sensor2['data_o2'].resample("10s").max().fillna(0)
+        df_sensor2_ch4      = df_sensor2['data_ch4'].resample("10s").max().fillna(0)
+        df_sensor2_temp     = df_sensor2['data_temp'].resample("10s").max().fillna(0)
+        df_sensor2_humid    = df_sensor2['data_humid'].resample("10s").max().fillna(0)
+        df_sensor2_volt     = df_sensor2['volt'].resample("10s").max().fillna(0)
+
+        df_sensor2_co   = df_sensor2_co.reset_index()
+        df_sensor2_o2   = df_sensor2_o2.reset_index()
+        df_sensor2_ch4  = df_sensor2_ch4.reset_index()
+        df_sensor2_volt = df_sensor2_volt.reset_index()
+
+        # # For Sensor3
+        # df_sensor3_co       = df_sensor3['data_co'].resample("10s").max().fillna(0)
+        # df_sensor3_o2       = df_sensor3['data_o2'].resample("10s").max().fillna(0)
+        # df_sensor3_ch4      = df_sensor3['data_ch4'].resample("10s").max().fillna(0)
+        # df_sensor3_temp     = df_sensor3['data_temp'].resample("10s").max().fillna(0)
+        # df_sensor3_humid    = df_sensor3['data_humid'].resample("10s").max().fillna(0)
+        # df_sensor3_volt     = df_sensor3['data_volt'].resample("10s").max().fillna(0)
+        #
+        # df_sensor3_co       = df_sensor3_co.reset_index()
+        # df_sensor3_o2       = df_sensor3_o2.reset_index()
+        # df_sensor3_ch4      = df_sensor3_ch4.reset_index()
+        # df_sensor3_volt     = df_sensor3_volt.reset_index()
+        #
+        # # For Sensor4
+        # df_sensor4_co       = df_sensor4['data_co'].resample("10s").max().fillna(0)
+        # df_sensor4_o2       = df_sensor4['data_o2'].resample("10s").max().fillna(0)
+        # df_sensor4_ch4      = df_sensor4['data_ch4'].resample("10s").max().fillna(0)
+        # df_sensor4_temp     = df_sensor4['data_temp'].resample("10s").max().fillna(0)
+        # df_sensor4_humid    = df_sensor4['data_humid'].resample("10s").max().fillna(0)
+        # df_sensor4_volt     = df_sensor4['data_volt'].resample("10s").max().fillna(0)
+        #
+        # df_sensor4_co   = df_sensor4_co.reset_index()
+        # df_sensor4_o2   = df_sensor4_o2.reset_index()
+        # df_sensor4_ch4  = df_sensor4_ch4.reset_index()
+        # df_sensor4_volt = df_sensor4_volt.reset_index()
+
+        # print('df_sensor2_o2')
+        # print('len of df_sensor2_co')
+        # print(len(df_sensor1_co))
+
+        sensor1_dts = df_sensor1_co['datetime'].tolist()
+        sensor2_dts = df_sensor2_co['datetime'].tolist()
+        # sensor3_dts = df_sensor3_co['datetime'].tolist()
+        # sensor4_dts = df_sensor4_co['datetime'].tolist()
+
+        sensor1_labels = []
+        sensor2_labels = []
+        # sensor3_labels = []
+        # sensor4_labels = []
+
+        for label in sensor1_dts :
+            sensor1_labels.append(str(label)[:19])
+
+        for label in sensor2_dts :
+            sensor2_labels.append(str(label)[:19])
+
+        # for label in sensor3_dts :
+        #     sensor3_labels.append(str(label)[:19])
+        #
+        # for label in sensor4_dts :
+        #     sensor4_labels.append(str(label)[:19])
+
+        # print(xenon2_labels)
+        # arg_labels = []
+        # arg_data = []
+        # xen_data = []
+        # for mesh in meshes :
+        #     arg_labels.append(str(mesh.created)[:16])
+        #     arg_data.append(mesh.data)
+        #     xen_data.append(mesh.xenon)
+        #
+        # argon_data = df_argon['argon'].tolist()
+        # print('----------------------')
+        # print(df_xenon2_co['data_co'].tolist())
+        # print('len of sensor2_labels')
+        # print(len(sensor2_labels))
+
+        # 산소 데이터 리스트
+
+        sensor1_o2_list = []
+        sensor2_o2_list = []
+        # sensor3_o2_list = []
+        # sensor4_o2_list = []
+
+        sensor1_len_o2 = len(df_sensor1_o2)
+        sensor2_len_o2 = len(df_sensor2_o2)
+        # sensor3_len_o2 = len(df_sensor3['data_o2'])
+        # sensor4_len_o2 = len(df_sensor4['data_o2'])
+
+        for i in range(sensor1_len_o2) :
+            sensor1_o2_list.append(df_sensor1_o2['data_o2'][i])
+
+        for i in range(sensor2_len_o2) :
+            sensor2_o2_list.append(df_sensor2_o2['data_o2'][i])
+
+        # for i in range(sensor3_len_o2):
+        #     sensor3_o2_list.append(round(df_sensor3['data_o2'][i], 1))
+        #
+        # for i in range(sensor3_len_o2):
+        #     sensor3_o2_list.append(round(df_sensor4['data_o2'][i], 1))
+        # print('sensor2_o2_list')
+        # print(sensor2_o2_list)
+
+        # CO 데이터 리스트
+
+        sensor1_co_list = []
+        sensor2_co_list = []
+        # sensor3_co_list = []
+        # sensor4_co_list = []
+
+        sensor1_len_co = len(df_sensor1_co)
+        sensor2_len_co = len(df_sensor2_co)
+        # sensor3_len_co = len(df_sensor3['data_co'])
+        # sensor4_len_co = len(df_sensor4['data_co'])
+
+        for i in range(sensor1_len_co) :
+            sensor1_co_list.append(df_sensor1_co['data_co'][i])
+
+        for i in range(sensor2_len_co) :
+            sensor2_co_list.append(df_sensor2_co['data_co'][i])
+
+        # for i in range(sensor3_len_co) :
+        #     sensor3_co_list.append(df_sensor3['data_co'][i])
+        #
+        # for i in range(sensor4_len_co) :
+        #     sensor4_co_list.append(df_sensor4['data_co'][i])
+
+        # print('sensor2_co_list')
+        # print(sensor2_co_list)
+        # print(len(sensor2_co_list))
+
+        # CH4 데이터 리스트
+
+        sensor1_ch4_list = []
+        sensor2_ch4_list = []
+        # sensor3_ch4_list = []
+        # sensor4_ch4_list = []
+
+        sensor1_len_ch4   = len(df_sensor1_ch4)
+        sensor2_len_ch4   = len(df_sensor2_ch4)
+        # sensor3_len_ch4 = len(df_sensor3['data_ch4'])
+        # sensor4_len_ch4 = len(df_sensor4['data_ch4'])
+
+        for i in range(sensor1_len_ch4):
+            sensor1_ch4_list.append(df_sensor1_ch4['data_ch4'][i])
+
+        for i in range(sensor2_len_ch4):
+            sensor2_ch4_list.append(df_sensor2_ch4['data_ch4'][i])
+
+        # print('sensor2_ch4_list')
+        # print(sensor2_ch4_list)
+        # print(len(sensor2_ch4_list))
+
+        # print(df_sensor2_co['data_co'])
+        # print(df_sensor1_co['data_co'].tolist())
+        # print(df_xenon1['data_o2'].tolist())
+        # print('-------------')
+        # print(len(sensor1_co_list))
+        # print(len(sensor1_o2_list))
+        # print(len(sensor1_ch4_list))
+        # print(len(sensor1_labels))
+
+        context['sensor1_data_co']  = sensor1_co_list
+        context['sensor1_data_o2']  = sensor1_o2_list
+        context['sensor1_data_ch4'] = sensor1_ch4_list
+        context['sensor1_labels']   = sensor1_labels
+
+        context['sensor2_data_co']  = sensor2_co_list
+        context['sensor2_data_o2']  = sensor2_o2_list
+        context['sensor2_data_ch4'] = sensor2_ch4_list
+        context['sensor2_labels']   = sensor2_labels
+
+        return context
+
+
 class MultipleDashboardView(TemplateView):
     template_name = 'multiple_dash_board.html'
 
@@ -990,6 +1228,190 @@ class MultipleDashboardView(TemplateView):
         return context
 
 
+class CloudDataboardView(TemplateView):
+    template_name = 'cloud_databoard_views.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+            sensor1_meshes = cursor.fetchall()
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+            sensor2_meshes = cursor.fetchall()
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+            sensor3_meshes = cursor.fetchall()
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+            sensor4_meshes = cursor.fetchall()
+
+        df_sensor1 = pd.DataFrame(sensor1_meshes)
+        df_sensor1.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt',
+                              'created']
+        df_sensor1['datetime'] = pd.to_datetime(df_sensor1['created'])
+        df_sensor1=df_sensor1.set_index(pd.DatetimeIndex(df_sensor1['datetime']))
+
+        df_sensor2 = pd.DataFrame(sensor2_meshes)
+        df_sensor2.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt',
+                              'created']
+        df_sensor2['datetime'] = pd.to_datetime(df_sensor2['created'])
+        df_sensor2=df_sensor2.set_index(pd.DatetimeIndex(df_sensor2['datetime']))
+
+        df_sensor3 = pd.DataFrame(sensor3_meshes)
+        df_sensor3.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt',
+                              'created']
+        df_sensor3['datetime'] = pd.to_datetime(df_sensor3['created'])
+        df_sensor3=df_sensor3.set_index(pd.DatetimeIndex(df_sensor3['datetime']))
+
+        df_sensor4 = pd.DataFrame(sensor4_meshes)
+        df_sensor4.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt',
+                              'created']
+        df_sensor4['datetime'] = pd.to_datetime(df_sensor4['created'])
+        df_sensor4 = df_sensor4.set_index(pd.DatetimeIndex(df_sensor4['datetime']))
+
+        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-04-25 15:00']
+        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-04-25 15:00']
+        df_sensor3 = df_sensor3[df_sensor3['datetime']>'2019-04-25 15:00']
+        df_sensor4 = df_sensor4[df_sensor4['datetime']>'2019-04-25 15:00']
+
+        # For Sensor1
+        df_sensor1_co    = df_sensor1['data_co'].resample("10s").max().fillna(0)
+        df_sensor1_o2    = df_sensor1['data_o2'].resample("10s").max().fillna(0)
+        df_sensor1_ch4   = df_sensor1['data_ch4'].resample("10s").max().fillna(0)
+        df_sensor1_temp  = df_sensor1['data_temp'].resample("10s").max().fillna(0)
+        df_sensor1_humid = df_sensor1['data_humid'].resample("10s").max().fillna(0)
+        df_sensor1_volt  = df_sensor1['volt'].resample("10s").max().fillna(0)
+
+        df_sensor1_co    = df_sensor1_co.reset_index()
+        df_sensor1_o2    = df_sensor1_o2.reset_index()
+        df_sensor1_ch4   = df_sensor1_ch4.reset_index()
+        df_sensor1_temp  = df_sensor1_temp.reset_index()
+        df_sensor1_humid = df_sensor1_humid.reset_index()
+        df_sensor1_volt  = df_sensor1_volt.reset_index()
+
+        # For Xenon2
+        df_sensor2_co    = df_sensor2['data_co'].resample("10s").max().fillna(0)
+        df_sensor2_o2    = df_sensor2['data_o2'].resample("10s").max().fillna(0)
+        df_sensor2_ch4   = df_sensor2['data_ch4'].resample("10s").max().fillna(0)
+        df_sensor2_temp  = df_sensor2['data_temp'].resample("10s").max().fillna(0)
+        df_sensor2_humid = df_sensor2['data_humid'].resample("10s").max().fillna(0)
+        df_sensor2_volt  = df_sensor2['volt'].resample("10s").max().fillna(0)
+
+        df_sensor2_co    = df_sensor2_co.reset_index()
+        df_sensor2_o2    = df_sensor2_o2.reset_index()
+        df_sensor2_ch4   = df_sensor2_ch4.reset_index()
+        df_sensor2_temp  = df_sensor2_temp.reset_index()
+        df_sensor2_humid = df_sensor2_humid.reset_index()
+        df_sensor2_volt  = df_sensor2_volt.reset_index()
+
+        # For Xenon3
+        df_sensor3_co    = df_sensor3['data_co'].resample("10s").max().fillna(0)
+        df_sensor3_o2    = df_sensor3['data_o2'].resample("10s").max().fillna(0)
+        df_sensor3_ch4   = df_sensor3['data_ch4'].resample("10s").max().fillna(0)
+        df_sensor3_temp  = df_sensor3['data_temp'].resample("10s").max().fillna(0)
+        df_sensor3_humid = df_sensor3['data_humid'].resample("10s").max().fillna(0)
+        df_sensor3_volt  = df_sensor3['volt'].resample("10s").max().fillna(0)
+
+        df_sensor3_co    = df_sensor3_co.reset_index()
+        df_sensor3_o2    = df_sensor3_o2.reset_index()
+        df_sensor3_ch4   = df_sensor3_ch4.reset_index()
+        df_sensor3_temp  = df_sensor3_temp.reset_index()
+        df_sensor3_humid = df_sensor3_humid.reset_index()
+        df_sensor3_volt  = df_sensor3_volt.reset_index()
+
+        # For Xenon4
+        df_sensor4_co    = df_sensor4['data_co'].resample("10s").max().fillna(0)
+        df_sensor4_o2    = df_sensor4['data_o2'].resample("10s").max().fillna(0)
+        df_sensor4_ch4   = df_sensor4['data_ch4'].resample("10s").max().fillna(0)
+        df_sensor4_temp  = df_sensor4['data_temp'].resample("10s").max().fillna(0)
+        df_sensor4_humid = df_sensor4['data_humid'].resample("10s").max().fillna(0)
+        df_sensor4_volt  = df_sensor4['volt'].resample("10s").max().fillna(0)
+
+        df_sensor4_co    = df_sensor4_co.reset_index()
+        df_sensor4_o2    = df_sensor4_o2.reset_index()
+        df_sensor4_ch4   = df_sensor4_ch4.reset_index()
+        df_sensor4_temp  = df_sensor4_temp.reset_index()
+        df_sensor4_humid = df_sensor4_humid.reset_index()
+        df_sensor4_volt  = df_sensor4_volt.reset_index()
+
+        sensor1_o2_per = df_sensor1_o2['data_o2'].tolist()[-1]/10.0
+        sensor1_o2_val = round(sensor1_o2_per,1)
+        sensor2_o2_per = df_sensor2_o2['data_o2'].tolist()[-1]/10.0
+        sensor2_o2_val = round(sensor2_o2_per,1)
+        sensor3_o2_per = df_sensor3_o2['data_o2'].tolist()[-1]/10.0
+        sensor3_o2_val = round(sensor3_o2_per,1)
+        sensor4_o2_per = df_sensor4_o2['data_o2'].tolist()[-1]/10.0
+        sensor4_o2_val = round(sensor4_o2_per,1)
+
+        sensor1_co_val = df_sensor1_co['data_co'].tolist()[-1]
+        sensor2_co_val = df_sensor2_co['data_co'].tolist()[-1]
+        sensor3_co_val = df_sensor3_co['data_co'].tolist()[-1]
+        sensor4_co_val = df_sensor4_co['data_co'].tolist()[-1]
+
+        sensor1_ch4_val = df_sensor1_ch4['data_ch4'].tolist()[-1]
+        sensor2_ch4_val = df_sensor2_ch4['data_ch4'].tolist()[-1]
+        sensor3_ch4_val = df_sensor3_ch4['data_ch4'].tolist()[-1]
+        sensor4_ch4_val = df_sensor4_ch4['data_ch4'].tolist()[-1]
+
+        sensor1_temp_val = df_sensor1_temp['data_temp'].tolist()[-1]
+        sensor2_temp_val = df_sensor2_temp['data_temp'].tolist()[-1]
+        sensor3_temp_val = df_sensor3_temp['data_temp'].tolist()[-1]
+        sensor4_temp_val = df_sensor4_temp['data_temp'].tolist()[-1]
+
+        sensor1_humid_val = df_sensor1_humid['data_humid'].tolist()[-1]
+        sensor2_humid_val = df_sensor2_humid['data_humid'].tolist()[-1]
+        sensor3_humid_val = df_sensor3_humid['data_humid'].tolist()[-1]
+        sensor4_humid_val = df_sensor4_humid['data_humid'].tolist()[-1]
+
+        sensor1_volt_val = df_sensor1_volt['volt'].tolist()[-1]/100.0
+        sensor2_volt_val = df_sensor2_volt['volt'].tolist()[-1]/100.0
+        sensor3_volt_val = df_sensor3_volt['volt'].tolist()[-1]/100.0
+        sensor4_volt_val = df_sensor4_volt['volt'].tolist()[-1]/100.0
+
+        context['sensor1_data_co']    = int(sensor1_co_val)
+        context['sensor1_data_o2']    = sensor1_o2_val
+        context['sensor1_data_ch4']   = sensor1_ch4_val
+        context['sensor1_data_temp']  = sensor1_temp_val
+        context['sensor1_data_humid'] = sensor1_humid_val
+        context['sensor1_volt']       = sensor1_volt_val
+        context['sensor1_datetime']   = df_sensor1_o2['datetime'][0] - datetime.timedelta(hours=9)
+
+        context['sensor2_data_co']    = int(sensor2_co_val)
+        context['sensor2_data_o2']    = sensor2_o2_val
+        context['sensor2_data_ch4']   = sensor2_ch4_val
+        context['sensor2_data_temp']  = sensor2_temp_val
+        context['sensor2_data_humid'] = sensor2_humid_val
+        context['sensor2_volt']       = sensor2_volt_val
+        context['sensor2_datetime']   = df_sensor2_o2['datetime'][0] - datetime.timedelta(hours=9)
+
+        context['sensor3_data_co']    = int(sensor3_co_val)
+        context['sensor3_data_o2']    = sensor3_o2_val
+        context['sensor3_data_ch4']   = sensor3_ch4_val
+        context['sensor3_data_temp']  = sensor3_temp_val
+        context['sensor3_data_humid'] = sensor3_humid_val
+        context['sensor3_volt']       = sensor3_volt_val
+        context['sensor3_datetime']   = df_sensor3_o2['datetime'][0] - datetime.timedelta(hours=9)
+
+        context['sensor4_data_co']    = int(sensor4_co_val)
+        context['sensor4_data_o2']    = sensor4_o2_val
+        context['sensor4_data_ch4']   = sensor4_ch4_val
+        context['sensor4_data_temp']  = sensor4_temp_val
+        context['sensor4_data_humid'] = sensor4_humid_val
+        context['sensor4_volt']       = sensor4_volt_val
+        context['sensor4_datetime']   = df_sensor4_o2['datetime'][0] - datetime.timedelta(hours=9)
+
+        return context
+
+
 class DashboardNumbersView(TemplateView):
     template_name = 'dashboard_numbers.html'
 
@@ -1141,6 +1563,150 @@ class DashboardNumbersView(TemplateView):
         return context
 
 
+class CloudDashboardUpdateView(View):
+
+    def get(self, request, *args, **kwargs):
+
+        if request.is_ajax():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created asc")
+                sensor1_meshes = cursor.fetchall()
+
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created asc")
+                sensor2_meshes = cursor.fetchall()
+
+            # with connection.cursor() as cursor:
+            #     cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created, volt from multiple_mesh_data where device_name = 'xenon2' order by created asc")
+            #     xenon3_meshes = cursor.fetchall()
+            #
+            # with connection.cursor() as cursor:
+            #     cursor.execute("select id, event, data_co, data_h2s, data_o2, data_ch4, created, volt from multiple_mesh_data where device_name = 'xenon2' order by created asc")
+            #     xenon4_meshes = cursor.fetchall()
+
+            df_sensor1 = pd.DataFrame(sensor1_meshes)
+            df_sensor1.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt',
+                                  'created']
+            df_sensor1['datetime'] = pd.to_datetime(df_sensor1['created'])
+            df_sensor1 = df_sensor1.set_index(pd.DatetimeIndex(df_sensor1['datetime']))
+
+            df_sensor2 = pd.DataFrame(sensor2_meshes)
+            df_sensor2.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt',
+                                  'created']
+            df_sensor2['datetime'] = pd.to_datetime(df_sensor2['created'])
+            df_sensor2 = df_sensor2.set_index(pd.DatetimeIndex(df_sensor2['datetime']))
+
+            # df_sensor3 = pd.DataFrame(sensor3_meshes)
+            # df_sensor3.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt', 'created']
+            # df_sensor3['datetime'] = pd.to_datetime(df_sensor3['created'])
+            # df_sensor3=df_sensor3.set_index(pd.DatetimeIndex(df_sensor3['datetime']))
+            #
+            # df_sensor4 = pd.DataFrame(sensor4_meshes)
+            # df_sensor4.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt', 'created']
+            # df_sensor4['datetime'] = pd.to_datetime(df_sensor4['created'])
+            # df_sensor4=df_sensor4.set_index(pd.DatetimeIndex(df_sensor4['datetime']))
+
+            df_sensor1 = df_sensor1[df_sensor1['datetime'] > '2019-09-17 13:15']
+            df_sensor2 = df_sensor2[df_sensor2['datetime'] > '2019-09-17 13:15']
+            # df_sensor3 = df_sensor3[df_sensor3['datetime']>'2019-04-25 15:00']
+            # df_sensor4 = df_sensor4[df_sensor4['datetime']>'2019-04-25 15:00']
+
+            # For Sensor1
+            df_sensor1_co = df_sensor1['data_co'].resample("30s").max().fillna(0)
+            df_sensor1_o2 = df_sensor1['data_o2'].resample("30s").max().fillna(0)
+            df_sensor1_ch4 = df_sensor1['data_ch4'].resample("30s").max().fillna(0)
+            df_sensor1_temp = df_sensor1['data_temp'].resample("30s").max().fillna(0)
+            df_sensor1_humid = df_sensor1['data_humid'].resample("30s").max().fillna(0)
+            df_sensor1_volt = df_sensor1['volt'].resample("30s").max().fillna(0)
+
+            df_sensor1_co = df_sensor1_co.reset_index()
+            df_sensor1_o2 = df_sensor1_o2.reset_index()
+            df_sensor1_ch4 = df_sensor1_ch4.reset_index()
+            df_sensor1_volt = df_sensor1_volt.reset_index()
+
+            # For Sensor2
+            df_sensor2_co = df_sensor2['data_co'].resample("30s").max().fillna(0)
+            df_sensor2_o2 = df_sensor2['data_o2'].resample("30s").max().fillna(0)
+            df_sensor2_ch4 = df_sensor2['data_ch4'].resample("30s").max().fillna(0)
+            df_sensor2_temp = df_sensor2['data_temp'].resample("30s").max().fillna(0)
+            df_sensor2_humid = df_sensor2['data_humid'].resample("30s").max().fillna(0)
+            df_sensor2_volt = df_sensor2['volt'].resample("30s").max().fillna(0)
+
+            df_sensor2_co = df_sensor2_co.reset_index()
+            df_sensor2_o2 = df_sensor2_o2.reset_index()
+            df_sensor2_ch4 = df_sensor2_ch4.reset_index()
+            df_sensor2_volt = df_sensor2_volt.reset_index()
+
+            # # For Sensor3
+            # df_sensor3_co       = df_sensor3['data_co'].resample("10s").max().fillna(0)
+            # df_sensor3_o2       = df_sensor3['data_o2'].resample("10s").max().fillna(0)
+            # df_sensor3_ch4      = df_sensor3['data_ch4'].resample("10s").max().fillna(0)
+            # df_sensor3_temp     = df_sensor3['data_temp'].resample("10s").max().fillna(0)
+            # df_sensor3_humid    = df_sensor3['data_humid'].resample("10s").max().fillna(0)
+            # df_sensor3_volt     = df_sensor3['data_volt'].resample("10s").max().fillna(0)
+            #
+            # df_sensor3_co       = df_sensor3_co.reset_index()
+            # df_sensor3_o2       = df_sensor3_o2.reset_index()
+            # df_sensor3_ch4      = df_sensor3_ch4.reset_index()
+            # df_sensor3_volt     = df_sensor3_volt.reset_index()
+            #
+            # # For Sensor4
+            # df_sensor4_co       = df_sensor4['data_co'].resample("10s").max().fillna(0)
+            # df_sensor4_o2       = df_sensor4['data_o2'].resample("10s").max().fillna(0)
+            # df_sensor4_ch4      = df_sensor4['data_ch4'].resample("10s").max().fillna(0)
+            # df_sensor4_temp     = df_sensor4['data_temp'].resample("10s").max().fillna(0)
+            # df_sensor4_humid    = df_sensor4['data_humid'].resample("10s").max().fillna(0)
+            # df_sensor4_volt     = df_sensor4['data_volt'].resample("10s").max().fillna(0)
+            #
+            # df_sensor4_co   = df_sensor4_co.reset_index()
+            # df_sensor4_o2   = df_sensor4_o2.reset_index()
+            # df_sensor4_ch4  = df_sensor4_ch4.reset_index()
+            # df_sensor4_volt = df_sensor4_volt.reset_index()
+
+            sensor1_dts = df_sensor1_co['datetime'].tolist()
+            sensor2_dts = df_sensor2_co['datetime'].tolist()
+            # sensor3_dts = df_sensor3_co['datetime'].tolist()
+            # sensor4_dts = df_sensor4_co['datetime'].tolist()
+
+            sensor1_o2_per = df_sensor1_o2['data_o2'].tolist()[-1]
+            sensor2_o2_per = df_sensor2_o2['data_o2'].tolist()[-1]
+            # sensor3_o2_per = df_sensor3_o2['data_o2'].tolist()[-1]
+            # sensor4_o2_per = df_sensor4_o2['data_o2'].tolist()[-1]
+
+            sensor1_co_per = df_sensor1_co['data_co'].tolist()[-1]
+            sensor2_co_per = df_sensor2_co['data_co'].tolist()[-1]
+            # sensor3_co_per = df_sensor3_co['data_co'].tolist()[-1]
+            # sensor4_co_per = df_sensor4_co['data_co'].tolist()[-1]
+
+            sensor1_ch4_per = df_sensor1_ch4['data_ch4'].tolist()[-1]
+            sensor2_ch4_per = df_sensor2_ch4['data_ch4'].tolist()[-1]
+            # sensor3_ch4_per = df_sensor3_ch4['data_ch4'].tolist()[-1]
+            # sensor4_ch4_per = df_sensor4_ch4['data_ch4'].tolist()[-1]
+
+            # print('sensor1_dts')
+            # print(str(sensor1_dts[-1])[:19])
+            # print('sensor1_o2_per')
+            # print(sensor1_o2_per)
+            # print('sensor1_co_per')
+            # print(sensor1_co_per)
+            # print('sensor1_ch4_per')
+            # print(sensor1_ch4_per)
+
+            data = {'sensor1_label': str(sensor1_dts[-1])[:19],
+                    'sensor1_data_co': sensor1_co_per,
+                    'sensor1_data_o2': sensor1_o2_per,
+                    'sensor1_data_ch4': sensor1_ch4_per,
+                    'sensor2_label': str(sensor2_dts[-1])[:19],
+                    'sensor2_data_co': sensor2_co_per,
+                    'sensor2_data_o2': sensor2_o2_per,
+                    'sensor2_data_ch4': sensor2_ch4_per,
+                    }
+
+            return JsonResponse(data)
+
+
 class DashboardUpdateView(View):
 
     def get(self, request, *args, **kwargs):
@@ -1267,6 +1833,195 @@ class DashboardUpdateView(View):
                     'xenon4_label': str(xenon4_dts[-1])[:19],
                     'xenon4_data_co': df_xenon4_co['data_co'].tolist()[-1], 'xenon4_data_h2s': df_xenon4_h2s['data_h2s'].tolist()[-1],
                     'xenon4_data_o2': xenon4_o2_per, 'xenon4_data_ch4': df_xenon4_ch4['data_ch4'].tolist()[-1],
+                    }
+
+            return JsonResponse(data)
+
+
+class CloudDataboardUpdateView(View):
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                sensor1_meshes = cursor.fetchall()
+
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                sensor2_meshes = cursor.fetchall()
+
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                sensor3_meshes = cursor.fetchall()
+
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                sensor4_meshes = cursor.fetchall()
+
+            df_sensor1 = pd.DataFrame(sensor1_meshes)
+            df_sensor1.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt',
+                                  'created']
+            df_sensor1['datetime'] = pd.to_datetime(df_sensor1['created'])
+            df_sensor1 = df_sensor1.set_index(pd.DatetimeIndex(df_sensor1['datetime']))
+
+            df_sensor2 = pd.DataFrame(sensor2_meshes)
+            df_sensor2.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt',
+                                  'created']
+            df_sensor2['datetime'] = pd.to_datetime(df_sensor2['created'])
+            df_sensor2 = df_sensor2.set_index(pd.DatetimeIndex(df_sensor2['datetime']))
+
+            df_sensor3 = pd.DataFrame(sensor3_meshes)
+            df_sensor3.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt',
+                                  'created']
+            df_sensor3['datetime'] = pd.to_datetime(df_sensor3['created'])
+            df_sensor3 = df_sensor3.set_index(pd.DatetimeIndex(df_sensor3['datetime']))
+
+            df_sensor4 = pd.DataFrame(sensor4_meshes)
+            df_sensor4.columns = ['id', 'event', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt',
+                                  'created']
+            df_sensor4['datetime'] = pd.to_datetime(df_sensor4['created'])
+            df_sensor4 = df_sensor4.set_index(pd.DatetimeIndex(df_sensor4['datetime']))
+
+            df_sensor1 = df_sensor1[df_sensor1['datetime'] > '2019-04-25 15:00']
+            df_sensor2 = df_sensor2[df_sensor2['datetime'] > '2019-04-25 15:00']
+            df_sensor3 = df_sensor3[df_sensor3['datetime'] > '2019-04-25 15:00']
+            df_sensor4 = df_sensor4[df_sensor4['datetime'] > '2019-04-25 15:00']
+
+            # For Sensor1
+            df_sensor1_co = df_sensor1['data_co'].resample("10s").max().fillna(0)
+            df_sensor1_o2 = df_sensor1['data_o2'].resample("10s").max().fillna(0)
+            df_sensor1_ch4 = df_sensor1['data_ch4'].resample("10s").max().fillna(0)
+            df_sensor1_temp = df_sensor1['data_temp'].resample("10s").max().fillna(0)
+            df_sensor1_humid = df_sensor1['data_humid'].resample("10s").max().fillna(0)
+            df_sensor1_volt = df_sensor1['volt'].resample("10s").max().fillna(0)
+
+            df_sensor1_co = df_sensor1_co.reset_index()
+            df_sensor1_o2 = df_sensor1_o2.reset_index()
+            df_sensor1_ch4 = df_sensor1_ch4.reset_index()
+            df_sensor1_temp = df_sensor1_temp.reset_index()
+            df_sensor1_humid = df_sensor1_humid.reset_index()
+            df_sensor1_volt = df_sensor1_volt.reset_index()
+
+            # For Xenon2
+            df_sensor2_co = df_sensor2['data_co'].resample("10s").max().fillna(0)
+            df_sensor2_o2 = df_sensor2['data_o2'].resample("10s").max().fillna(0)
+            df_sensor2_ch4 = df_sensor2['data_ch4'].resample("10s").max().fillna(0)
+            df_sensor2_temp = df_sensor2['data_temp'].resample("10s").max().fillna(0)
+            df_sensor2_humid = df_sensor2['data_humid'].resample("10s").max().fillna(0)
+            df_sensor2_volt = df_sensor2['volt'].resample("10s").max().fillna(0)
+
+            df_sensor2_co = df_sensor2_co.reset_index()
+            df_sensor2_o2 = df_sensor2_o2.reset_index()
+            df_sensor2_ch4 = df_sensor2_ch4.reset_index()
+            df_sensor2_temp = df_sensor2_temp.reset_index()
+            df_sensor2_humid = df_sensor2_humid.reset_index()
+            df_sensor2_volt = df_sensor2_volt.reset_index()
+
+            # For Xenon3
+            df_sensor3_co = df_sensor3['data_co'].resample("10s").max().fillna(0)
+            df_sensor3_o2 = df_sensor3['data_o2'].resample("10s").max().fillna(0)
+            df_sensor3_ch4 = df_sensor3['data_ch4'].resample("10s").max().fillna(0)
+            df_sensor3_temp = df_sensor3['data_temp'].resample("10s").max().fillna(0)
+            df_sensor3_humid = df_sensor3['data_humid'].resample("10s").max().fillna(0)
+            df_sensor3_volt = df_sensor3['volt'].resample("10s").max().fillna(0)
+
+            df_sensor3_co = df_sensor3_co.reset_index()
+            df_sensor3_o2 = df_sensor3_o2.reset_index()
+            df_sensor3_ch4 = df_sensor3_ch4.reset_index()
+            df_sensor3_temp = df_sensor3_temp.reset_index()
+            df_sensor3_humid = df_sensor3_humid.reset_index()
+            df_sensor3_volt = df_sensor3_volt.reset_index()
+
+            # For Xenon4
+            df_sensor4_co = df_sensor4['data_co'].resample("10s").max().fillna(0)
+            df_sensor4_o2 = df_sensor4['data_o2'].resample("10s").max().fillna(0)
+            df_sensor4_ch4 = df_sensor4['data_ch4'].resample("10s").max().fillna(0)
+            df_sensor4_temp = df_sensor4['data_temp'].resample("10s").max().fillna(0)
+            df_sensor4_humid = df_sensor4['data_humid'].resample("10s").max().fillna(0)
+            df_sensor4_volt = df_sensor4['volt'].resample("10s").max().fillna(0)
+
+            df_sensor4_co = df_sensor4_co.reset_index()
+            df_sensor4_o2 = df_sensor4_o2.reset_index()
+            df_sensor4_ch4 = df_sensor4_ch4.reset_index()
+            df_sensor4_temp = df_sensor4_temp.reset_index()
+            df_sensor4_humid = df_sensor4_humid.reset_index()
+            df_sensor4_volt = df_sensor4_volt.reset_index()
+
+            sensor1_o2_per = df_sensor1_o2['data_o2'].tolist()[-1] / 10.0
+            sensor1_o2_val = round(sensor1_o2_per, 1)
+            sensor2_o2_per = df_sensor2_o2['data_o2'].tolist()[-1] / 10.0
+            sensor2_o2_val = round(sensor2_o2_per, 1)
+            sensor3_o2_per = df_sensor3_o2['data_o2'].tolist()[-1] / 10.0
+            sensor3_o2_val = round(sensor3_o2_per, 1)
+            sensor4_o2_per = df_sensor4_o2['data_o2'].tolist()[-1] / 10.0
+            sensor4_o2_val = round(sensor4_o2_per, 1)
+
+            sensor1_co_val = df_sensor1_co['data_co'].tolist()[-1]
+            sensor2_co_val = df_sensor2_co['data_co'].tolist()[-1]
+            sensor3_co_val = df_sensor3_co['data_co'].tolist()[-1]
+            sensor4_co_val = df_sensor4_co['data_co'].tolist()[-1]
+
+            sensor1_ch4_val = df_sensor1_ch4['data_ch4'].tolist()[-1]
+            sensor2_ch4_val = df_sensor2_ch4['data_ch4'].tolist()[-1]
+            sensor3_ch4_val = df_sensor3_ch4['data_ch4'].tolist()[-1]
+            sensor4_ch4_val = df_sensor4_ch4['data_ch4'].tolist()[-1]
+
+            sensor1_temp_val = df_sensor1_temp['data_temp'].tolist()[-1]
+            sensor2_temp_val = df_sensor2_temp['data_temp'].tolist()[-1]
+            sensor3_temp_val = df_sensor3_temp['data_temp'].tolist()[-1]
+            sensor4_temp_val = df_sensor4_temp['data_temp'].tolist()[-1]
+
+            sensor1_humid_val = df_sensor1_humid['data_humid'].tolist()[-1]
+            sensor2_humid_val = df_sensor2_humid['data_humid'].tolist()[-1]
+            sensor3_humid_val = df_sensor3_humid['data_humid'].tolist()[-1]
+            sensor4_humid_val = df_sensor4_humid['data_humid'].tolist()[-1]
+
+            sensor1_volt_val = df_sensor1_volt['volt'].tolist()[-1] / 100.0
+            sensor2_volt_val = df_sensor2_volt['volt'].tolist()[-1] / 100.0
+            sensor3_volt_val = df_sensor3_volt['volt'].tolist()[-1] / 100.0
+            sensor4_volt_val = df_sensor4_volt['volt'].tolist()[-1] / 100.0
+
+            sensor1_datetime = df_sensor1_o2['datetime'][0] - datetime.timedelta(hours=9)
+            sensor2_datetime = df_sensor2_o2['datetime'][0] - datetime.timedelta(hours=9)
+            sensor3_datetime = df_sensor3_o2['datetime'][0] - datetime.timedelta(hours=9)
+            sensor4_datetime = df_sensor4_o2['datetime'][0] - datetime.timedelta(hours=9)
+
+            data = {'sensor1_label'     : str(sensor1_datetime)[:19],
+                    'sensor1_data_co'   : int(sensor1_co_val),
+                    'sensor1_data_o2'   : sensor1_o2_val,
+                    'sensor1_data_ch4'  : sensor1_ch4_val,
+                    'sensor1_data_temp' : sensor1_temp_val,
+                    'sensor1_data_humid': sensor1_humid_val,
+                    'sensor1_volt'      : sensor1_volt_val,
+                    'sensor1_datetime'  : sensor1_datetime,
+                    'sensor2_label'     : str(sensor2_datetime)[:19],
+                    'sensor2_data_co'   : int(sensor2_co_val),
+                    'sensor2_data_o2'   : sensor2_o2_val,
+                    'sensor2_data_ch4'  : sensor2_ch4_val,
+                    'sensor2_data_temp' : sensor2_temp_val,
+                    'sensor2_data_humid': sensor2_humid_val,
+                    'sensor2_volt'      : sensor2_volt_val,
+                    'sensor2_datetime'  : sensor2_datetime,
+                    'sensor3_label'     : str(sensor3_datetime)[:19],
+                    'sensor3_data_co'   : int(sensor3_co_val),
+                    'sensor3_data_o2'   : sensor3_o2_val,
+                    'sensor3_data_ch4'  : sensor3_ch4_val,
+                    'sensor3_data_temp' : sensor3_temp_val,
+                    'sensor3_data_humid': sensor3_humid_val,
+                    'sensor3_volt'      : sensor3_volt_val,
+                    'sensor3_datetime'  : sensor3_datetime,
+                    'sensor4_label'     : str(sensor4_datetime)[:19],
+                    'sensor4_data_co'   : int(sensor4_co_val),
+                    'sensor4_data_o2'   : sensor4_o2_val,
+                    'sensor4_data_ch4'  : sensor4_ch4_val,
+                    'sensor4_data_temp' : sensor4_temp_val,
+                    'sensor4_data_humid': sensor4_humid_val,
+                    'sensor4_volt'      : sensor4_volt_val,
+                    'sensor4_datetime'  : sensor4_datetime,
                     }
 
             return JsonResponse(data)
