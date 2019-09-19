@@ -797,11 +797,11 @@ class CloudDashboardView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created asc")
+            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created asc")
             sensor1_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created asc")
+            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created asc")
             sensor2_meshes = cursor.fetchall()
 
         # with connection.cursor() as cursor:
@@ -838,12 +838,12 @@ class CloudDashboardView(TemplateView):
         # df_sensor4 = df_sensor4[df_sensor4['datetime']>'2019-04-25 15:00']
 
         # For Sensor1
-        df_sensor1_co       = df_sensor1['data_co'].resample("10s").max().fillna(0)
-        df_sensor1_o2       = df_sensor1['data_o2'].resample("10s").max().fillna(0)
-        df_sensor1_ch4      = df_sensor1['data_ch4'].resample("10s").max().fillna(0)
-        df_sensor1_temp     = df_sensor1['data_temp'].resample("10s").max().fillna(0)
-        df_sensor1_humid    = df_sensor1['data_humid'].resample("10s").max().fillna(0)
-        df_sensor1_volt     = df_sensor1['volt'].resample("10s").max().fillna(0)
+        df_sensor1_co       = df_sensor1['data_co'].resample("30s").max().fillna(0)
+        df_sensor1_o2       = df_sensor1['data_o2'].resample("30s").max().fillna(0)
+        df_sensor1_ch4      = df_sensor1['data_ch4'].resample("30s").max().fillna(0)
+        df_sensor1_temp     = df_sensor1['data_temp'].resample("30s").max().fillna(0)
+        df_sensor1_humid    = df_sensor1['data_humid'].resample("30s").max().fillna(0)
+        df_sensor1_volt     = df_sensor1['volt'].resample("30s").max().fillna(0)
 
         df_sensor1_co   = df_sensor1_co.reset_index()
         df_sensor1_o2   = df_sensor1_o2.reset_index()
@@ -851,12 +851,12 @@ class CloudDashboardView(TemplateView):
         df_sensor1_volt = df_sensor1_volt.reset_index()
 
         # For Sensor2
-        df_sensor2_co       = df_sensor2['data_co'].resample("10s").max().fillna(0)
-        df_sensor2_o2       = df_sensor2['data_o2'].resample("10s").max().fillna(0)
-        df_sensor2_ch4      = df_sensor2['data_ch4'].resample("10s").max().fillna(0)
-        df_sensor2_temp     = df_sensor2['data_temp'].resample("10s").max().fillna(0)
-        df_sensor2_humid    = df_sensor2['data_humid'].resample("10s").max().fillna(0)
-        df_sensor2_volt     = df_sensor2['volt'].resample("10s").max().fillna(0)
+        df_sensor2_co       = df_sensor2['data_co'].resample("30s").max().fillna(0)
+        df_sensor2_o2       = df_sensor2['data_o2'].resample("30s").max().fillna(0)
+        df_sensor2_ch4      = df_sensor2['data_ch4'].resample("30s").max().fillna(0)
+        df_sensor2_temp     = df_sensor2['data_temp'].resample("30s").max().fillna(0)
+        df_sensor2_humid    = df_sensor2['data_humid'].resample("30s").max().fillna(0)
+        df_sensor2_volt     = df_sensor2['volt'].resample("30s").max().fillna(0)
 
         df_sensor2_co   = df_sensor2_co.reset_index()
         df_sensor2_o2   = df_sensor2_o2.reset_index()
@@ -1236,22 +1236,22 @@ class CloudDataboardView(TemplateView):
 
         with connection.cursor() as cursor:
             cursor.execute(
-                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created desc limit 5")
             sensor1_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
             cursor.execute(
-                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created desc limit 5")
             sensor2_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
             cursor.execute(
-                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created desc limit 5")
             sensor3_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
             cursor.execute(
-                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created desc limit 5")
             sensor4_meshes = cursor.fetchall()
 
         df_sensor1 = pd.DataFrame(sensor1_meshes)
@@ -1284,12 +1284,12 @@ class CloudDataboardView(TemplateView):
         df_sensor4 = df_sensor4[df_sensor4['datetime']>'2019-04-25 15:00']
 
         # For Sensor1
-        df_sensor1_co    = df_sensor1['data_co'].resample("10s").max().fillna(0)
-        df_sensor1_o2    = df_sensor1['data_o2'].resample("10s").max().fillna(0)
-        df_sensor1_ch4   = df_sensor1['data_ch4'].resample("10s").max().fillna(0)
-        df_sensor1_temp  = df_sensor1['data_temp'].resample("10s").max().fillna(0)
-        df_sensor1_humid = df_sensor1['data_humid'].resample("10s").max().fillna(0)
-        df_sensor1_volt  = df_sensor1['volt'].resample("10s").max().fillna(0)
+        df_sensor1_co    = df_sensor1['data_co'].resample("30s").max().fillna(0)
+        df_sensor1_o2    = df_sensor1['data_o2'].resample("30s").max().fillna(0)
+        df_sensor1_ch4   = df_sensor1['data_ch4'].resample("30s").max().fillna(0)
+        df_sensor1_temp  = df_sensor1['data_temp'].resample("30s").max().fillna(0)
+        df_sensor1_humid = df_sensor1['data_humid'].resample("30s").max().fillna(0)
+        df_sensor1_volt  = df_sensor1['volt'].resample("30s").max().fillna(0)
 
         df_sensor1_co    = df_sensor1_co.reset_index()
         df_sensor1_o2    = df_sensor1_o2.reset_index()
@@ -1299,12 +1299,12 @@ class CloudDataboardView(TemplateView):
         df_sensor1_volt  = df_sensor1_volt.reset_index()
 
         # For Xenon2
-        df_sensor2_co    = df_sensor2['data_co'].resample("10s").max().fillna(0)
-        df_sensor2_o2    = df_sensor2['data_o2'].resample("10s").max().fillna(0)
-        df_sensor2_ch4   = df_sensor2['data_ch4'].resample("10s").max().fillna(0)
-        df_sensor2_temp  = df_sensor2['data_temp'].resample("10s").max().fillna(0)
-        df_sensor2_humid = df_sensor2['data_humid'].resample("10s").max().fillna(0)
-        df_sensor2_volt  = df_sensor2['volt'].resample("10s").max().fillna(0)
+        df_sensor2_co    = df_sensor2['data_co'].resample("30s").max().fillna(0)
+        df_sensor2_o2    = df_sensor2['data_o2'].resample("30s").max().fillna(0)
+        df_sensor2_ch4   = df_sensor2['data_ch4'].resample("30s").max().fillna(0)
+        df_sensor2_temp  = df_sensor2['data_temp'].resample("30s").max().fillna(0)
+        df_sensor2_humid = df_sensor2['data_humid'].resample("30s").max().fillna(0)
+        df_sensor2_volt  = df_sensor2['volt'].resample("30s").max().fillna(0)
 
         df_sensor2_co    = df_sensor2_co.reset_index()
         df_sensor2_o2    = df_sensor2_o2.reset_index()
@@ -1314,12 +1314,12 @@ class CloudDataboardView(TemplateView):
         df_sensor2_volt  = df_sensor2_volt.reset_index()
 
         # For Xenon3
-        df_sensor3_co    = df_sensor3['data_co'].resample("10s").max().fillna(0)
-        df_sensor3_o2    = df_sensor3['data_o2'].resample("10s").max().fillna(0)
-        df_sensor3_ch4   = df_sensor3['data_ch4'].resample("10s").max().fillna(0)
-        df_sensor3_temp  = df_sensor3['data_temp'].resample("10s").max().fillna(0)
-        df_sensor3_humid = df_sensor3['data_humid'].resample("10s").max().fillna(0)
-        df_sensor3_volt  = df_sensor3['volt'].resample("10s").max().fillna(0)
+        df_sensor3_co    = df_sensor3['data_co'].resample("30s").max().fillna(0)
+        df_sensor3_o2    = df_sensor3['data_o2'].resample("30s").max().fillna(0)
+        df_sensor3_ch4   = df_sensor3['data_ch4'].resample("30s").max().fillna(0)
+        df_sensor3_temp  = df_sensor3['data_temp'].resample("30s").max().fillna(0)
+        df_sensor3_humid = df_sensor3['data_humid'].resample("30s").max().fillna(0)
+        df_sensor3_volt  = df_sensor3['volt'].resample("30s").max().fillna(0)
 
         df_sensor3_co    = df_sensor3_co.reset_index()
         df_sensor3_o2    = df_sensor3_o2.reset_index()
@@ -1329,12 +1329,12 @@ class CloudDataboardView(TemplateView):
         df_sensor3_volt  = df_sensor3_volt.reset_index()
 
         # For Xenon4
-        df_sensor4_co    = df_sensor4['data_co'].resample("10s").max().fillna(0)
-        df_sensor4_o2    = df_sensor4['data_o2'].resample("10s").max().fillna(0)
-        df_sensor4_ch4   = df_sensor4['data_ch4'].resample("10s").max().fillna(0)
-        df_sensor4_temp  = df_sensor4['data_temp'].resample("10s").max().fillna(0)
-        df_sensor4_humid = df_sensor4['data_humid'].resample("10s").max().fillna(0)
-        df_sensor4_volt  = df_sensor4['volt'].resample("10s").max().fillna(0)
+        df_sensor4_co    = df_sensor4['data_co'].resample("30s").max().fillna(0)
+        df_sensor4_o2    = df_sensor4['data_o2'].resample("30s").max().fillna(0)
+        df_sensor4_ch4   = df_sensor4['data_ch4'].resample("30s").max().fillna(0)
+        df_sensor4_temp  = df_sensor4['data_temp'].resample("30s").max().fillna(0)
+        df_sensor4_humid = df_sensor4['data_humid'].resample("30s").max().fillna(0)
+        df_sensor4_volt  = df_sensor4['volt'].resample("30s").max().fillna(0)
 
         df_sensor4_co    = df_sensor4_co.reset_index()
         df_sensor4_o2    = df_sensor4_o2.reset_index()
@@ -1570,12 +1570,12 @@ class CloudDashboardUpdateView(View):
         if request.is_ajax():
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created asc")
                 sensor1_meshes = cursor.fetchall()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created asc")
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created asc")
                 sensor2_meshes = cursor.fetchall()
 
             # with connection.cursor() as cursor:
@@ -1844,22 +1844,22 @@ class CloudDataboardUpdateView(View):
         if request.is_ajax():
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created desc limit 5")
                 sensor1_meshes = cursor.fetchall()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created desc limit 5")
                 sensor2_meshes = cursor.fetchall()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created desc limit 5")
                 sensor3_meshes = cursor.fetchall()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created desc limit 5")
+                    "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created desc limit 5")
                 sensor4_meshes = cursor.fetchall()
 
             df_sensor1 = pd.DataFrame(sensor1_meshes)
@@ -1892,12 +1892,12 @@ class CloudDataboardUpdateView(View):
             df_sensor4 = df_sensor4[df_sensor4['datetime'] > '2019-04-25 15:00']
 
             # For Sensor1
-            df_sensor1_co = df_sensor1['data_co'].resample("10s").max().fillna(0)
-            df_sensor1_o2 = df_sensor1['data_o2'].resample("10s").max().fillna(0)
-            df_sensor1_ch4 = df_sensor1['data_ch4'].resample("10s").max().fillna(0)
-            df_sensor1_temp = df_sensor1['data_temp'].resample("10s").max().fillna(0)
-            df_sensor1_humid = df_sensor1['data_humid'].resample("10s").max().fillna(0)
-            df_sensor1_volt = df_sensor1['volt'].resample("10s").max().fillna(0)
+            df_sensor1_co = df_sensor1['data_co'].resample("30s").max().fillna(0)
+            df_sensor1_o2 = df_sensor1['data_o2'].resample("30s").max().fillna(0)
+            df_sensor1_ch4 = df_sensor1['data_ch4'].resample("30s").max().fillna(0)
+            df_sensor1_temp = df_sensor1['data_temp'].resample("30s").max().fillna(0)
+            df_sensor1_humid = df_sensor1['data_humid'].resample("30s").max().fillna(0)
+            df_sensor1_volt = df_sensor1['volt'].resample("30s").max().fillna(0)
 
             df_sensor1_co = df_sensor1_co.reset_index()
             df_sensor1_o2 = df_sensor1_o2.reset_index()
@@ -1907,12 +1907,12 @@ class CloudDataboardUpdateView(View):
             df_sensor1_volt = df_sensor1_volt.reset_index()
 
             # For Xenon2
-            df_sensor2_co = df_sensor2['data_co'].resample("10s").max().fillna(0)
-            df_sensor2_o2 = df_sensor2['data_o2'].resample("10s").max().fillna(0)
-            df_sensor2_ch4 = df_sensor2['data_ch4'].resample("10s").max().fillna(0)
-            df_sensor2_temp = df_sensor2['data_temp'].resample("10s").max().fillna(0)
-            df_sensor2_humid = df_sensor2['data_humid'].resample("10s").max().fillna(0)
-            df_sensor2_volt = df_sensor2['volt'].resample("10s").max().fillna(0)
+            df_sensor2_co = df_sensor2['data_co'].resample("30s").max().fillna(0)
+            df_sensor2_o2 = df_sensor2['data_o2'].resample("30s").max().fillna(0)
+            df_sensor2_ch4 = df_sensor2['data_ch4'].resample("30s").max().fillna(0)
+            df_sensor2_temp = df_sensor2['data_temp'].resample("30s").max().fillna(0)
+            df_sensor2_humid = df_sensor2['data_humid'].resample("30s").max().fillna(0)
+            df_sensor2_volt = df_sensor2['volt'].resample("30s").max().fillna(0)
 
             df_sensor2_co = df_sensor2_co.reset_index()
             df_sensor2_o2 = df_sensor2_o2.reset_index()
@@ -1922,12 +1922,12 @@ class CloudDataboardUpdateView(View):
             df_sensor2_volt = df_sensor2_volt.reset_index()
 
             # For Xenon3
-            df_sensor3_co = df_sensor3['data_co'].resample("10s").max().fillna(0)
-            df_sensor3_o2 = df_sensor3['data_o2'].resample("10s").max().fillna(0)
-            df_sensor3_ch4 = df_sensor3['data_ch4'].resample("10s").max().fillna(0)
-            df_sensor3_temp = df_sensor3['data_temp'].resample("10s").max().fillna(0)
-            df_sensor3_humid = df_sensor3['data_humid'].resample("10s").max().fillna(0)
-            df_sensor3_volt = df_sensor3['volt'].resample("10s").max().fillna(0)
+            df_sensor3_co = df_sensor3['data_co'].resample("30s").max().fillna(0)
+            df_sensor3_o2 = df_sensor3['data_o2'].resample("30s").max().fillna(0)
+            df_sensor3_ch4 = df_sensor3['data_ch4'].resample("30s").max().fillna(0)
+            df_sensor3_temp = df_sensor3['data_temp'].resample("30s").max().fillna(0)
+            df_sensor3_humid = df_sensor3['data_humid'].resample("30s").max().fillna(0)
+            df_sensor3_volt = df_sensor3['volt'].resample("30s").max().fillna(0)
 
             df_sensor3_co = df_sensor3_co.reset_index()
             df_sensor3_o2 = df_sensor3_o2.reset_index()
@@ -1937,12 +1937,12 @@ class CloudDataboardUpdateView(View):
             df_sensor3_volt = df_sensor3_volt.reset_index()
 
             # For Xenon4
-            df_sensor4_co = df_sensor4['data_co'].resample("10s").max().fillna(0)
-            df_sensor4_o2 = df_sensor4['data_o2'].resample("10s").max().fillna(0)
-            df_sensor4_ch4 = df_sensor4['data_ch4'].resample("10s").max().fillna(0)
-            df_sensor4_temp = df_sensor4['data_temp'].resample("10s").max().fillna(0)
-            df_sensor4_humid = df_sensor4['data_humid'].resample("10s").max().fillna(0)
-            df_sensor4_volt = df_sensor4['volt'].resample("10s").max().fillna(0)
+            df_sensor4_co = df_sensor4['data_co'].resample("30s").max().fillna(0)
+            df_sensor4_o2 = df_sensor4['data_o2'].resample("30s").max().fillna(0)
+            df_sensor4_ch4 = df_sensor4['data_ch4'].resample("30s").max().fillna(0)
+            df_sensor4_temp = df_sensor4['data_temp'].resample("30s").max().fillna(0)
+            df_sensor4_humid = df_sensor4['data_humid'].resample("30s").max().fillna(0)
+            df_sensor4_volt = df_sensor4['volt'].resample("30s").max().fillna(0)
 
             df_sensor4_co = df_sensor4_co.reset_index()
             df_sensor4_o2 = df_sensor4_o2.reset_index()
