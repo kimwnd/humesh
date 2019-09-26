@@ -61,9 +61,9 @@
           <div class="col-lg-6 content order-lg-1 order-2">
               <div id="graph_ch4"></div>
           </div>
-{#            <div class="col-lg-6 content order-lg-1 order-2">#}
-{#                <div id="graph_h2s1"></div>#}
-{#            </div>#}
+            <div class="col-lg-6 content order-lg-1 order-2">
+                <div id="graph_volt"></div>
+            </div>
 
         </div>
       </div>
@@ -99,7 +99,7 @@
 
     var sensor1_dates = [];
     var sensor2_dates = [];
-    {#var sensor3_dates = [];#}
+    var sensor3_dates = [];
     {#var sensor4_dates = [];#}
 
         {% for label in sensor1_labels %}
@@ -110,9 +110,9 @@
             sensor2_dates[sensor2_dates.length] = '{{ label }}';
         {% endfor %}
 
-{#        {% for label in sensor3_labels %}#}
-{#            sensor3_dates[sensor3_dates.length] = '{{ label }}';#}
-{#        {% endfor %}#}
+        {% for label in sensor3_labels %}
+            sensor3_dates[sensor3_dates.length] = '{{ label }}';
+        {% endfor %}
 {##}
 {#        {% for label in sensor4_labels %}#}
 {#            sensor4_dates[sensor4_dates.length] = '{{ label }}';#}
@@ -138,18 +138,18 @@
 		    color: 'green'
         }
 	};
-    {##}
-	{#var co_trace3 = {#}
-	{#	x: sensor3_dates,#}
-	{#	y: {{ sensor3_data_co }},#}
-	{#	yaxis: 'y',#}
-	{#	mode: 'line',#}
-    {#    name: 'sensor3',#}
-    {#    line: {#}
-	{#	    color: 'purple'#}
-    {#    }#}
-	{# ;#}
-    {##}
+
+	var co_trace3 = {
+        x: sensor3_dates,
+        y: {{ sensor3_data_co }},
+        yaxis: 'y',
+        mode: 'line',
+        name: 'sensor3',
+        line: {
+            color: 'purple'
+        }
+    };
+
 	{#var co_trace4 = {#}
 	{#	x: sensor4_dates,#}
 	{#	y: {{ sensor4_data_co }},#}
@@ -162,7 +162,7 @@
 	{# ;#}
 
 	{#var toPlot_co = [co_trace1, co_trace2, co_trace3, co_trace4];#}
-	var toPlot_co = [co_trace1, co_trace2];
+	var toPlot_co = [co_trace1, co_trace2, co_trace3];
 
 	var layout_co = {
         title: {
@@ -206,12 +206,16 @@
                 success: function(data){
                     sensor1_label = data['sensor1_label'];
                     sensor2_label = data['sensor2_label'];
+                    sensor3_label = data['sensor3_label'];
                     sensor1_data_co = data['sensor1_data_co'];
                     sensor1_data_o2 = data['sensor1_data_o2'];
                     sensor1_data_ch4 = data['sensor1_data_ch4'];
                     sensor2_data_co = data['sensor2_data_co'];
                     sensor2_data_o2 = data['sensor2_data_o2'];
                     sensor2_data_ch4 = data['sensor2_data_ch4'];
+                    sensor3_data_co = data['sensor3_data_co'];
+                    sensor3_data_o2 = data['sensor3_data_o2'];
+                    sensor3_data_ch4 = data['sensor3_data_ch4'];
                     {#alert(typeof sensor1_label);#}
                     {#alert(sensor2_label);#}
                 },
@@ -223,8 +227,8 @@
             var update = {
                        {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
                        {#y: [[xenon1_data_co], [xenon2_data_co], [xenon3_data_co], [xenon4_data_co]]#}
-                       x:  [[sensor1_label], [sensor2_label]] ,
-                       y: [[sensor1_data_co], [sensor2_data_co]]
+                       x:  [[sensor1_label], [sensor2_label], [sensor3_label]] ,
+                       y: [[sensor1_data_co], [sensor2_data_co], [sensor3_data_co]]
                       }
 
             return update;
@@ -232,7 +236,7 @@
     }
 
     var interval = setInterval(function() {
-        Plotly.extendTraces('graph_co', co_update(), [0, 1])
+        Plotly.extendTraces('graph_co', co_update(), [0, 1, 2])
     }, 10000)
 
 </script>
@@ -261,16 +265,17 @@
         }
 	};
 
-	{#var o2_trace3 = {#}
-	{#	x: xenon3_dates,#}
-	{#	y: {{ sensor3_data_o2 }},#}
-	{#	yaxis: 'y',#}
-	{#	mode: 'line',#}
-    {#    name: 'sensor3',#}
-    {#    line: {#}
-	{#	    color: 'purple'#}
-    {#    }#}
-	{# ;#}
+	var o2_trace3 = {
+        x: sensor3_dates,
+        y: {{ sensor3_data_o2 }},
+        yaxis: 'y',
+        mode: 'line',
+        name: 'sensor3',
+        line: {
+            color: 'purple'
+        }
+    };
+
     {##}
 	{#var o2_trace4 = {#}
 	{#	x: xenon4_dates,#}
@@ -284,7 +289,7 @@
 	{# ;#}
 
 	{#var toPlot_o2 = [o2_trace1, o2_trace2, o2_trace3, o2_trace4];#}
-	var toPlot_o2 = [o2_trace1, o2_trace2];
+	var toPlot_o2 = [o2_trace1, o2_trace2, o2_trace3];
 
 	var layout_o2 = {
         title: {
@@ -328,12 +333,16 @@
                 success: function(data){
                     sensor1_label = data['sensor1_label'];
                     sensor2_label = data['sensor2_label'];
+                    sensor3_label = data['sensor3_label'];
                     sensor1_data_co = data['sensor1_data_co'];
                     sensor1_data_o2 = data['sensor1_data_o2'];
                     sensor1_data_ch4 = data['sensor1_data_ch4'];
                     sensor2_data_co = data['sensor2_data_co'];
                     sensor2_data_o2 = data['sensor2_data_o2'];
                     sensor2_data_ch4 = data['sensor2_data_ch4'];
+                    sensor3_data_co = data['sensor3_data_co'];
+                    sensor3_data_o2 = data['sensor3_data_o2'];
+                    sensor3_data_ch4 = data['sensor3_data_ch4'];
                 },
                 error: function(error_data){
                     console.log('error');
@@ -343,8 +352,8 @@
             var update = {
                        {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
                        {#y: [[xenon1_data_o2], [xenon2_data_o2], [xenon3_data_o2], [xenon4_data_o2]]#}
-                       x:  [[sensor1_label], [sensor2_label]],
-                       y: [[sensor1_data_o2], [sensor2_data_o2]]
+                       x:  [[sensor1_label], [sensor2_label], [sensor3_label]],
+                       y: [[sensor1_data_o2], [sensor2_data_o2], [sensor3_data_o2]]
                       }
 
             return update;
@@ -352,7 +361,7 @@
     }
 
     var interval = setInterval(function() {
-        Plotly.extendTraces('graph_o2', o2_update(), [0, 1])
+        Plotly.extendTraces('graph_o2', o2_update(), [0, 1, 2])
     }, 10000)
 
 </script>
@@ -380,16 +389,16 @@
         }
 	};
 
-	{#var ch4_trace3 = {#}
-	{#	x: sensor3_dates,#}
-	{#	y: {{ sensor3_data_ch4 }},#}
-	{#	yaxis: 'y',#}
-	{#	mode: 'line',#}
-    {#    name: 'sensor3',#}
-    {#    line: {#}
-	{#	    color: 'purple'#}
-    {#    }#}
-	{# ;#}
+	var ch4_trace3 = {
+        x: sensor3_dates,
+        y: {{ sensor3_data_ch4 }},
+        yaxis: 'y',
+        mode: 'line',
+        name: 'sensor3',
+        line: {
+            color: 'purple'
+        }
+    };
     {##}
 	{#var ch4_trace4 = {#}
 	{#	x: sensor4_dates,#}
@@ -402,7 +411,7 @@
     {#    }#}
 	{# ;#}
 
-	var toPlot_ch4 = [ch4_trace1, ch4_trace2];
+	var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3];
 	{#var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3, ch4_trace4];#}
 
 	var layout_ch4 = {
@@ -447,12 +456,16 @@
                 success: function(data){
                     sensor1_label = data['sensor1_label'];
                     sensor2_label = data['sensor2_label'];
+                    sensor3_label = data['sensor3_label'];
                     sensor1_data_co = data['sensor1_data_co'];
                     sensor1_data_o2 = data['sensor1_data_o2'];
                     sensor1_data_ch4 = data['sensor1_data_ch4'];
                     sensor2_data_co = data['sensor2_data_co'];
                     sensor2_data_o2 = data['sensor2_data_o2'];
                     sensor2_data_ch4 = data['sensor2_data_ch4'];
+                    sensor3_data_co = data['sensor3_data_co'];
+                    sensor3_data_o2 = data['sensor3_data_o2'];
+                    sensor3_data_ch4 = data['sensor3_data_ch4'];
                 },
                 error: function(error_data){
                     console.log('error');
@@ -462,8 +475,8 @@
             var update = {
                        {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
                        {#y: [[xenon1_data_ch4], [xenon2_data_ch4], [xenon3_data_ch4], [xenon4_data_ch4]]#}
-                       x:  [[sensor1_label], [sensor2_label]],
-                       y: [[sensor1_data_ch4], [sensor2_data_ch4]]
+                       x:  [[sensor1_label], [sensor2_label], [sensor2_label]],
+                       y: [[sensor1_data_ch4], [sensor2_data_ch4], [sensor2_label]]
                       }
 
             return update;
@@ -471,7 +484,133 @@
     }
 
     var interval = setInterval(function() {
-        Plotly.extendTraces('graph_ch4', ch4_update(), [0, 1])
+        Plotly.extendTraces('graph_ch4', ch4_update(), [0, 1, 2])
+    }, 10000)
+
+</script>
+
+<script type="text/javascript">
+
+    var volt_trace1 = {
+		x: sensor1_dates,
+		y: {{ sensor1_volt }},
+		mode: 'line',
+        name: 'sensor1',
+        line: {
+		    color: 'blue'
+        }
+	};
+
+	var volt_trace2 = {
+		x: sensor2_dates,
+		y: {{ sensor2_volt }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor2',
+        line: {
+		    color: 'green'
+        }
+	};
+
+	var volt_trace3 = {
+        x: sensor3_dates,
+        y: {{ sensor3_volt }},
+        yaxis: 'y',
+        mode: 'line',
+        name: 'sensor3',
+        line: {
+            color: 'purple'
+        }
+    };
+    {##}
+	{#var ch4_trace4 = {#}
+	{#	x: sensor4_dates,#}
+	{#	y: {{ sensor4_data_ch4 }},#}
+	{#	yaxis: 'y',#}
+	{#	mode: 'line',#}
+    {#    name: 'sensor4',#}
+    {#    line: {#}
+	{#	    color: 'black'#}
+    {#    }#}
+	{# ;#}
+
+	var toPlot_volt = [volt_trace1, volt_trace2, volt_trace3];
+	{#var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3, ch4_trace4];#}
+
+	var layout_volt = {
+        title: {
+            text: 'Voltage',
+            font: {
+                size: 24
+            },
+            xref: 'paper',
+            {#x: 0.05,#}
+        },
+        showlegend: true,
+        yaxis: {
+        title: '[V]'
+        },
+        {#shapes: [{#}
+        {#    type:'line',#}
+        {#    xref: 'paper',#}
+        {#    x0: 0,#}
+        {#    x1: 1,#}
+        {#    yref:'y',#}
+        {#    y0: 20,#}
+        {#    y1: 20,#}
+        {#    line: {#}
+        {#        color: 'red',#}
+        {#        width: 2,#}
+        {#    },#}
+        {# ]#}
+	};
+
+	Plotly.plot('graph_volt', toPlot_volt, layout_volt, {displayModeBar: false});
+
+    var cnt = 0;
+
+    function volt_update() {
+
+          var endpoint = '/cloud/dashboard/update/';
+
+            $.ajax({
+                method: "GET",
+                url : endpoint,
+                success: function(data){
+                    sensor1_label = data['sensor1_label'];
+                    sensor2_label = data['sensor2_label'];
+                    sensor3_label = data['sensor3_label'];
+                    sensor1_data_co = data['sensor1_data_co'];
+                    sensor1_data_o2 = data['sensor1_data_o2'];
+                    sensor1_data_ch4 = data['sensor1_data_ch4'];
+                    sensor1_data_volt = data['sensor1_volt'];
+                    sensor2_data_co = data['sensor2_data_co'];
+                    sensor2_data_o2 = data['sensor2_data_o2'];
+                    sensor2_data_ch4 = data['sensor2_data_ch4'];
+                    sensor2_data_volt = data['sensor2_volt'];
+                    sensor3_data_co = data['sensor3_data_co'];
+                    sensor3_data_o2 = data['sensor3_data_o2'];
+                    sensor3_data_ch4 = data['sensor3_data_ch4'];
+                    sensor3_volt = data['sensor3_volt'];
+                },
+                error: function(error_data){
+                    console.log('error');
+                },
+            });
+
+            var update = {
+                       {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
+                       {#y: [[xenon1_data_ch4], [xenon2_data_ch4], [xenon3_data_ch4], [xenon4_data_ch4]]#}
+                       x:  [[sensor1_label], [sensor2_label], [sensor2_label]],
+                       y: [[sensor1_volt], [sensor2_volt], [sensor3_volt]]
+                      }
+
+            return update;
+
+    }
+
+    var interval = setInterval(function() {
+        Plotly.extendTraces('graph_volt', volt_update(), [0, 1, 2])
     }, 10000)
 
 </script>
