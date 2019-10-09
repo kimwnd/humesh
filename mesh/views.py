@@ -117,6 +117,8 @@ def cloud_notification(request):
         flag = values[0]
         o2 = int(values[1:5],16)/10.0
         co = int(values[5:9],16)
+        if co < 3 :
+            co = 0
         ch4 = int(values[9:11],16)
         temp = int(values[11:15],16)/10.0
         humid = int(values[15:17],16)
@@ -791,7 +793,8 @@ class MultipleLineChartView(TemplateView):
 
 
 class CloudDashboardView(TemplateView):
-    template_name = 'cloud_dash_board.html'
+    # template_name = 'cloud_dash_board.html'
+    template_name = 'layouts-preloader.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -833,9 +836,9 @@ class CloudDashboardView(TemplateView):
         # df_sensor4['datetime'] = pd.to_datetime(df_sensor4['created'])
         # df_sensor4=df_sensor4.set_index(pd.DatetimeIndex(df_sensor4['datetime']))
 
-        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-09-27 18:00']
-        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-09-27 18:00']
-        df_sensor3 = df_sensor3[df_sensor3['datetime']>'2019-09-27 18:00']
+        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-10-09 13:00']
+        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-10-09 13:00']
+        df_sensor3 = df_sensor3[df_sensor3['datetime']>'2019-10-09 13:00']
         # df_sensor4 = df_sensor4[df_sensor4['datetime']>'2019-04-25 15:00']
 
         # For Sensor1
@@ -850,6 +853,8 @@ class CloudDashboardView(TemplateView):
         df_sensor1_o2   = df_sensor1_o2.reset_index()
         df_sensor1_ch4  = df_sensor1_ch4.reset_index()
         df_sensor1_volt = df_sensor1_volt.reset_index()
+        df_sensor1_temp = df_sensor1_temp.reset_index()
+        df_sensor1_humid = df_sensor1_humid.reset_index()
 
         # For Sensor2
         df_sensor2_co       = df_sensor2['data_co'].resample("600s").median().fillna(0)
@@ -863,6 +868,8 @@ class CloudDashboardView(TemplateView):
         df_sensor2_o2   = df_sensor2_o2.reset_index()
         df_sensor2_ch4  = df_sensor2_ch4.reset_index()
         df_sensor2_volt = df_sensor2_volt.reset_index()
+        df_sensor2_temp = df_sensor2_temp.reset_index()
+        df_sensor2_humid = df_sensor2_humid.reset_index()
 
         # For Sensor3
         df_sensor3_co       = df_sensor3['data_co'].resample("600s").median().fillna(0)
@@ -876,6 +883,8 @@ class CloudDashboardView(TemplateView):
         df_sensor3_o2       = df_sensor3_o2.reset_index()
         df_sensor3_ch4      = df_sensor3_ch4.reset_index()
         df_sensor3_volt     = df_sensor3_volt.reset_index()
+        df_sensor3_temp     = df_sensor3_temp.reset_index()
+        df_sensor3_humid    = df_sensor3_humid.reset_index()
 
         # # For Sensor4
         # df_sensor4_co       = df_sensor4['data_co'].resample("10s").max().fillna(0)
@@ -1027,6 +1036,47 @@ class CloudDashboardView(TemplateView):
         for i in range(sensor3_len_volt):
             sensor3_volt_list.append(df_sensor3_volt['volt'][i])
 
+        # 온도 데이터 리스트
+
+        sensor1_temp_list = []
+        sensor2_temp_list = []
+        sensor3_temp_list = []
+        # sensor4_ch4_list = []
+
+        sensor1_len_temp = len(df_sensor1_temp)
+        sensor2_len_temp = len(df_sensor2_temp)
+        sensor3_len_temp = len(df_sensor3_temp)
+        # sensor4_len_ch4 = len(df_sensor4['data_ch4'])
+
+        for i in range(sensor1_len_temp):
+            sensor1_temp_list.append(df_sensor1_temp['data_temp'][i])
+
+        for i in range(sensor2_len_temp):
+            sensor2_temp_list.append(df_sensor2_temp['data_temp'][i])
+
+        for i in range(sensor3_len_volt):
+            sensor3_temp_list.append(df_sensor3_temp['data_temp'][i])
+
+        # 습도 데이터 리스트
+
+        sensor1_humid_list = []
+        sensor2_humid_list = []
+        sensor3_humid_list = []
+        # sensor4_ch4_list = []
+
+        sensor1_len_humid = len(df_sensor1_humid)
+        sensor2_len_humid = len(df_sensor2_humid)
+        sensor3_len_humid = len(df_sensor3_humid)
+        # sensor4_len_ch4 = len(df_sensor4['data_ch4'])
+
+        for i in range(sensor1_len_humid):
+            sensor1_humid_list.append(df_sensor1_humid['data_humid'][i])
+
+        for i in range(sensor2_len_humid):
+            sensor2_humid_list.append(df_sensor2_humid['data_humid'][i])
+
+        for i in range(sensor3_len_humid):
+            sensor3_humid_list.append(df_sensor3_humid['data_humid'][i])
 
         # print('sensor2_ch4_list')
         # print(sensor2_ch4_list)
@@ -1045,19 +1095,43 @@ class CloudDashboardView(TemplateView):
         context['sensor1_data_o2']  = sensor1_o2_list
         context['sensor1_data_ch4'] = sensor1_ch4_list
         context['sensor1_volt']     = sensor1_volt_list
+        context['sensor1_temp']     = sensor1_temp_list
         context['sensor1_labels']   = sensor1_labels
+        context['sensor1_co_val']   = sensor1_co_list[-1]
+        context['sensor1_o2_val']   = sensor1_o2_list[-1]
+        context['sensor1_ch4_val']   = sensor1_ch4_list[-1]
+        context['sensor1_temp_val']   = sensor1_temp_list[-1]
+        context['sensor1_humid_val']   = int(sensor1_humid_list[-1])
+        context['sensor1_power_per']   = int(sensor1_volt_list[-1]/4.2 * 100.0)
+        context['sensor1_datenow']   = sensor1_labels[-1]
 
         context['sensor2_data_co']  = sensor2_co_list
         context['sensor2_data_o2']  = sensor2_o2_list
         context['sensor2_data_ch4'] = sensor2_ch4_list
         context['sensor2_volt']     = sensor2_volt_list
+        context['sensor2_temp']     = sensor2_temp_list
         context['sensor2_labels']   = sensor2_labels
+        context['sensor2_co_val']   = sensor2_co_list[-1]
+        context['sensor2_o2_val']   = sensor2_o2_list[-1]
+        context['sensor2_ch4_val']   = sensor2_ch4_list[-1]
+        context['sensor2_temp_val']   = sensor2_temp_list[-1]
+        context['sensor2_humid_val']   = int(sensor2_humid_list[-1])
+        context['sensor2_power_per'] = int(sensor2_volt_list[-1] / 4.2 * 100.0)
+        context['sensor2_datenow'] = sensor2_labels[-1]
 
         context['sensor3_data_co']  = sensor3_co_list
         context['sensor3_data_o2']  = sensor3_o2_list
         context['sensor3_data_ch4'] = sensor3_ch4_list
         context['sensor3_volt']     = sensor3_volt_list
+        context['sensor3_temp']     = sensor3_temp_list
         context['sensor3_labels']   = sensor3_labels
+        context['sensor3_co_val']   = sensor3_co_list[-1]
+        context['sensor3_o2_val']   = sensor3_o2_list[-1]
+        context['sensor3_ch4_val']   = sensor3_ch4_list[-1]
+        context['sensor3_temp_val']   = sensor3_temp_list[-1]
+        context['sensor3_humid_val']   = int(sensor3_humid_list[-1])
+        context['sensor3_power_per'] = int(sensor3_volt_list[-1] / 4.2 * 100.0)
+        context['sensor3_datenow'] = sensor3_labels[-1]
 
         return context
 
@@ -1641,9 +1715,9 @@ class CloudDashboardUpdateView(View):
             # df_sensor4['datetime'] = pd.to_datetime(df_sensor4['created'])
             # df_sensor4=df_sensor4.set_index(pd.DatetimeIndex(df_sensor4['datetime']))
 
-            df_sensor1 = df_sensor1[df_sensor1['datetime'] > '2019-09-27 18:00']
-            df_sensor2 = df_sensor2[df_sensor2['datetime'] > '2019-09-27 18:00']
-            df_sensor3 = df_sensor3[df_sensor3['datetime'] > '2019-09-27 18:00']
+            df_sensor1 = df_sensor1[df_sensor1['datetime'] > '2019-10-09 13:00']
+            df_sensor2 = df_sensor2[df_sensor2['datetime'] > '2019-10-09 13:00']
+            df_sensor3 = df_sensor3[df_sensor3['datetime'] > '2019-10-09 13:00']
             # df_sensor4 = df_sensor4[df_sensor4['datetime']>'2019-04-25 15:00']
 
             # For Sensor1
@@ -2218,3 +2292,5 @@ class DashboardNumnersUpdateView(View):
 
             return JsonResponse(data)
 
+class CloudTestTemplateView(TemplateView):
+    template_name = 'layouts-preloader.html'

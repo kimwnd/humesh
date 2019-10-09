@@ -7,7 +7,7 @@ from . import views
 from django.urls import path
 
 urlpatterns = [
-    path('', views.HomePageView.as_view(), name='home'),
+    path('', views.CloudDashboardView.as_view(), name='home'),
     # path('mesh/data/', views.ReceiveMeshDataView.as_view(), name='mesh'),
     path('mesh/data/', views.mesh_notification, name='mesh'),
     path('multiple/notification/', views.multiple_notification, name='multiple_notification'),
@@ -18,7 +18,8 @@ urlpatterns = [
     path('line/chart/new/', views.NewLineChartView.as_view(), name='line_chart_new'),
     path('multiple/line/chart/', views.MultipleLineChartView.as_view(), name='multiple_line_chart'),
     path('dashboard/numbers/', views.DashboardNumbersView.as_view(), name='dashboard_numbers'),
-    path('cloud/databoard/', views.CloudDataboardView.as_view(), name='cloud_databoard'),
+    # path('cloud/databoard/', views.CloudDataboardView.as_view(), name='cloud_databoard'),
+    path('cloud/databoard/', views.CloudDashboardView.as_view(), name='cloud_databoard'),
     path('cloud/databoard/update/', views.CloudDataboardUpdateView.as_view(), name='cloud_databoard_update'),
     path('dashboard/numbers/update/', views.DashboardNumnersUpdateView.as_view(), name='dashboard_numbers_update'),
     path('dashboard/', views.MultipleDashboardView.as_view(), name='multiple_dash_board'),
@@ -32,4 +33,5 @@ urlpatterns = [
     path('get/wifi/update/', views.GetWifiDataUpdateView.as_view(), name='get_wifi_data_update'),
     path('control/led/', views.ControlLEDView.as_view(), name='control_led'),
     path('control/switch/', views.ControlSwitchView.as_view(), name='control_switch'),
+    path('cloud/test/', views.CloudTestTemplateView.as_view(), name='cloud_test_template'),
 ]

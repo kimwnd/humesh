@@ -1,0 +1,1513 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Huconn Sensor Networks Monitoring System</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Huconn Sensor Networks Monitoring System" name="description" />
+        <meta content="Coderthemes" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="refresh" content="600">
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+        <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+        <!-- third party css -->
+        <link href="{% static 'assets/libs/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'assets/libs/datatables/responsive.bootstrap4.css' %}" rel="stylesheet" type="text/css" />
+        <!-- third party css end -->
+
+        <!-- App css -->
+        <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'assets/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'assets/css/app.min.css' %}" rel="stylesheet" type="text/css" />
+
+          <!-- Plotly.js -->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+    </head>
+
+    <body class="center-menu">
+
+        <!-- Pre-loader -->
+        <div id="preloader">
+            <div id="status">
+                <div class="spinner">Loading...</div>
+            </div>
+        </div>
+        <!-- End Preloader-->
+
+        <!-- Navigation Bar-->
+        <header id="topnav">
+
+            <!-- Topbar Start -->
+            <div class="navbar-custom">
+                <div class="container-fluid">
+                    <ul class="list-unstyled topnav-menu float-right mb-0">
+
+                        <li class="dropdown notification-list">
+                            <!-- Mobile menu toggle-->
+                            <a class="navbar-toggle nav-link">
+                                <div class="lines">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </a>
+                            <!-- End mobile menu toggle-->
+                        </li>
+
+                        <li class="d-none d-sm-block">
+                            <form class="app-search">
+                                <div class="app-search-box">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Search...">
+                                        <div class="input-group-append">
+                                            <button class="btn" type="submit">
+                                                <i class="fe-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                    <br/>
+                    <!-- LOGO -->
+                    <div class="logo-box">
+                        <a href="/" class="logo text-center">
+
+                            <span class="logo-lg"><h2>HICT 휴컨 밀폐통신 관제시스템</h2>
+{#                               템 <img src="{% static 'assets/images/logo-dark.png' %}" alt="" height="26">#}
+                                <!-- <span class="logo-lg-text-dark">Upvex</span> -->
+                            </span>
+                            <span class="logo-sm"> <h2>밀폐통신 관제시스템</h2>
+                                <!-- <span class="logo-sm-text-dark">X</span> -->
+{#                                <img src="{% static 'assets/images/logo-sm.png' %}" alt="" height="28">#}
+                            </span>
+                        </a>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <!-- end Topbar -->
+
+            <div class="topbar-menu">
+                <div class="container-fluid">
+                    <div id="navigation">
+                        <!-- Navigation Menu-->
+                        <ul class="navigation-menu">
+
+                            <li class="has-submenu">
+                                <a href="/">
+                                    <i class="la la-dashboard"></i>대쉬보드</a>
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="#">
+                                    <i class="la la-cube"></i>운용상황</a>
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="#"> <i class="la la-clone"></i>관리이력</a>
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="#"> <i class="la la-briefcase"></i>공지사항</a>
+                            </li>
+
+                        </ul>
+                        <!-- End navigation menu -->
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <!-- end #navigation -->
+                </div>
+                <!-- end container -->
+            </div>
+            <!-- end navbar-custom -->
+
+        </header>
+        <!-- End Navigation Bar-->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <h4 class="page-title">Dashboards</h4>
+                        </div>
+                    </div>
+                </div>     
+                <!-- end page title --> 
+
+                <div class="row">
+                    <div class="col-xl-6">
+                        <!-- Portlet card -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-widgets">
+                                    <a href="javascript: void(0);" data-toggle="reload"><i class="mdi mdi-refresh"></i></a>
+                                </div>
+                                <h4 class="header-title mb-0">Co Gas Chart</h4>
+
+                                <div id="cardCollpase1" class="collapse pt-3 show" dir="ltr">
+{#                                    <div id="apex-sales-analytics" class="apex-charts"></div>#}
+                                    <div id="graph_co"></div>
+                                </div> <!-- collapsed end -->
+                            </div> <!-- end card-body -->
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-widgets">
+                                    <a href="javascript: void(0);" data-toggle="reload"><i class="mdi mdi-refresh"></i></a>
+                                </div>
+                                <h4 class="header-title mb-0">O2 Gas Chart</h4>
+
+                                <div id="cardCollpase2" class="collapse pt-3 show" dir="ltr">
+{#                                    <div id="apex-order-analytics" class="apex-charts"></div>#}
+                                    <div id="graph_o2"></div>
+
+                                </div> <!-- collapsed end -->
+                            </div> <!-- end card-body -->
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+                        <div class="col-xl-6">
+                        <!-- Portlet card -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-widgets">
+                                    <a href="javascript: void(0);" data-toggle="reload"><i class="mdi mdi-refresh"></i></a>
+                                </div>
+                                <h4 class="header-title mb-0">LEL Gas Chart</h4>
+
+                                <div id="cardCollpase1" class="collapse pt-3 show" dir="ltr">
+{#                                    <div id="apex-sales-analytics" class="apex-charts"></div>#}
+                                    <div id="graph_ch4"></div>
+
+                                </div> <!-- collapsed end -->
+                            </div> <!-- end card-body -->
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-widgets">
+                                    <a href="javascript: void(0);" data-toggle="reload"><i class="mdi mdi-refresh"></i></a>
+                                </div>
+                                <h4 class="header-title mb-0">Temperature Change</h4>
+
+                                <div id="cardCollpase2" class="collapse pt-3 show" dir="ltr">
+{#                                    <div id="apex-order-analytics" class="apex-charts"></div>#}
+                                      <div id="graph_temp"></div>
+
+                                </div> <!-- collapsed end -->
+                            </div> <!-- end card-body -->
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+                </div>
+                <!-- end row -->
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <h4 class="page-title">Databoards</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="card-box">
+                            <h4 class="header-title">센서노드 #1</h4>
+                            <p class="text-muted">{{ sensor1_datenow }}</p>
+{#                            <h2 class="mb-4"><i class="mdi mdi-currency-usd text-primary"></i>25,632.78</h2>#}
+
+                            <div class="row mb-4">
+                                <div class="col-4">
+                                    <p class="text-muted mb-1">CO(ppm)</p>
+                                    <h3 class="mt-0 font-20">{{ sensor1_co_val }}</h3>
+                                </div>
+
+                                <div class="col-4">
+                                    <p class="text-muted mb-1">O2(%)</p>
+                                    <h3 class="mt-0 font-20">{{ sensor1_o2_val }}</h3>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-muted mb-1">LEL(%)</p>
+                                    <h3 class="mt-0 font-20">{{ sensor1_ch4_val }}</h3>
+                                </div>
+                            </div>
+
+                            <div class="mt-1 col-10">
+                                <div class="float-left" dir="ltr">
+                                    <input data-plugin="knob" data-width="64" data-height="64" data-fgColor="#f05050 "
+                                        data-bgColor="#F9B9B9" value="{{ sensor1_power_per }}"
+                                        data-skin="tron" data-angleOffset="180" data-readOnly=true
+                                        data-thickness=".15"/>
+                                    <p class="text-muted mb-0">전력소모</p>
+                                </div>
+                                <div class="text-right">
+                                    <h2 class="mt-3 pt-1 mb-1">{{ sensor1_temp_val }}&#8451;/{{ sensor1_humid_val }}% </h2>
+                                    <p class="text-muted mb-0">온도/습도</p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="mt-5">
+                               <span data-plugin="peity-bar" data-colors="#4e9cf7,#ebeff2" data-width="100%" data-height="80">5,3,9,6,5,9,7,3,5,2,9,7,2,1,3,5,2,9,7,2,5,3,9,6,5,9,7</span>
+                            </div>
+
+                        </div> <!-- end card-box -->
+                    </div> <!-- end col -->
+
+                    <div class="col-xl-4">
+                        <div class="card-box">
+                            <h4 class="header-title">센서노드 #2</h4>
+                            <p class="text-muted">{{ sensor2_datenow }}</p>
+{#                            <h2 class="mb-4"><i class="mdi mdi-currency-usd text-primary"></i>25,632.78</h2>#}
+
+                            <div class="row mb-4">
+                                <div class="col-4">
+                                    <p class="text-muted mb-1">CO(ppm)</p>
+                                    <h3 class="mt-0 font-20"> {{  sensor2_co_val }}</h3>
+                                </div>
+
+                                <div class="col-4">
+                                    <p class="text-muted mb-1">O2(%)</p>
+                                    <h3 class="mt-0 font-20"> {{ sensor2_o2_val }}</h3>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-muted mb-1">LEL(%)</p>
+                                    <h3 class="mt-0 font-20">{{ sensor2_ch4_val }}</h3>
+                                </div>
+                            </div>
+
+                            <div class="mt-1 col-10">
+                                <div class="float-left" dir="ltr">
+                                    <input data-plugin="knob" data-width="64" data-height="64" data-fgColor="#f05050 "
+                                        data-bgColor="#F9B9B9" value="{{ sensor2_power_per }}"
+                                        data-skin="tron" data-angleOffset="180" data-readOnly=true
+                                        data-thickness=".15"/>
+                                    <p class="text-muted mb-0">전력소모</p>
+                                </div>
+                                <div class="text-right">
+                                    <h2 class="mt-3 pt-1 mb-1">{{ sensor2_temp_val }}&#8451;/{{ sensor2_humid_val }}% </h2>
+                                    <p class="text-muted mb-0">온도/습도</p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="mt-5">
+                                <span data-plugin="peity-bar" data-colors="#f7b84b,#ebeff2" data-width="100%" data-height="80">5,3,9,6,5,9,7,3,5,2,9,7,2,1,3,5,2,9,7,2,5,3,9,6,5,9,7</span>
+                            </div>
+
+
+                        </div> <!-- end card-box -->
+                    </div> <!-- end col -->
+
+                    <div class="col-xl-4">
+                        <div class="card-box">
+                            <h4 class="header-title">센서노드 #3</h4>
+                            <p class="text-muted">{{ sensor3_datenow }}</p>
+{#                            <h2 class="mb-4"><i class="mdi mdi-currency-usd text-primary"></i>25,632.78</h2>#}
+
+                            <div class="row mb-4">
+                                <div class="col-4">
+                                    <p class="text-muted mb-1">CO(ppm)</p>
+                                    <h3 class="mt-0 font-20"> {{ sensor3_co_val  }}</h3>
+                                </div>
+
+                                <div class="col-4">
+                                    <p class="text-muted mb-1">O2(%)</p>
+                                    <h3 class="mt-0 font-20">{{ sensor3_o2_val }}</h3>
+                                </div>
+                                <div class="col-4">
+                                    <p class="text-muted mb-1">LEL(%)</p>
+                                    <h3 class="mt-0 font-20"> {{ sensor3_ch4_val }}</h3>
+                                </div>
+                            </div>
+
+                             <div class="mt-1 col-10">
+                                <div class="float-left" dir="ltr">
+                                    <input data-plugin="knob" data-width="64" data-height="64" data-fgColor="#f05050 "
+                                        data-bgColor="#F9B9B9" value="{{ sensor3_power_per }}"
+                                        data-skin="tron" data-angleOffset="180" data-readOnly=true
+                                        data-thickness=".15"/>
+                                    <p class="text-muted mb-0">전력소모</p>
+                                </div>
+                                <div class="text-right">
+                                    <h2 class="mt-3 pt-1 mb-1"> {{ sensor3_temp_val }}&#8451;/{{ sensor3_humid_val }}% </h2>
+                                    <p class="text-muted mb-0">온도/습도</p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="mt-5">
+                                <span data-plugin="peity-bar" data-colors="#784ff7,#ebeff2" data-width="100%" data-height="80">5,3,9,6,5,9,7,3,5,2,9,7,2,1,3,5,2,9,7,2,5,3,9,6,5,9,7</span>
+                            </div>
+
+                        </div> <!-- end card-box -->
+                    </div> <!-- end col -->
+                </div>
+                <!-- end row -->
+{#                <!-- start row -->#}
+{#                <div class="row">#}
+{#                    <div class="col-xl-3 col-md-6">#}
+{#                        <div class="card-box">#}
+{##}
+{#                            <h4 class="header-title mt-0 mb-2">Sensor Node #1</h4>#}
+{##}
+{#                            <div class="mt-1">#}
+{#                                <div class="float-left" dir="ltr">#}
+{#                                    <input data-plugin="knob" data-width="64" data-height="64" data-fgColor="#f05050 "#}
+{#                                        data-bgColor="#F9B9B9" value="58"#}
+{#                                        data-skin="tron" data-angleOffset="180" data-readOnly=true#}
+{#                                        data-thickness=".15"/>#}
+{#                                    <p class="text-muted mb-0">전력소모</p>#}
+{#                                </div>#}
+{#                                <div class="text-right">#}
+{#                                    <h2 class="mt-3 pt-1 mb-1">26.7&#8451;/50% </h2>#}
+{#                                    <p class="text-muted mb-0">온도/습도</p>#}
+{#                                </div>#}
+{#                                <div class="clearfix"></div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div><!-- end col -->#}
+{##}
+{#                    <div class="col-xl-3 col-md-6">#}
+{#                        <div class="card-box">#}
+{#                            <h4 class="header-title mt-0 mb-3">Sensor Node #2</h4>#}
+{##}
+{#                            <div class="mt-1">#}
+{#                                <div class="float-left" dir="ltr">#}
+{#                                    <input data-plugin="knob" data-width="64" data-height="64" data-fgColor="#675db7"#}
+{#                                        data-bgColor="#e8e7f4" value="80"#}
+{#                                        data-skin="tron" data-angleOffset="180" data-readOnly=true#}
+{#                                        data-thickness=".15"/>#}
+{#                                    <p class="text-muted mb-0">전력소모</p>#}
+{#                                </div>#}
+{#                                <div class="text-right">#}
+{#                                    <h2 class="mt-3 pt-1 mb-1">26.7&#8451;/50% </h2>#}
+{#                                    <p class="text-muted mb-0">온도/습도</p>#}
+{#                                </div>#}
+{#                                <div class="clearfix"></div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div><!-- end col -->#}
+{##}
+{#                    <div class="col-xl-3 col-md-6">#}
+{#                        <div class="card-box">#}
+{##}
+{#                            <h4 class="header-title mt-0 mb-3">Sensor Node #3</h4>#}
+{##}
+{#                            <div class="mt-1">#}
+{#                                <div class="float-left" dir="ltr">#}
+{#                                    <input data-plugin="knob" data-width="64" data-height="64" data-fgColor="#23b397"#}
+{#                                        data-bgColor="#c8ece5" value="77"#}
+{#                                        data-skin="tron" data-angleOffset="180" data-readOnly=true#}
+{#                                        data-thickness=".15"/>#}
+{#                                    <p class="text-muted mb-0">전력소모</p>#}
+{#                                </div>#}
+{#                                <div class="text-right">#}
+{#                                    <h2 class="mt-3 pt-1 mb-1">26.7&#8451;/50% </h2>#}
+{#                                    <p class="text-muted mb-0">온도/습도</p>#}
+{#                                </div>#}
+{#                                <div class="clearfix"></div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div><!-- end col -->#}
+{##}
+{#                    <div class="col-xl-3 col-md-6">#}
+{#                        <div class="card-box">#}
+{#                            <h4 class="header-title mt-0 mb-3">Sensor Node #4</h4>#}
+{##}
+{#                            <div class="mt-1">#}
+{#                                <div class="float-left" dir="ltr">#}
+{#                                    <input data-plugin="knob" data-width="64" data-height="64" data-fgColor="#ffbd4a"#}
+{#                                        data-bgColor="#FFE6BA" value="35"#}
+{#                                        data-skin="tron" data-angleOffset="180" data-readOnly=true#}
+{#                                        data-thickness=".15"/>#}
+{#                                    <p class="text-muted mb-0">전력소모</p>#}
+{#                                </div>#}
+{#                                <div class="text-right">#}
+{#                                    <h2 class="mt-3 pt-1 mb-1">26.7&#8451;/50% </h2>#}
+{#                                    <p class="text-muted mb-0">온도/습도</p>#}
+{#                                </div>#}
+{#                                <div class="clearfix"></div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div><!-- end col -->#}
+{##}
+{#                </div>#}
+{#                <!-- end row -->#}
+{#                <div class="row">#}
+{##}
+{#                    <div class="col-xl-4">#}
+{#                        <div class="card-box">#}
+{#                            <h4 class="header-title">Earning Reports</h4>#}
+{#                            <p class="text-muted">1 Mar - 31 Mar Showing Data</p>#}
+{#                            <h2 class="mb-4"><i class="mdi mdi-currency-usd text-primary"></i>25,632.78</h2>#}
+{##}
+{#                            <div class="row mb-4">#}
+{#                                <div class="col-6">#}
+{#                                    <p class="text-muted mb-1">This Month</p>#}
+{#                                    <h3 class="mt-0 font-20">$120,254 <small class="badge badge-light-success font-13">+15%</small></h3>#}
+{#                                </div>#}
+{##}
+{#                                <div class="col-6">#}
+{#                                    <p class="text-muted mb-1">Last Month</p>#}
+{#                                    <h3 class="mt-0 font-20">$98,741 <small class="badge badge-light-danger font-13">-5%</small></h3>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <h5 class="font-16"><i class="mdi mdi-chart-donut text-primary"></i> Weekly Earning Report</h5>#}
+{##}
+{#                            <div class="mt-5">#}
+{#                                <span data-plugin="peity-bar" data-colors="#f7b84b,#ebeff2" data-width="100%" data-height="80">5,3,9,6,5,9,7,3,5,2,9,7,2,1,3,5,2,9,7,2,5,3,9,6,5,9,7</span>#}
+{#                            </div>#}
+{##}
+{#                        </div> <!-- end card-box -->#}
+{#                    </div> <!-- end col -->#}
+{##}
+{#                    <div class="col-xl-8">#}
+{#                        <div class="card-box">#}
+{#                            <h4 class="header-title mb-3">Transaction History</h4>#}
+{##}
+{#                            <div class="table-responsive">#}
+{#                                <table class="table table-centered table-borderless table-hover table-nowrap mb-0" id="datatable">#}
+{#                                    <thead class="thead-light">#}
+{#                                    <tr>#}
+{#                                        <th class="border-top-0">Name</th>#}
+{#                                        <th class="border-top-0">Card</th>#}
+{#                                        <th class="border-top-0">Date</th>#}
+{#                                        <th class="border-top-0">Amount</th>#}
+{#                                        <th class="border-top-0">Status</th>#}
+{#                                    </tr>#}
+{#                                    </thead>#}
+{#                                    <tbody>#}
+{#                                    <tr>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/users/user-2.jpg' %}" alt="user-pic" class="rounded-circle avatar-sm" />#}
+{#                                            <span class="ml-2">Imelda J. Stanberry</span>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/cards/visa.png' %}" alt="user-card" height="24" />#}
+{#                                            <span class="ml-2">**** 3256</span>#}
+{#                                        </td>#}
+{#                                        <td>27.03.2018</td>#}
+{#                                        <td>$345.98</td>#}
+{#                                        <td><span class="badge badge-pill badge-danger">Failed</span></td>#}
+{#                                    </tr>#}
+{#                                    <tr>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/users/user-3.jpg' %}" alt="user-pic" class="rounded-circle avatar-sm" />#}
+{#                                            <span class="ml-2">Francisca S. Lobb</span>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/cards/master.png' %}" alt="user-card" height="24" />#}
+{#                                            <span class="ml-2">**** 8451</span>#}
+{#                                        </td>#}
+{#                                        <td>28.03.2018</td>#}
+{#                                        <td>$1,250</td>#}
+{#                                        <td><span class="badge badge-pill badge-success">Paid</span></td>#}
+{#                                    </tr>#}
+{#                                    <tr>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/users/user-4.jpg' %}" alt="user-pic" class="rounded-circle avatar-sm" />#}
+{#                                            <span class="ml-2">James A. Wert</span>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/cards/amazon.png' %}" alt="user-card" height="24" />#}
+{#                                            <span class="ml-2">**** 2258</span>#}
+{#                                        </td>#}
+{#                                        <td>28.03.2018</td>#}
+{#                                        <td>$145</td>#}
+{#                                        <td><span class="badge badge-pill badge-success">Paid</span></td>#}
+{#                                    </tr>#}
+{#                                    <tr>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/users/user-5.jpg' %}" alt="user-pic" class="rounded-circle avatar-sm" />#}
+{#                                            <span class="ml-2">Dolores J. Pooley</span>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/cards/american-express.png' %}" alt="user-card" height="24" />#}
+{#                                            <span class="ml-2">**** 6950</span>#}
+{#                                        </td>#}
+{#                                        <td>29.03.2018</td>#}
+{#                                        <td>$2,005.89</td>#}
+{#                                        <td><span class="badge badge-pill badge-danger">Failed</span></td>#}
+{#                                    </tr>#}
+{#                                    <tr>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/users/user-5.jpg' %}" alt="user-pic" class="rounded-circle avatar-sm" />#}
+{#                                            <span class="ml-2">Karen I. McCluskey</span>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/cards/discover.png' %}" alt="user-card" height="24" />#}
+{#                                            <span class="ml-2">**** 0021</span>#}
+{#                                        </td>#}
+{#                                        <td>31.03.2018</td>#}
+{#                                        <td>$24.95</td>#}
+{#                                        <td><span class="badge badge-pill badge-success">Paid</span></td>#}
+{#                                    </tr>#}
+{#                                    <tr>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/users/user-6.jpg' %}" alt="user-pic" class="rounded-circle avatar-sm" />#}
+{#                                            <span class="ml-2">Kenneth J. Melendez</span>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/cards/visa.png' %}'" alt="user-card" height="24" />#}
+{#                                            <span class="ml-2">**** 2840</span>#}
+{#                                        </td>#}
+{#                                        <td>27.03.2018</td>#}
+{#                                        <td>$345.98</td>#}
+{#                                        <td><span class="badge badge-pill badge-success">Paid</span></td>#}
+{#                                    </tr>#}
+{#                                    <tr>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/users/user-7.jpg' %}" alt="user-pic" class="rounded-circle avatar-sm" />#}
+{#                                            <span class="ml-2">Sandra M. Nicholas</span>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/cards/master.png' %}" alt="user-card" height="24" />#}
+{#                                            <span class="ml-2">**** 2015</span>#}
+{#                                        </td>#}
+{#                                        <td>28.03.2018</td>#}
+{#                                        <td>$1,250</td>#}
+{#                                        <td><span class="badge badge-pill badge-danger">Failed</span></td>#}
+{#                                    </tr>#}
+{#                                    <tr>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/users/user-8.jpg' %}" alt="user-pic" class="rounded-circle avatar-sm" />#}
+{#                                            <span class="ml-2">Ronald S. Taylor</span>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/cards/amazon.png' %}" alt="user-card" height="24" />#}
+{#                                            <span class="ml-2">**** 0325</span>#}
+{#                                        </td>#}
+{#                                        <td>28.03.2018</td>#}
+{#                                        <td>$145</td>#}
+{#                                        <td><span class="badge badge-pill badge-success">Paid</span></td>#}
+{#                                    </tr>#}
+{#                                    <tr>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/users/user-9.jpg' %}" alt="user-pic" class="rounded-circle avatar-sm" />#}
+{#                                            <span class="ml-2">Beatrice L. Iacovelli</span>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/cards/discover.png' %}" alt="user-card" height="24" />#}
+{#                                            <span class="ml-2">**** 9058</span>#}
+{#                                        </td>#}
+{#                                        <td>29.03.2018</td>#}
+{#                                        <td>$6,542.32</td>#}
+{#                                        <td><span class="badge badge-pill badge-success">Paid</span></td>#}
+{#                                    </tr>#}
+{#                                    <tr>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/users/user-10.jpg' %}" alt="user-pic" class="rounded-circle avatar-sm" />#}
+{#                                            <span class="ml-2">Sylvia H. Parker</span>#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            <img src="{% static 'assets/images/cards/discover.png' %}" alt="user-card" height="24" />#}
+{#                                            <span class="ml-2">**** 2577</span>#}
+{#                                        </td>#}
+{#                                        <td>31.03.2018</td>#}
+{#                                        <td>$24.95</td>#}
+{#                                        <td><span class="badge badge-pill badge-danger">Failed</span></td>#}
+{#                                    </tr>#}
+{#                                    </tbody>#}
+{#                                </table>#}
+{#                            </div> <!-- end table-responsive -->#}
+{##}
+{#                        </div> <!-- end card-box-->#}
+{#                    </div> <!-- end col-->#}
+{##}
+{#                </div>#}
+            </div> <!-- end container -->
+        </div>
+        <!-- end wrapper -->
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+        <!-- Footer Start -->
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        2019 &copy; Huconn
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-md-right footer-links d-none d-sm-block">
+                            <a href="javascript:void(0);">About Us</a>
+                            <a href="javascript:void(0);">Help</a>
+                            <a href="javascript:void(0);">Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- end Footer -->
+
+        <!-- Right Sidebar -->
+        <div class="right-bar">
+            <div class="rightbar-title">
+                <a href="javascript:void(0);" class="right-bar-toggle float-right">
+                    <i class="mdi mdi-close"></i>
+                </a>
+                <h5 class="m-0 text-white">Settings</h5>
+            </div>
+            <div class="slimscroll-menu">
+                <!-- User box -->
+                <div class="user-box">
+                    <div class="user-img">
+                        <img src="{% static 'assets/images/users/user-1.jpg' %}" alt="user-img" title="Mat Helme" class="rounded-circle img-fluid">
+                        <a href="javascript:void(0);" class="user-edit"><i class="mdi mdi-pencil"></i></a>
+                    </div>
+            
+                    <h5><a href="javascript: void(0);">Marcia J. Melia</a> </h5>
+                    <p class="text-muted mb-0"><small>Product Owner</small></p>
+                </div>
+
+                <!-- Settings -->
+                <hr class="mt-0" />
+                <div class="row">
+                    <div class="col-6 text-center">
+                        <h4 class="mb-1 mt-0">8,504</h4>
+                        <p class="m-0">Balance</p>
+                    </div>
+                    <div class="col-6 text-center">
+                        <h4 class="mb-1 mt-0">8,504</h4>
+                        <p class="m-0">Balance</p>
+                    </div>
+                </div>
+                <hr class="mb-0" />
+
+                <div class="p-3">
+                    <div class="custom-control custom-switch mb-2">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
+                        <label class="custom-control-label" for="customSwitch1">Notifications</label>
+                    </div>
+                    <div class="custom-control custom-switch mb-2">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch2">
+                        <label class="custom-control-label" for="customSwitch2">API Access</label>
+                    </div>
+                    <div class="custom-control custom-switch mb-2">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch3" checked>
+                        <label class="custom-control-label" for="customSwitch3">Auto Updates</label>
+                    </div>
+                    <div class="custom-control custom-switch mb-2">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch4" checked>
+                        <label class="custom-control-label" for="customSwitch4">Online Status</label>
+                    </div>
+                </div>
+
+                <!-- Timeline -->
+                <hr class="mt-0" />
+                <h5 class="pl-3 pr-3">Messages <span class="float-right badge badge-pill badge-danger">25</span></h5>
+                <hr class="mb-0" />
+                <div class="p-3">
+                    <div class="inbox-widget">
+                        <div class="inbox-item">
+                            <div class="inbox-item-img"><img src="{% static 'assets/images/users/user-2.jpg' %}" class="rounded-circle" alt=""></div>
+                            <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">Tomaslau</a></p>
+                            <p class="inbox-item-text">I've finished it! See you so...</p>
+                        </div>
+                        <div class="inbox-item">
+                            <div class="inbox-item-img"><img src="{% static 'assets/images/users/user-3.jpg' %}" class="rounded-circle" alt=""></div>
+                            <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">Stillnotdavid</a></p>
+                            <p class="inbox-item-text">This theme is awesome!</p>
+                        </div>
+                        <div class="inbox-item">
+                            <div class="inbox-item-img"><img src="{% static 'assets/images/users/user-4.jpg' %}" class="rounded-circle" alt=""></div>
+                            <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">Kurafire</a></p>
+                            <p class="inbox-item-text">Nice to meet you</p>
+                        </div>
+
+                        <div class="inbox-item">
+                            <div class="inbox-item-img"><img src="{% static 'assets/images/users/user-5.jpg' %}" class="rounded-circle" alt=""></div>
+                            <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">Shahedk</a></p>
+                            <p class="inbox-item-text">Hey! there I'm available...</p>
+                        </div>
+                        <div class="inbox-item">
+                            <div class="inbox-item-img"><img src="{% static 'assets/images/users/user-6.jpg' %}" class="rounded-circle" alt=""></div>
+                            <p class="inbox-item-author"><a href="javascript: void(0);" class="text-dark">Adhamdannaway</a></p>
+                            <p class="inbox-item-text">This theme is awesome!</p>
+                        </div>
+                    </div> <!-- end inbox-widget -->
+                </div> <!-- end .p-3-->
+
+            </div> <!-- end slimscroll-menu-->
+        </div>
+        <!-- /Right-bar -->
+
+                  <!-- Huconn JavaScript Libraries -->
+          <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+          <script src="{% static 'lib/jquery/jquery-migrate.min.js' %}"></script>
+          <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+          <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+          <script src="{% static 'lib/mobile-nav/mobile-nav.js' %}"></script>
+          <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+          <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+          <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
+          <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+          <script src="{% static 'lib/isotope/isotope.pkgd.min.js' %}"></script>
+          <script src="{% static 'lib/lightbox/js/lightbox.min.js' %}"></script>
+          <!-- Contact Form JavaScript File -->
+          <script src="{% static 'contactform/contactform.js' %}"></script>
+          <script src="{% static 'js/highlight.js' %}"></script>
+          <script src="{% static 'js/bootstrap-switch.js' %}"></script>
+          <script src="{% static 'js/main.js' %}"></script>
+
+          <!-- Template Main Javascript File -->
+          <script src="{% static 'js/main1.js' %}"></script>
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- Vendor js -->
+        <script src="{% static 'assets/js/vendor.min.js' %}"></script>
+
+        <!-- Third Party js-->
+        <script src="{% static 'assets/libs/jquery-knob/jquery.knob.min.js' %}"></script>
+        <script src="{% static 'assets/libs/peity/jquery.peity.min.js' %}"></script>
+        <script src="{% static 'assets/libs/apexcharts/apexcharts.min.js' %}"></script>
+        <script src="{% static 'assets/libs/datatables/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'assets/libs/datatables/dataTables.bootstrap4.js' %}"></script>
+        <script src="{% static 'assets/libs/datatables/dataTables.responsive.min.js' %}"></script>
+        <script src="{% static 'assets/libs/datatables/responsive.bootstrap4.min.js' %}"></script>
+        <!-- third party js ends -->
+
+        <!-- Dashboard init -->
+        <script src="{% static 'assets/js/pages/dashboard-2.init.js' %}"></script>
+
+        <!-- App js-->
+        <script src="{% static 'assets/js/app.min.js' %}"></script>
+        
+    </body>
+</html>
+
+ <script type="text/javascript">
+
+    var sensor1_dates = [];
+    var sensor2_dates = [];
+    var sensor3_dates = [];
+    {#var sensor4_dates = [];#}
+
+        {% for label in sensor1_labels %}
+            sensor1_dates[sensor1_dates.length] = '{{ label }}';
+        {% endfor %}
+
+        {% for label in sensor2_labels %}
+            sensor2_dates[sensor2_dates.length] = '{{ label }}';
+        {% endfor %}
+
+        {% for label in sensor3_labels %}
+            sensor3_dates[sensor3_dates.length] = '{{ label }}';
+        {% endfor %}
+{##}
+{#        {% for label in sensor4_labels %}#}
+{#            sensor4_dates[sensor4_dates.length] = '{{ label }}';#}
+{#        {% endfor %}#}
+
+	var co_trace1 = {
+	    mode: 'scatter',
+		x: sensor1_dates,
+		y: {{ sensor1_data_co }},
+		mode: 'markers',
+        name: 'sensor1',
+        marker: {
+          color: 'blue',
+          line: {
+            color: 'blue'
+          },
+          symbol: 'blue',
+          size: 5
+        }
+	};
+
+	var co_trace2 = {
+		x: sensor2_dates,
+		y: {{ sensor2_data_co }},
+		yaxis: 'y',
+		mode: 'markers',
+        name: 'sensor2',
+        marker: {
+          color: 'orange',
+          line: {
+            color: 'orange'
+          },
+          symbol: 'orange',
+          size: 5
+        }
+	};
+
+	var co_trace3 = {
+        x: sensor3_dates,
+        y: {{ sensor3_data_co }},
+        yaxis: 'y',
+        mode: 'markers',
+        name: 'sensor3',
+        marker: {
+          color: 'purple',
+          line: {
+            color: 'purple'
+          },
+          symbol: 'purple',
+          size: 5
+        }
+    };
+
+	{#var co_trace4 = {#}
+	{#	x: sensor4_dates,#}
+	{#	y: {{ sensor4_data_co }},#}
+	{#	yaxis: 'y',#}
+	{#	mode: 'line',#}
+    {#    name: 'sensor4',#}
+    {#    line: {#}
+	{#	    color: 'black'#}
+    {#    }#}
+	{# ;#}
+
+	{#var toPlot_co = [co_trace1, co_trace2, co_trace3, co_trace4];#}
+	var toPlot_co = [co_trace1, co_trace2, co_trace3];
+
+	var layout_co = {
+        title: {
+            text: 'Co Gas Chart',
+            font: {
+                size: 24
+            },
+            xref: 'paper',
+            {#x: 0.05,#}
+        },
+        showlegend: true,
+        yaxis: {
+        title: 'ppm'
+        },
+        {#shapes: [{#}
+        {#    type:'line',#}
+        {#    xref: 'paper',#}
+        {#    x0: 0,#}
+        {#    x1: 1,#}
+        {#    yref:'y',#}
+        {#    y0: 0,#}
+        {#    y1: 0,#}
+        {#    line: {#}
+        {#        color: 'red',#}
+        {#        width: 2,#}
+        {#    },#}
+        {# ]#}
+	};
+
+	Plotly.plot('graph_co', toPlot_co, layout_co, {displayModeBar: false});
+
+    var cnt = 0;
+
+    function co_update() {
+
+          var endpoint = "/cloud/dashboard/update/";
+
+            $.ajax({
+                method: "GET",
+                url : endpoint,
+                success: function(data){
+                    sensor1_label = data['sensor1_label'];
+                    sensor2_label = data['sensor2_label'];
+                    sensor3_label = data['sensor3_label'];
+                    sensor1_data_co = data['sensor1_data_co'];
+                    sensor1_data_o2 = data['sensor1_data_o2'];
+                    sensor1_data_ch4 = data['sensor1_data_ch4'];
+                    sensor2_data_co = data['sensor2_data_co'];
+                    sensor2_data_o2 = data['sensor2_data_o2'];
+                    sensor2_data_ch4 = data['sensor2_data_ch4'];
+                    sensor3_data_co = data['sensor3_data_co'];
+                    sensor3_data_o2 = data['sensor3_data_o2'];
+                    sensor3_data_ch4 = data['sensor3_data_ch4'];
+                    {#alert(typeof sensor1_label);#}
+                    {#alert(sensor2_label);#}
+                },
+                error: function(error_data){
+                    console.log('error');
+                },
+            });
+
+            var update = {
+                       {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
+                       {#y: [[xenon1_data_co], [xenon2_data_co], [xenon3_data_co], [xenon4_data_co]]#}
+                       x:  [[sensor1_label], [sensor2_label], [sensor3_label]] ,
+                       y: [[sensor1_data_co], [sensor2_data_co], [sensor3_data_co]]
+                      }
+
+            return update;
+
+    }
+
+    var interval = setInterval(function() {
+        Plotly.extendTraces('graph_co', co_update(), [0, 1, 2])
+    }, 600000)
+
+</script>
+
+
+<script type="text/javascript">
+
+    var o2_trace1 = {
+        mode: 'scatter',
+		x: sensor1_dates,
+		y: {{ sensor1_data_o2 }},
+		mode: 'markers',
+        name: 'sensor1',
+        marker: {
+          color: 'blue',
+          line: {
+            color: 'blue'
+          },
+          symbol: 'blue',
+          size: 5
+        }
+	};
+
+	var o2_trace2 = {
+		x: sensor2_dates,
+		y: {{ sensor2_data_o2 }},
+		yaxis: 'y',
+		mode: 'markers',
+        name: 'sensor2',
+        marker: {
+          color: 'orange',
+          line: {
+            color: 'orange'
+          },
+          symbol: 'orange',
+          size: 5
+        }
+	};
+
+	var o2_trace3 = {
+        x: sensor3_dates,
+        y: {{ sensor3_data_o2 }},
+        yaxis: 'y',
+        mode: 'markers',
+        name: 'sensor3',
+        marker: {
+          color: 'purple',
+          line: {
+            color: 'purple'
+          },
+          symbol: 'circle',
+          size: 5
+        }
+    };
+
+    {##}
+	{#var o2_trace4 = {#}
+	{#	x: xenon4_dates,#}
+	{#	y: {{ sensor4_data_o2 }},#}
+	{#	yaxis: 'y',#}
+	{#	mode: 'line',#}
+    {#    name: 'sensor4',#}
+    {#    line: {#}
+	{#	    color: 'black'#}
+    {#    }#}
+	{# ;#}
+
+	{#var toPlot_o2 = [o2_trace1, o2_trace2, o2_trace3, o2_trace4];#}
+	var toPlot_o2 = [o2_trace1, o2_trace2, o2_trace3];
+
+	var layout_o2 = {
+        title: {
+            text: 'O2 Gas Chart',
+            font: {
+                size: 24
+            },
+            xref: 'paper',
+            {#x: 0.05,#}
+        },
+        showlegend: true,
+        yaxis: {
+        title: '%'
+        },
+        {#shapes: [{#}
+        {#    type:'line',#}
+        {#    xref: 'paper',#}
+        {#    x0: 0,#}
+        {#    x1: 1,#}
+        {#    yref:'y',#}
+        {#    y0: 20.9,#}
+        {#    y1: 20.9,#}
+        {#    line: {#}
+        {#        color: 'red',#}
+        {#        width: 2,#}
+        {#    },#}
+        {# ] #}
+	};
+
+	Plotly.plot('graph_o2', toPlot_o2, layout_o2, {displayModeBar: false});
+
+    var cnt = 0;
+
+    function o2_update() {
+
+          var endpoint = '/cloud/dashboard/update/';
+
+            $.ajax({
+                method: "GET",
+                url : endpoint,
+                success: function(data){
+                    sensor1_label = data['sensor1_label'];
+                    sensor2_label = data['sensor2_label'];
+                    sensor3_label = data['sensor3_label'];
+                    sensor1_data_co = data['sensor1_data_co'];
+                    sensor1_data_o2 = data['sensor1_data_o2'];
+                    sensor1_data_ch4 = data['sensor1_data_ch4'];
+                    sensor2_data_co = data['sensor2_data_co'];
+                    sensor2_data_o2 = data['sensor2_data_o2'];
+                    sensor2_data_ch4 = data['sensor2_data_ch4'];
+                    sensor3_data_co = data['sensor3_data_co'];
+                    sensor3_data_o2 = data['sensor3_data_o2'];
+                    sensor3_data_ch4 = data['sensor3_data_ch4'];
+                },
+                error: function(error_data){
+                    console.log('error');
+                },
+            });
+
+            var update = {
+                       {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
+                       {#y: [[xenon1_data_o2], [xenon2_data_o2], [xenon3_data_o2], [xenon4_data_o2]]#}
+                       x:  [[sensor1_label], [sensor2_label], [sensor3_label]],
+                       y: [[sensor1_data_o2], [sensor2_data_o2], [sensor3_data_o2]]
+                      }
+
+            return update;
+
+    }
+
+    var interval = setInterval(function() {
+        Plotly.extendTraces('graph_o2', o2_update(), [0, 1, 2])
+    }, 600000)
+
+</script>
+
+<script type="text/javascript">
+
+    var ch4_trace1 = {
+        type: 'scatter',
+		x: sensor1_dates,
+		y: {{ sensor1_data_ch4 }},
+		mode: 'markers',
+        name: 'sensor1',
+        marker: {
+          color: 'blue',
+          line: {
+            color: 'blue'
+          },
+          symbol: 'circle',
+          size: 5
+        }
+	};
+
+	var ch4_trace2 = {
+		x: sensor2_dates,
+		y: {{ sensor2_data_ch4 }},
+		yaxis: 'y',
+		mode: 'markers',
+        name: 'sensor2',
+        marker: {
+          color: 'orange',
+          line: {
+            color: 'orange'
+          },
+          symbol: 'circle',
+          size: 5
+        }
+	};
+
+	var ch4_trace3 = {
+        x: sensor3_dates,
+        y: {{ sensor3_data_ch4 }},
+        yaxis: 'y',
+        mode: 'markers',
+        name: 'sensor3',
+        marker: {
+          color: 'purple',
+          line: {
+            color: 'purple'
+          },
+          symbol: 'purple',
+          size: 5
+        }
+    };
+    {##}
+	{#var ch4_trace4 = {#}
+	{#	x: sensor4_dates,#}
+	{#	y: {{ sensor4_data_ch4 }},#}
+	{#	yaxis: 'y',#}
+	{#	mode: 'line',#}
+    {#    name: 'sensor4',#}
+    {#    line: {#}
+	{#	    color: 'black'#}
+    {#    }#}
+	{# ;#}
+
+	var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3];
+	{#var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3, ch4_trace4];#}
+
+	var layout_ch4 = {
+        title: {
+            text: 'LEL Gas Chart',
+            font: {
+                size: 24
+            },
+            xref: 'paper',
+            {#x: 0.05,#}
+        },
+        showlegend: true,
+        yaxis: {
+        title: 'LEL'
+        },
+        {#shapes: [{#}
+        {#    type:'line',#}
+        {#    xref: 'paper',#}
+        {#    x0: 0,#}
+        {#    x1: 1,#}
+        {#    yref:'y',#}
+        {#    y0: 20,#}
+        {#    y1: 20,#}
+        {#    line: {#}
+        {#        color: 'red',#}
+        {#        width: 2,#}
+        {#    },#}
+        {# ]#}
+	};
+
+	Plotly.plot('graph_ch4', toPlot_ch4, layout_ch4, {displayModeBar: false});
+
+    var cnt = 0;
+
+    function ch4_update() {
+
+          var endpoint = '/cloud/dashboard/update/';
+
+            $.ajax({
+                method: "GET",
+                url : endpoint,
+                success: function(data){
+                    sensor1_label = data['sensor1_label'];
+                    sensor2_label = data['sensor2_label'];
+                    sensor3_label = data['sensor3_label'];
+                    sensor1_data_co = data['sensor1_data_co'];
+                    sensor1_data_o2 = data['sensor1_data_o2'];
+                    sensor1_data_ch4 = data['sensor1_data_ch4'];
+                    sensor2_data_co = data['sensor2_data_co'];
+                    sensor2_data_o2 = data['sensor2_data_o2'];
+                    sensor2_data_ch4 = data['sensor2_data_ch4'];
+                    sensor3_data_co = data['sensor3_data_co'];
+                    sensor3_data_o2 = data['sensor3_data_o2'];
+                    sensor3_data_ch4 = data['sensor3_data_ch4'];
+                },
+                error: function(error_data){
+                    console.log('error');
+                },
+            });
+
+            var update = {
+                       {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
+                       {#y: [[xenon1_data_ch4], [xenon2_data_ch4], [xenon3_data_ch4], [xenon4_data_ch4]]#}
+                       x:  [[sensor1_label], [sensor2_label], [sensor2_label]],
+                       y: [[sensor1_data_ch4], [sensor2_data_ch4], [sensor2_label]]
+                      }
+
+            return update;
+
+    }
+
+    var interval = setInterval(function() {
+        Plotly.extendTraces('graph_ch4', ch4_update(), [0, 1, 2])
+    }, 600000)
+
+</script>
+
+<script type="text/javascript">
+
+    var volt_trace1 = {
+		x: sensor1_dates,
+		y: {{ sensor1_volt }},
+		mode: 'line',
+        name: 'sensor1',
+        line: {
+		    color: 'blue'
+        }
+	};
+
+	var volt_trace2 = {
+		x: sensor2_dates,
+		y: {{ sensor2_volt }},
+		yaxis: 'y',
+		mode: 'line',
+        name: 'sensor2',
+        line: {
+		    color: 'green'
+        }
+	};
+
+	var volt_trace3 = {
+        x: sensor3_dates,
+        y: {{ sensor3_volt }},
+        yaxis: 'y',
+        mode: 'line',
+        name: 'sensor3',
+        line: {
+            color: 'purple'
+        }
+    };
+    {##}
+	{#var ch4_trace4 = {#}
+	{#	x: sensor4_dates,#}
+	{#	y: {{ sensor4_data_ch4 }},#}
+	{#	yaxis: 'y',#}
+	{#	mode: 'line',#}
+    {#    name: 'sensor4',#}
+    {#    line: {#}
+	{#	    color: 'black'#}
+    {#    }#}
+	{# ;#}
+
+	var toPlot_volt = [volt_trace1, volt_trace2, volt_trace3];
+	{#var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3, ch4_trace4];#}
+
+	var layout_volt = {
+        title: {
+            text: 'Voltage',
+            font: {
+                size: 24
+            },
+            xref: 'paper',
+            {#x: 0.05,#}
+        },
+        showlegend: true,
+        yaxis: {
+        title: '[V]'
+        },
+        {#shapes: [{#}
+        {#    type:'line',#}
+        {#    xref: 'paper',#}
+        {#    x0: 0,#}
+        {#    x1: 1,#}
+        {#    yref:'y',#}
+        {#    y0: 20,#}
+        {#    y1: 20,#}
+        {#    line: {#}
+        {#        color: 'red',#}
+        {#        width: 2,#}
+        {#    },#}
+        {# ]#}
+	};
+
+	Plotly.plot('graph_volt', toPlot_volt, layout_volt, {displayModeBar: false});
+
+    var cnt = 0;
+
+    function volt_update() {
+
+          var endpoint = '/cloud/dashboard/update/';
+
+            $.ajax({
+                method: "GET",
+                url : endpoint,
+                success: function(data){
+                    sensor1_label = data['sensor1_label'];
+                    sensor2_label = data['sensor2_label'];
+                    sensor3_label = data['sensor3_label'];
+                    sensor1_data_co = data['sensor1_data_co'];
+                    sensor1_data_o2 = data['sensor1_data_o2'];
+                    sensor1_data_ch4 = data['sensor1_data_ch4'];
+                    sensor1_data_volt = data['sensor1_volt'];
+                    sensor2_data_co = data['sensor2_data_co'];
+                    sensor2_data_o2 = data['sensor2_data_o2'];
+                    sensor2_data_ch4 = data['sensor2_data_ch4'];
+                    sensor2_data_volt = data['sensor2_volt'];
+                    sensor3_data_co = data['sensor3_data_co'];
+                    sensor3_data_o2 = data['sensor3_data_o2'];
+                    sensor3_data_ch4 = data['sensor3_data_ch4'];
+                    sensor3_volt = data['sensor3_volt'];
+                },
+                error: function(error_data){
+                    console.log('error');
+                },
+            });
+
+            var update = {
+                       {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
+                       {#y: [[xenon1_data_ch4], [xenon2_data_ch4], [xenon3_data_ch4], [xenon4_data_ch4]]#}
+                       x:  [[sensor1_label], [sensor2_label], [sensor2_label]],
+                       y: [[sensor1_volt], [sensor2_volt], [sensor3_volt]]
+                      }
+
+            return update;
+
+    }
+
+    var interval = setInterval(function() {
+        Plotly.extendTraces('graph_volt', volt_update(), [0, 1, 2])
+    }, 600000)
+
+</script>
+
+<script type="text/javascript">
+
+    var temp_trace1 = {
+        type: 'scatter',
+		x: sensor1_dates,
+		y: {{ sensor1_temp }},
+		mode: 'markers',
+        name: 'sensor1',
+        marker: {
+          color: 'blue',
+          line: {
+            color: 'blue'
+          },
+          symbol: 'circle',
+          size: 5
+        }
+	};
+
+	var temp_trace2 = {
+		x: sensor2_dates,
+		y: {{ sensor2_temp }},
+		yaxis: 'y',
+		mode: 'markers',
+        name: 'sensor2',
+        marker: {
+          color: 'orange',
+          line: {
+            color: 'orange'
+          },
+          symbol: 'circle',
+          size: 5
+        }
+	};
+
+	var temp_trace3 = {
+        x: sensor3_dates,
+        y: {{ sensor3_temp }},
+        yaxis: 'y',
+        mode: 'markers',
+        name: 'sensor3',
+
+        marker: {
+          color: 'purple',
+          line: {
+            color: 'purple'
+          },
+          symbol: 'circle',
+          size: 5
+        }
+    };
+    {##}
+	{#var ch4_trace4 = {#}
+	{#	x: sensor4_dates,#}
+	{#	y: {{ sensor4_data_ch4 }},#}
+	{#	yaxis: 'y',#}
+	{#	mode: 'line',#}
+    {#    name: 'sensor4',#}
+    {#    line: {#}
+	{#	    color: 'black'#}
+    {#    }#}
+	{# ;#}
+
+	var toPlot_temp = [temp_trace1, temp_trace2, temp_trace3];
+	{#var toPlot_ch4 = [ch4_trace1, ch4_trace2, ch4_trace3, ch4_trace4];#}
+
+	var layout_temp = {
+        title: {
+            text: 'Temperature Chart ',
+            font: {
+                size: 24
+            },
+            xref: 'paper',
+            {#x: 0.05,#}
+        },
+        showlegend: true,
+        yaxis: {
+        title: '[C]'
+        },
+        {#shapes: [{#}
+        {#    type:'line',#}
+        {#    xref: 'paper',#}
+        {#    x0: 0,#}
+        {#    x1: 1,#}
+        {#    yref:'y',#}
+        {#    y0: 20,#}
+        {#    y1: 20,#}
+        {#    line: {#}
+        {#        color: 'red',#}
+        {#        width: 2,#}
+        {#    },#}
+        {# ]#}
+	};
+
+	Plotly.plot('graph_temp', toPlot_temp, layout_temp, {displayModeBar: false});
+
+    var cnt = 0;
+
+    function temp_update() {
+
+          var endpoint = '/cloud/dashboard/update/';
+
+            $.ajax({
+                method: "GET",
+                url : endpoint,
+                success: function(data){
+                    sensor1_label = data['sensor1_label'];
+                    sensor2_label = data['sensor2_label'];
+                    sensor3_label = data['sensor3_label'];
+                    sensor1_data_co = data['sensor1_data_co'];
+                    sensor1_data_o2 = data['sensor1_data_o2'];
+                    sensor1_data_ch4 = data['sensor1_data_ch4'];
+                    sensor1_data_volt = data['sensor1_volt'];
+                    sensor2_data_co = data['sensor2_data_co'];
+                    sensor2_data_o2 = data['sensor2_data_o2'];
+                    sensor2_data_ch4 = data['sensor2_data_ch4'];
+                    sensor2_data_volt = data['sensor2_volt'];
+                    sensor3_data_co = data['sensor3_data_co'];
+                    sensor3_data_o2 = data['sensor3_data_o2'];
+                    sensor3_data_ch4 = data['sensor3_data_ch4'];
+                    sensor3_volt = data['sensor3_volt'];
+                },
+                error: function(error_data){
+                    console.log('error');
+                },
+            });
+
+            var update = {
+                       {#x:  [[xenon1_label], [xenon2_label], [xenon3_label], [xenon4_label]],#}
+                       {#y: [[xenon1_data_ch4], [xenon2_data_ch4], [xenon3_data_ch4], [xenon4_data_ch4]]#}
+                       x:  [[sensor1_label], [sensor2_label], [sensor2_label]],
+                       y: [[sensor1_volt], [sensor2_volt], [sensor3_volt]]
+                      }
+
+            return update;
+
+    }
+
+    var interval = setInterval(function() {
+        Plotly.extendTraces('graph_temp', temp_update(), [0, 1, 2])
+    }, 600000)
+
+</script>
