@@ -1097,13 +1097,13 @@ class CloudDashboardView(TemplateView):
         context['sensor1_volt']     = sensor1_volt_list
         context['sensor1_temp']     = sensor1_temp_list
         context['sensor1_labels']   = sensor1_labels
-        context['sensor1_co_val']   = sensor1_co_list[-1]
-        context['sensor1_o2_val']   = sensor1_o2_list[-1]
-        context['sensor1_ch4_val']   = sensor1_ch4_list[-1]
-        context['sensor1_temp_val']   = sensor1_temp_list[-1]
+        context['sensor1_co_val']   = int(sensor1_co_list[-1])
+        context['sensor1_o2_val']   = round(sensor1_o2_list[-1],1)
+        context['sensor1_ch4_val']   = int(sensor1_ch4_list[-1])
+        context['sensor1_temp_val']   = round(sensor1_temp_list[-1],1)
         context['sensor1_humid_val']   = int(sensor1_humid_list[-1])
-        context['sensor1_power_per']   = int(sensor1_volt_list[-1]/4.2 * 100.0)
-        context['sensor1_datenow']   = sensor1_labels[-1]
+        context['sensor1_power_per']   = int((sensor1_volt_list[-1]-3.3)  / 0.9 * 100.0)
+        context['sensor1_datenow']   = sensor1_labels[-1][0:16]
 
         context['sensor2_data_co']  = sensor2_co_list
         context['sensor2_data_o2']  = sensor2_o2_list
@@ -1111,13 +1111,13 @@ class CloudDashboardView(TemplateView):
         context['sensor2_volt']     = sensor2_volt_list
         context['sensor2_temp']     = sensor2_temp_list
         context['sensor2_labels']   = sensor2_labels
-        context['sensor2_co_val']   = sensor2_co_list[-1]
-        context['sensor2_o2_val']   = sensor2_o2_list[-1]
-        context['sensor2_ch4_val']   = sensor2_ch4_list[-1]
-        context['sensor2_temp_val']   = sensor2_temp_list[-1]
+        context['sensor2_co_val']   = int(sensor2_co_list[-1])
+        context['sensor2_o2_val']   = round(sensor2_o2_list[-1],1)
+        context['sensor2_ch4_val']   = int(sensor2_ch4_list[-1])
+        context['sensor2_temp_val']   = round(sensor2_temp_list[-1],1)
         context['sensor2_humid_val']   = int(sensor2_humid_list[-1])
-        context['sensor2_power_per'] = int(sensor2_volt_list[-1] / 4.2 * 100.0)
-        context['sensor2_datenow'] = sensor2_labels[-1]
+        context['sensor2_power_per'] = int((sensor2_volt_list[-1]-3.3) / 0.9 * 100.0)
+        context['sensor2_datenow'] = sensor2_labels[-1][0:16]
 
         context['sensor3_data_co']  = sensor3_co_list
         context['sensor3_data_o2']  = sensor3_o2_list
@@ -1125,13 +1125,13 @@ class CloudDashboardView(TemplateView):
         context['sensor3_volt']     = sensor3_volt_list
         context['sensor3_temp']     = sensor3_temp_list
         context['sensor3_labels']   = sensor3_labels
-        context['sensor3_co_val']   = sensor3_co_list[-1]
-        context['sensor3_o2_val']   = sensor3_o2_list[-1]
-        context['sensor3_ch4_val']   = sensor3_ch4_list[-1]
-        context['sensor3_temp_val']   = sensor3_temp_list[-1]
+        context['sensor3_co_val']   = int(sensor3_co_list[-1])
+        context['sensor3_o2_val']   = round(sensor3_o2_list[-1],1)
+        context['sensor3_ch4_val']   = int(sensor3_ch4_list[-1])
+        context['sensor3_temp_val']   = round(sensor3_temp_list[-1])
         context['sensor3_humid_val']   = int(sensor3_humid_list[-1])
-        context['sensor3_power_per'] = int(sensor3_volt_list[-1] / 4.2 * 100.0)
-        context['sensor3_datenow'] = sensor3_labels[-1]
+        context['sensor3_power_per'] = int((sensor3_volt_list[-1]-3.3) / 0.9 * 100.0)
+        context['sensor3_datenow'] = sensor3_labels[-1][0:16]
 
         return context
 

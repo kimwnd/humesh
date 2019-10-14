@@ -139,7 +139,73 @@
 
         <div class="wrapper">
             <div class="container-fluid">
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <h4 class="page-title">센서 데이터보드</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card-box">
+{#                            <h4 class="header-title">Bordered table</h4>#}
+{#                            <p class="sub-header">#}
+{#                                Add <code>.table-bordered</code> for borders on all sides of the table and cells.#}
+{#                            </p>#}
 
+                            <div class="table-responsive">
+                                <table class="table table-bordered mb-0">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th style="text-align: center; font-size: medium;">위치</th>
+                                        <th style="text-align: center; font-size: medium;">Co(ppm)</th>
+                                        <th style="text-align: center; font-size: medium;">O2(%)</th>
+                                        <th style="text-align: center; font-size: medium;">LEL(%)</th>
+                                         <th style="text-align: center; font-size: medium;">온도(&#8451;)/습도(%)</th>
+                                         <th style="text-align: center; font-size: medium;">수집일시</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row" style="text-align: center; font-size: medium;">Sensor #1</th>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor1_co_val }}</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor1_o2_val }}</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor1_ch4_val }}</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor1_temp_val }}&#8451;/{{ sensor1_humid_val }}%</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor1_datenow }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="text-align: center; font-size: medium;">Sensor #2</th>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor2_co_val }}</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor2_o2_val }}</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor2_ch4_val }}</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor2_temp_val }}&#8451;/{{ sensor2_humid_val }}%</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor2_datenow }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="text-align: center; font-size: medium;">Sensor #3</th>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor3_co_val }}</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor3_o2_val }}</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor3_ch4_val }}</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor3_temp_val }}&#8451;/{{ sensor3_humid_val }}%</td>
+                                        <td style="text-align: center; font-size: medium;">{{ sensor3_datenow }}</td>
+                                    </tr>
+{#                                    <tr>#}
+{#                                        <th scope="row">4</th>#}
+{#                                        <td colspan="5" style="text-align: right; font-size: medium;">Larry the Bird</td>#}
+{#                                        <td>@twitter</td>#}
+{#                                        <td>@twitter</td>#}
+{#                                    </tr>#}
+                                    </tbody>
+                                </table>
+                            </div> <!-- end .table-responsive-->
+                        </div> <!-- end card-box -->
+                    </div> <!-- end col -->
+                </div>
+                <!-- end row -->
                 <!-- start page title -->
                 <div class="row">
                     <div class="col-12">
@@ -173,7 +239,7 @@
                             <div class="card-body">
                                 <div class="card-widgets">
                                     <a href="javascript: void(0);" data-toggle="reload"><i class="mdi mdi-refresh"></i></a>
-                                </div>
+                               </div>
                                 <h4 class="header-title mb-0">O2 Gas Chart</h4>
 
                                 <div id="cardCollpase2" class="collapse pt-3 show" dir="ltr">
@@ -258,7 +324,7 @@
                                         data-bgColor="#F9B9B9" value="{{ sensor1_power_per }}"
                                         data-skin="tron" data-angleOffset="180" data-readOnly=true
                                         data-thickness=".15"/>
-                                    <p class="text-muted mb-0">전력소모</p>
+                                    <p class="text-muted mb-0">베터리잔량</p>
                                 </div>
                                 <div class="text-right">
                                     <h2 class="mt-3 pt-1 mb-1">{{ sensor1_temp_val }}&#8451;/{{ sensor1_humid_val }}% </h2>
@@ -302,7 +368,7 @@
                                         data-bgColor="#F9B9B9" value="{{ sensor2_power_per }}"
                                         data-skin="tron" data-angleOffset="180" data-readOnly=true
                                         data-thickness=".15"/>
-                                    <p class="text-muted mb-0">전력소모</p>
+                                    <p class="text-muted mb-0">배터리잔량</p>
                                 </div>
                                 <div class="text-right">
                                     <h2 class="mt-3 pt-1 mb-1">{{ sensor2_temp_val }}&#8451;/{{ sensor2_humid_val }}% </h2>
@@ -347,7 +413,7 @@
                                         data-bgColor="#F9B9B9" value="{{ sensor3_power_per }}"
                                         data-skin="tron" data-angleOffset="180" data-readOnly=true
                                         data-thickness=".15"/>
-                                    <p class="text-muted mb-0">전력소모</p>
+                                    <p class="text-muted mb-0">베터리잔량</p>
                                 </div>
                                 <div class="text-right">
                                     <h2 class="mt-3 pt-1 mb-1"> {{ sensor3_temp_val }}&#8451;/{{ sensor3_humid_val }}% </h2>
@@ -363,7 +429,7 @@
                     </div> <!-- end col -->
                 </div>
                 <!-- end row -->
-{#                <!-- start row -->#}
+                <!-- start row -->
 {#                <div class="row">#}
 {#                    <div class="col-xl-3 col-md-6">#}
 {#                        <div class="card-box">#}
@@ -452,7 +518,7 @@
 {#                    </div><!-- end col -->#}
 {##}
 {#                </div>#}
-{#                <!-- end row -->#}
+                <!-- end row -->
 {#                <div class="row">#}
 {##}
 {#                    <div class="col-xl-4">#}
