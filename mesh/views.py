@@ -989,7 +989,7 @@ class CloudDashboardView(TemplateView):
             sensor2_co_list.append(df_sensor2_co['data_co'][i])
 
         for i in range(sensor3_len_co) :
-            sensor3_co_list.append(df_sensor3['data_co'][i])
+            sensor3_co_list.append(df_sensor3_co['data_co'][i])
 
         # for i in range(sensor4_len_co) :
         #     sensor4_co_list.append(df_sensor4['data_co'][i])
