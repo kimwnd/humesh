@@ -1106,7 +1106,7 @@ class CloudDashboardView(TemplateView):
         context['sensor1_ch4_val']   = int(sensor1_ch4_list[-1])
         context['sensor1_temp_val']   = round(sensor1_temp_list[-1],1)
         context['sensor1_humid_val']   = int(sensor1_humid_list[-1])
-        context['sensor1_power_per']   = int((sensor1_volt_list[-1]-3.3)  / 0.85 * 100.0)
+        context['sensor1_power_per']   = int((sensor1_volt_list[-1]-3.3)  / 0.9 * 100.0)
         context['sensor1_datenow']   = sensor1_labels[-1][0:16]
 
         context['sensor2_data_co']  = sensor2_co_list
