@@ -117,7 +117,7 @@ def cloud_notification(request):
         flag = values[0]
         o2 = int(values[1:5],16)/10.0
         co = int(values[5:9],16)
-        if co < 3 :
+        if co < 6 :
             co = 0
         ch4 = int(values[9:11],16)
         temp = int(values[11:15],16)/10.0
