@@ -11,6 +11,7 @@ urlpatterns = [
     # path('mesh/data/', views.ReceiveMeshDataView.as_view(), name='mesh'),
     path('mesh/data/', views.mesh_notification, name='mesh'),
     path('multiple/notification/', views.multiple_notification, name='multiple_notification'),
+    path('test/notification/', views.test_notification, name='test_notification'),
     path('cloud/notification/', views.cloud_notification, name='cloud_notification'),
     path('wifi/data/', views.wifi_notification, name='wifi'),
     path('chart/', views.ChartView.as_view(), name='chart'),
