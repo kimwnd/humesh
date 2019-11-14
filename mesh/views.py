@@ -179,7 +179,7 @@ def test_notification(request):
         f.write('POST data is new added\n\n')
         f.write("{}".format(request.body))
         f.write("----\n")
-        f.write(str(data['Time']))
+        f.write(data)
         f.write("----\n")
         # f.write('published_at : {}'.format(data['published_at']))
         f.close()
