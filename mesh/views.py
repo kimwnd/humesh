@@ -180,7 +180,7 @@ def test_notification(request):
         f.write('POST data is new added\n\n')
         f.write("{}".format(request.body))
         f.write("----\n\n")
-        received = "{}".format(request.body)
+        received = (request.body).decode('ascii')
         received = ast.literal_eval(received)
         f.write(str(type(received)))
         f.write("----\n\n")
