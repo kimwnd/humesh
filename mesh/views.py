@@ -13,6 +13,7 @@ import datetime
 import logging
 import pandas as pd
 import requests
+import ast
 
 logger = logging.getLogger(__name__)
 
@@ -179,7 +180,8 @@ def test_notification(request):
         f.write('POST data is new added\n\n')
         f.write("{}".format(request.body))
         f.write("----\n")
-        f.write(data)
+        received = ast.literal_eval(request.body)
+        f.write(str(received))
         f.write("----\n")
         # f.write('published_at : {}'.format(data['published_at']))
         f.close()
