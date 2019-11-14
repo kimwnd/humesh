@@ -182,7 +182,7 @@ def test_notification(request):
         f.write("----\n\n")
         received = "{}".format(request.body)
         received = ast.literal_eval(received)
-        f.write(received)
+        f.write(type(received))
         f.write("----\n\n")
         # f.write('published_at : {}'.format(data['published_at']))
         f.close()
