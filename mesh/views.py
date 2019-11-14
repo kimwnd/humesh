@@ -190,6 +190,7 @@ def test_notification(request):
     except Exception as e:
             f = open('demo1.txt', 'a')
             f.write('POST Exception\n\n')
+            f.write(e)
             f.close()
 
     return HttpResponse('SUCCESS')
