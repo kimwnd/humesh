@@ -182,7 +182,7 @@ def test_notification(request):
         f.write("----\n\n")
         received = (request.body).decode('ascii')
         received = ast.literal_eval(received)
-        f.write(str(received['data']['Humidity']))
+        f.write(str(received['data']['GpsInfo']))
         f.write("----\n\n")
         f.write(str(type(data)))
         f.write("----\n\n")
