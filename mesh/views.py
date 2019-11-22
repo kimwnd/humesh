@@ -212,8 +212,13 @@ def test_notification(request):
 
             if key in ['location']:
                 device_name = 'sensor1'
-                latitude = 35.884338
-                longitude = 128.595566
+                lat_temp = float(val['latitude'])
+                lat_do = int(lat_temp/100)
+                latitude = lat_do * 1.0 + (lat_temp - lat_do * 100)/60.0
+
+                long_temp = float(val['longitude'])
+                long_do = int(long_temp/100)
+                longitude = long_do * 1.0 + (long_temp - long_do * 100)/60.0
 
                 published = datetime.datetime.now() + datetime.timedelta(hours=9)
 
