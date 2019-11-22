@@ -195,6 +195,8 @@ def test_notification(request):
                 dock_name   = 'dock1000'
                 shipname    = 'Ship1'
 
+                published = datetime.datetime.now() + datetime.timedelta(hours=9)
+
                 catm1_data = CatM1SensorDataMdodel( device_name = device_name,
                                                     data_co = data_co,
                                                     data_o2 = data_o2,
@@ -203,7 +205,8 @@ def test_notification(request):
                                                     data_humid = data_humid,
                                                     volt= volt,
                                                     dock_name = dock_name,
-                                                    shipname = shipname )
+                                                    shipname = shipname,
+                                                    created = published )
 
                 catm1_data.save()
 
@@ -212,10 +215,12 @@ def test_notification(request):
                 latitude = 35.884338
                 longitude = 128.595566
 
+                published = datetime.datetime.now() + datetime.timedelta(hours=9)
+
                 device_location = CatM1LocationMdodel(device_name = device_name,
                                                       latitude = latitude,
-                                                      longitude = longitude
-                                                      )
+                                                      longitude = longitude,
+                                                      created=published )
 
                 device_location.save()
 
