@@ -83,7 +83,7 @@ class CatM1SensorDataMdodel(models.Model):
 
 class CatM1LocationMdodel(models.Model):
     device_name = models.CharField(max_length=255, null=False, blank=False, verbose_name='device name')
-    latitude = models.IntegerField(null=False, blank=False, verbose_name='위도')
+    latitude = models.FloatField(null=False, blank=False, verbose_name='위도')
     longitude = models.FloatField(null=False, blank=False, verbose_name='경도')
     created = models.DateTimeField(default=timezone.now, verbose_name='생성일시')
 
