@@ -2368,3 +2368,6 @@ class DashboardNumnersUpdateView(View):
 
 class CloudTestTemplateView(TemplateView):
     template_name = 'layouts-preloader.html'
+
+class MapTestview(TemplateView):
+    template_name = 'map_view.html'

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>좌표로 주소를 얻어내기</title>
+    <style>
+    .map_wrap {position:relative;width:100%;height:350px;}
+    .title {font-weight:bold;display:block;}
+    .hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;}
+    #centerAddr {display:block;margin-top:2px;font-weight: normal;}
+    .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+</style>
+</head>
+<body>
+<div class="map_wrap">
+    <div id="map" style="width:60%;height:100%;position:relative;overflow:hidden;"></div>
+    <div class="hAddr">
+{#        <span class="title">지도중심기준 행정동 주소정보</span>#}
+        <span id="centerAddr"></span>
+    </div>
+</div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6009e5ca6db2046685059bdbbb2e3f1e&libraries=services"></script>
+<script>
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+    mapOption = {
+        center: new kakao.maps.LatLng(35.884338, 128.595566), // 지도의 중심좌표
+        level: 4 // 지도의 확대 레벨
+    };
+
+var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+// 마커를 표시할 위치와 title 객체 배열입니다
+var positions = [
+    {
+        title: '센서노드1',
+        latlng: new kakao.maps.LatLng(35.884338, 128.595466)
+    },
+    {
+        title: '센서노드2',
+        latlng: new kakao.maps.LatLng(35.885338, 128.592566)
+    },
+    {
+        title: '센서노드3',
+        latlng: new kakao.maps.LatLng(35.883338, 128.591566)
+    }
+];
+
+// 마커 이미지의 이미지 주소입니다
+var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+for (var i = 0; i < positions.length; i ++) {
+
+    // 마커 이미지의 이미지 크기 입니다
+    var imageSize = new kakao.maps.Size(24, 35);
+
+    // 마커 이미지를 생성합니다
+    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+    // 마커를 생성합니다
+    var marker = new kakao.maps.Marker({
+        map: map, // 마커를 표시할 지도
+        position: positions[i].latlng, // 마커를 표시할 위치
+        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+        image : markerImage // 마커 이미지
+    });
+}
+
+</script>
+</body>
+</html>
