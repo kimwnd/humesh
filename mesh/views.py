@@ -221,14 +221,14 @@ def test_notification(request):
                 longitude = long_do * 1.0 + (long_temp - long_do * 100)/60.0
 
                 f.write("--latitude org--\n\n")
-                f.write(lat_temp)
+                f.write("{}".format(lat_temp))
                 f.write("----\n\n")
-                f.write(latitude)
+                f.write("{}".format(latitude))
 
                 f.write("--longitude org--\n\n")
-                f.write(long_temp)
+                f.write("{}".format(long_temp))
                 f.write("----\n\n")
-                f.write(longitude)
+                f.write("{}".format(longitude))
 
                 published = datetime.datetime.now() + datetime.timedelta(hours=9)
 
