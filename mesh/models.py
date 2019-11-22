@@ -61,3 +61,36 @@ class CloudMeshDataMdodel(models.Model):
 
     def __str__(self):
         return self.event
+
+class CatM1SensorDataMdodel(models.Model):
+    device_name = models.CharField(max_length=255, null=False, blank=False, verbose_name='device name')
+    data_co = models.IntegerField(null=False, blank=False, verbose_name='Co 가스 데이터')
+    data_o2 = models.FloatField(null=False, blank=False, verbose_name='O2 가스 데이터')
+    data_ch4 = models.IntegerField(null=False, blank=False, verbose_name='CH4 가스 데이터')
+    data_temp = models.FloatField(null=False, blank=False, verbose_name='온도 데이터')
+    data_humid = models.IntegerField(null=False, blank=False, verbose_name='습도 데이터')
+    volt = models.FloatField(null=False, blank=False, default=0.0, verbose_name='Voltage')
+    dock_name = models.CharField(max_length=128, null=False, blank=False, verbose_name='도크명')
+    shipname = models.CharField(max_length=128, null=False, blank=False, verbose_name='선박명')
+    created = models.DateTimeField(default=timezone.now, verbose_name='생성일시')
+
+    class Meta:
+        db_table = 'catm1_sensor_data'
+
+    def __str__(self):
+        return self.device_name
+
+
+class CatM1LocationMdodel(models.Model):
+    device_name = models.CharField(max_length=255, null=False, blank=False, verbose_name='device name')
+    latitude = models.IntegerField(null=False, blank=False, verbose_name='위도')
+    longitude = models.FloatField(null=False, blank=False, verbose_name='경도')
+    created = models.DateTimeField(default=timezone.now, verbose_name='생성일시')
+
+    class Meta:
+        db_table = 'device_location_data'
+
+    def __str__(self):
+        return self.device_name
+
+

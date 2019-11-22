@@ -4,7 +4,8 @@ from django.views.generic import TemplateView, View, FormView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse, JsonResponse
-from .models import MeshDataModel, WifiDataModel, MultipleMeshDataMdodel, CloudMeshDataMdodel
+from .models import ( MeshDataModel, WifiDataModel, MultipleMeshDataMdodel, CloudMeshDataMdodel, CatM1SensorDataMdodel,
+                      CatM1LocationMdodel)
 from .forms import ControlLEDForm
 
 from django.db import connection
@@ -177,15 +178,51 @@ def test_notification(request):
         data = request.POST
         logger.debug("data: {}".format(data))
         f = open('demo1.txt', 'a')
-        f.write('POST data is new added\n\n')
-        f.write("{}".format(request.body))
+        # f.write('POST data is new added\n\n')
+        # f.write("{}".format(request.body))
         f.write("----\n\n")
         received = (request.body).decode('ascii')
         received = ast.literal_eval(received)
-        f.write(str(received['data']['GpsInfo']))
-        f.write("----\n\n")
-        f.write(str(type(data)))
-        f.write("----\n\n")
+        for key, val in received.items():
+            if key in ['data']:
+                data_co     = val['data_co']
+                data_o2     = val['data_o2']
+                data_ch4    = val['data_ch4']
+                data_temp   = val['data_temp']
+                data_humid  = val['data_humid']
+                volt        = val['volt']
+                device_name = 'sensor1'
+                dock_name   = 'dock1000'
+                shipname    = 'Ship1'
+
+                catm1_data = CatM1SensorDataMdodel( device_name = device_name,
+                                                    data_co = data_co,
+                                                    data_o2 = data_o2,
+                                                    data_ch4 = data_ch4,
+                                                    data_temp = data_temp,
+                                                    data_humid = data_humid,
+                                                    volt= volt,
+                                                    dock_name = dock_name,
+                                                    shipname = shipname )
+
+                catm1_data.save()
+
+            if key in ['location']:
+                device_name = 'sensor1'
+                latitude = 35.884338
+                longitude = 128.595566
+
+                device_location = CatM1LocationMdodel(device_name = device_name,
+                                                      latitude = latitude,
+                                                      longitude = longitude
+                                                      )
+
+                device_location.save()
+
+        # f.write(str(received['data']['GpsInfo']))
+        # f.write("----\n\n")
+        # f.write(str(type(data)))
+        # f.write("----\n\n")
         # f.write('published_at : {}'.format(data['published_at']))
         f.close()
 
