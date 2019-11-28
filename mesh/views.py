@@ -178,8 +178,8 @@ def test_notification(request):
         data = request.POST
         logger.debug("data: {}".format(data))
         f = open('demo1.txt', 'a')
-        # f.write('POST data is new added\n\n')
-        # f.write("{}".format(request.body))
+        f.write('POST data is new added\n\n')
+        f.write("{}".format(request.body))
         f.write("----\n\n")
         received = (request.body).decode('ascii')
         received = ast.literal_eval(received)
@@ -195,20 +195,20 @@ def test_notification(request):
                 dock_name   = 'dock1000'
                 shipname    = 'Ship1'
 
-                published = datetime.datetime.now() + datetime.timedelta(hours=9)
-
-                catm1_data = CatM1SensorDataMdodel( device_name = device_name,
-                                                    data_co = data_co,
-                                                    data_o2 = data_o2,
-                                                    data_ch4 = data_ch4,
-                                                    data_temp = data_temp,
-                                                    data_humid = data_humid,
-                                                    volt= volt,
-                                                    dock_name = dock_name,
-                                                    shipname = shipname,
-                                                    created = published )
-
-                catm1_data.save()
+                # published = datetime.datetime.now() + datetime.timedelta(hours=9)
+                #
+                # catm1_data = CatM1SensorDataMdodel( device_name = device_name,
+                #                                     data_co = data_co,
+                #                                     data_o2 = data_o2,
+                #                                     data_ch4 = data_ch4,
+                #                                     data_temp = data_temp,
+                #                                     data_humid = data_humid,
+                #                                     volt= volt,
+                #                                     dock_name = dock_name,
+                #                                     shipname = shipname,
+                #                                     created = published )
+                #
+                # catm1_data.save()
 
             if key in ['location']:
                 device_name = 'sensor1'
@@ -230,14 +230,14 @@ def test_notification(request):
                 f.write("----\n\n")
                 f.write("{}".format(longitude))
 
-                published = datetime.datetime.now() + datetime.timedelta(hours=9)
-
-                device_location = CatM1LocationMdodel(device_name = device_name,
-                                                      latitude = latitude,
-                                                      longitude = longitude,
-                                                      created=published )
-
-                device_location.save()
+                # published = datetime.datetime.now() + datetime.timedelta(hours=9)
+                #
+                # device_location = CatM1LocationMdodel(device_name = device_name,
+                #                                       latitude = latitude,
+                #                                       longitude = longitude,
+                #                                       created=published )
+                #
+                # device_location.save()
 
         # f.write(str(received['data']['GpsInfo']))
         # f.write("----\n\n")
