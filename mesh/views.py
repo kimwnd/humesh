@@ -194,11 +194,11 @@ def test_notification(request):
             if data_type == 'data' :
                 values      = received['value']
                 data_co     = values['co']
-                data_o2     = values['o2']
+                data_o2     = values['o2']/10.0
                 data_ch4    = values['ch4']
                 data_temp   = values['temp']
                 data_humid  = values['humid']
-                volt        = values['volt']
+                volt        = values['volt']/10.0
 
                 # published = datetime.datetime.now() + datetime.timedelta(hours=9)
 
