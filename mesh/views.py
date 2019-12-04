@@ -177,10 +177,10 @@ def test_notification(request):
     try:
         data = request.POST
         logger.debug("data: {}".format(data))
-        f = open('demo1.txt', 'a')
-        f.write('POST data is new added\n\n')
-        f.write("{}".format(request.body))
-        f.write("----\n\n")
+        # f = open('demo1.txt', 'a')
+        # f.write('POST data is new added\n\n')
+        # f.write("{}".format(request.body))
+        # f.write("----\n\n")
         received = (request.body).decode('ascii')
         received = ast.literal_eval(received)
         if received.get('dock_name', None) and received.get('data_type', None) :
@@ -199,8 +199,6 @@ def test_notification(request):
                 data_temp   = values['temp']
                 data_humid  = values['humid']
                 volt        = values['volt']/10.0
-
-                # published = datetime.datetime.now() + datetime.timedelta(hours=9)
 
                 catm1_data = CatM1SensorDataMdodel( device_name = device_name,
                                                     data_co = data_co,
@@ -235,8 +233,6 @@ def test_notification(request):
                 f.write("----\n\n")
                 f.write("{}".format(longitude))
 
-                # published = datetime.datetime.now() + datetime.timedelta(hours=9)
-
                 device_location = CatM1LocationMdodel(device_name = device_name,
                                                       latitude = latitude,
                                                       longitude = longitude,
@@ -249,7 +245,7 @@ def test_notification(request):
         # f.write(str(type(data)))
         # f.write("----\n\n")
         # f.write('published_at : {}'.format(data['published_at']))
-        f.close()
+        # f.close()
 
     except Exception as e:
             f = open('demo1.txt', 'a')
