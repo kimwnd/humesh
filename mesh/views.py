@@ -183,40 +183,45 @@ def test_notification(request):
         f.write("----\n\n")
         received = (request.body).decode('ascii')
         received = ast.literal_eval(received)
-        for key, val in received.items():
-            if key in ['data']:
-                data_co     = val['data_co']
-                data_o2     = val['data_o2']
-                data_ch4    = val['data_ch4']
-                data_temp   = val['data_temp']
-                data_humid  = val['data_humid']
-                volt        = val['volt']
-                device_name = 'sensor1'
-                dock_name   = 'dock1000'
-                shipname    = 'Ship1'
+        if received.get('dock_name', None) and received.get('data_type', None) :
+            dock_name = received['dock_name']
+            device_name = received['device_name']
+            data_type = received['data_type']
+            timestamp = received['timestamp']
+            published = datetime.datetime.fromtimestamp(timestamp)
+            shipname = 'Ship1'
+
+            if data_type == 'data' :
+                values      = received['value']
+                data_co     = values['co']
+                data_o2     = values['o2']
+                data_ch4    = values['ch4']
+                data_temp   = values['temp']
+                data_humid  = values['humid']
+                volt        = values['volt']
 
                 # published = datetime.datetime.now() + datetime.timedelta(hours=9)
-                #
-                # catm1_data = CatM1SensorDataMdodel( device_name = device_name,
-                #                                     data_co = data_co,
-                #                                     data_o2 = data_o2,
-                #                                     data_ch4 = data_ch4,
-                #                                     data_temp = data_temp,
-                #                                     data_humid = data_humid,
-                #                                     volt= volt,
-                #                                     dock_name = dock_name,
-                #                                     shipname = shipname,
-                #                                     created = published )
-                #
-                # catm1_data.save()
 
-            if key in ['location']:
-                device_name = 'sensor1'
-                lat_temp = float(val['latitude'])
+                catm1_data = CatM1SensorDataMdodel( device_name = device_name,
+                                                    data_co = data_co,
+                                                    data_o2 = data_o2,
+                                                    data_ch4 = data_ch4,
+                                                    data_temp = data_temp,
+                                                    data_humid = data_humid,
+                                                    volt= volt,
+                                                    dock_name = dock_name,
+                                                    shipname = shipname,
+                                                    created = published )
+
+                catm1_data.save()
+
+            if data_type == 'location' :
+                locations = received['gps']
+                lat_temp = float(locations['latitude'])
                 lat_do = int(lat_temp/100)
                 latitude = lat_do * 1.0 + (lat_temp - lat_do * 100)/60.0
 
-                long_temp = float(val['longitude'])
+                long_temp = float(locations['longitude'])
                 long_do = int(long_temp/100)
                 longitude = long_do * 1.0 + (long_temp - long_do * 100)/60.0
 
@@ -231,13 +236,13 @@ def test_notification(request):
                 f.write("{}".format(longitude))
 
                 # published = datetime.datetime.now() + datetime.timedelta(hours=9)
-                #
-                # device_location = CatM1LocationMdodel(device_name = device_name,
-                #                                       latitude = latitude,
-                #                                       longitude = longitude,
-                #                                       created=published )
-                #
-                # device_location.save()
+
+                device_location = CatM1LocationMdodel(device_name = device_name,
+                                                      latitude = latitude,
+                                                      longitude = longitude,
+                                                      created=published )
+
+                device_location.save()
 
         # f.write(str(received['data']['GpsInfo']))
         # f.write("----\n\n")
