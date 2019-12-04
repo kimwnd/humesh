@@ -223,15 +223,15 @@ def test_notification(request):
                 long_do = int(long_temp/100)
                 longitude = long_do * 1.0 + (long_temp - long_do * 100)/60.0
 
-                f.write("--latitude org--\n\n")
-                f.write("{}".format(lat_temp))
-                f.write("----\n\n")
-                f.write("{}".format(latitude))
-
-                f.write("--longitude org--\n\n")
-                f.write("{}".format(long_temp))
-                f.write("----\n\n")
-                f.write("{}".format(longitude))
+                # f.write("--latitude org--\n\n")
+                # f.write("{}".format(lat_temp))
+                # f.write("----\n\n")
+                # f.write("{}".format(latitude))
+                #
+                # f.write("--longitude org--\n\n")
+                # f.write("{}".format(long_temp))
+                # f.write("----\n\n")
+                # f.write("{}".format(longitude))
 
                 device_location = CatM1LocationMdodel(device_name = device_name,
                                                       latitude = latitude,
