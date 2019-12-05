@@ -191,8 +191,8 @@ def test_notification(request):
             data_type = received['data_type']
             timestamp = received['timestamp']
             fromtimetamp = datetime.datetime.fromtimestamp(timestamp)
-            mytimezone = pytz.timezone("Asia/Seoul")
-            published = mytimezone.localize(fromtimetamp)
+            # mytimezone = pytz.timezone("Asia/Seoul")
+            published = timezone.localtime(fromtimetamp)
 
             shipname = 'Ship1'
 
