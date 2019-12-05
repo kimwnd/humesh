@@ -9,8 +9,10 @@ from .models import ( MeshDataModel, WifiDataModel, MultipleMeshDataMdodel, Clou
 from .forms import ControlLEDForm
 
 from django.db import connection
+from django.utils import timezone
 
 import datetime
+import pytz
 import logging
 import pandas as pd
 import requests
@@ -188,7 +190,10 @@ def test_notification(request):
             device_name = received['device_name']
             data_type = received['data_type']
             timestamp = received['timestamp']
-            published = datetime.datetime.fromtimestamp(timestamp)
+            fromtimetamp = datetime.datetime.fromtimestamp(timestamp)
+            mytimezone = pytz.timezone("Asia/Seoul")
+            published = mytimezone.localize(fromtimetamp)
+
             shipname = 'Ship1'
 
             if data_type == 'data' :
@@ -1222,6 +1227,208 @@ class CloudDashboardView(TemplateView):
         context['sensor3_humid_val']   = int(sensor3_humid_list[-1])
         context['sensor3_power_per'] = int((sensor3_volt_list[-1]-3.3) / 0.9 * 100.0)
         context['sensor3_datenow'] = sensor3_labels[-1][0:16]
+
+        return context
+
+class LTEDashboardView(TemplateView):
+    # template_name = 'cloud_dash_board.html'
+    template_name = 'lte-dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' order by created asc")
+            sensor1_data = cursor.fetchall()
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' order by created asc")
+            sensor2_data = cursor.fetchall()
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, latitude, longitude, created from device_location_data where device_name = 'sensor001' order by created desc limit 5")
+            sensor1_locs = cursor.fetchone()
+
+        with connection.cursor() as cursor:
+            cursor.execute("select id, latitude, longitude, created from device_location_data where device_name = 'sensor001' order by created desc limit 5")
+            sensor2_locs = cursor.fetchone()
+
+        df_sensor1              = pd.DataFrame(sensor1_data)
+        df_sensor1.columns      = ['id', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt', 'created']
+        dtime1                  = pd.to_datetime(df_sensor1['created'])
+        df_sensor1['datetime']  = dtime1.dt.tz_convert('Asia/Seoul')
+        df_sensor1              = df_sensor1.set_index(pd.DatetimeIndex(df_sensor1['datetime']))
+
+        df_sensor2              = pd.DataFrame(sensor2_data)
+        df_sensor2.columns      = ['id', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt', 'created']
+        dtime2                  = pd.to_datetime(df_sensor2['created'])
+        df_sensor2['datetime']  = dtime2.dt.tz_convert('Asia/Seoul')
+        df_sensor2              = df_sensor2.set_index(pd.DatetimeIndex(df_sensor2['datetime']))
+
+        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-04 01:00']
+        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-04 01:00']
+
+        # For Sensor1
+        df_sensor1_co       = df_sensor1['data_co'].resample("20s").median().fillna(0)
+        df_sensor1_o2       = df_sensor1['data_o2'].resample("20s").median().fillna(0)
+        df_sensor1_ch4      = df_sensor1['data_ch4'].resample("20s").median().fillna(0)
+        df_sensor1_temp     = df_sensor1['data_temp'].resample("20s").median().fillna(0)
+        df_sensor1_humid    = df_sensor1['data_humid'].resample("20s").median().fillna(0)
+        df_sensor1_volt     = df_sensor1['volt'].resample("20s").median().fillna(0)
+
+        df_sensor1_co   = df_sensor1_co.reset_index()
+        df_sensor1_o2   = df_sensor1_o2.reset_index()
+        df_sensor1_ch4  = df_sensor1_ch4.reset_index()
+        df_sensor1_volt = df_sensor1_volt.reset_index()
+        df_sensor1_temp = df_sensor1_temp.reset_index()
+        df_sensor1_humid = df_sensor1_humid.reset_index()
+
+        # For Sensor2
+        df_sensor2_co       = df_sensor2['data_co'].resample("20s").median().fillna(0)
+        df_sensor2_o2       = df_sensor2['data_o2'].resample("20s").median().fillna(0)
+        df_sensor2_ch4      = df_sensor2['data_ch4'].resample("20s").median().fillna(0)
+        df_sensor2_temp     = df_sensor2['data_temp'].resample("20s").median().fillna(0)
+        df_sensor2_humid    = df_sensor2['data_humid'].resample("20s").median().fillna(0)
+        df_sensor2_volt     = df_sensor2['volt'].resample("20s").median().fillna(0)
+
+        df_sensor2_co   = df_sensor2_co.reset_index()
+        df_sensor2_o2   = df_sensor2_o2.reset_index()
+        df_sensor2_ch4  = df_sensor2_ch4.reset_index()
+        df_sensor2_volt = df_sensor2_volt.reset_index()
+        df_sensor2_temp = df_sensor2_temp.reset_index()
+        df_sensor2_humid = df_sensor2_humid.reset_index()
+
+        sensor1_dts = df_sensor1_co['datetime'].tolist()
+        sensor2_dts = df_sensor2_co['datetime'].tolist()
+
+        sensor1_labels = []
+        sensor2_labels = []
+
+        for label in sensor1_dts :
+            sensor1_labels.append(str(label)[:19])
+
+        for label in sensor2_dts :
+            sensor2_labels.append(str(label)[:19])
+
+        # 산소 데이터 리스트
+
+        sensor1_o2_list = []
+        sensor2_o2_list = []
+
+        sensor1_len_o2 = len(df_sensor1_o2)
+        sensor2_len_o2 = len(df_sensor2_o2)
+
+        for i in range(sensor1_len_o2) :
+            sensor1_o2_list.append(df_sensor1_o2['data_o2'][i])
+
+        for i in range(sensor2_len_o2) :
+            sensor2_o2_list.append(df_sensor2_o2['data_o2'][i])
+
+        # CO 데이터 리스트
+
+        sensor1_co_list = []
+        sensor2_co_list = []
+
+        sensor1_len_co = len(df_sensor1_co)
+        sensor2_len_co = len(df_sensor2_co)
+
+        for i in range(sensor1_len_co) :
+            sensor1_co_list.append(df_sensor1_co['data_co'][i])
+
+        for i in range(sensor2_len_co) :
+            sensor2_co_list.append(df_sensor2_co['data_co'][i])
+
+        # CH4 데이터 리스트
+
+        sensor1_ch4_list = []
+        sensor2_ch4_list = []
+
+        sensor1_len_ch4   = len(df_sensor1_ch4)
+        sensor2_len_ch4   = len(df_sensor2_ch4)
+
+        for i in range(sensor1_len_ch4):
+            sensor1_ch4_list.append(df_sensor1_ch4['data_ch4'][i])
+
+        for i in range(sensor2_len_ch4):
+            sensor2_ch4_list.append(df_sensor2_ch4['data_ch4'][i])
+
+        # Volt 데이터 리스트
+
+        sensor1_volt_list = []
+        sensor2_volt_list = []
+
+        sensor1_len_volt = len(df_sensor1_volt)
+        sensor2_len_volt = len(df_sensor2_volt)
+
+        for i in range(sensor1_len_volt):
+            sensor1_volt_list.append(df_sensor1_volt['volt'][i])
+
+        for i in range(sensor2_len_volt):
+            sensor2_volt_list.append(df_sensor2_volt['volt'][i])
+
+        # 온도 데이터 리스트
+
+        sensor1_temp_list = []
+        sensor2_temp_list = []
+
+        sensor1_len_temp = len(df_sensor1_temp)
+        sensor2_len_temp = len(df_sensor2_temp)
+
+        for i in range(sensor1_len_temp):
+            sensor1_temp_list.append(df_sensor1_temp['data_temp'][i])
+
+        for i in range(sensor2_len_temp):
+            sensor2_temp_list.append(df_sensor2_temp['data_temp'][i])
+
+        # 습도 데이터 리스트
+
+        sensor1_humid_list = []
+        sensor2_humid_list = []
+
+        sensor1_len_humid = len(df_sensor1_humid)
+        sensor2_len_humid = len(df_sensor2_humid)
+
+        for i in range(sensor1_len_humid):
+            sensor1_humid_list.append(df_sensor1_humid['data_humid'][i])
+
+        for i in range(sensor2_len_humid):
+            sensor2_humid_list.append(df_sensor2_humid['data_humid'][i])
+
+        context['sensor1_data_co']  = sensor1_co_list
+        context['sensor1_data_o2']  = sensor1_o2_list
+        context['sensor1_data_ch4'] = sensor1_ch4_list
+        context['sensor1_volt']     = sensor1_volt_list
+        context['sensor1_temp']     = sensor1_temp_list
+        context['sensor1_labels']   = sensor1_labels
+        context['sensor1_co_val']   = int(sensor1_co_list[-1])
+        context['sensor1_o2_val']   = round(sensor1_o2_list[-1],1)
+        context['sensor1_ch4_val']   = int(sensor1_ch4_list[-1])
+        context['sensor1_temp_val']   = round(sensor1_temp_list[-1],1)
+        context['sensor1_humid_val']   = int(sensor1_humid_list[-1])
+        context['sensor1_power_per']   = int((sensor1_volt_list[-1]-3.3)  / 0.9 * 100.0)
+        context['sensor1_datenow']   = sensor1_labels[-1][0:16]
+
+        context['sensor2_data_co']  = sensor2_co_list
+        context['sensor2_data_o2']  = sensor2_o2_list
+        context['sensor2_data_ch4'] = sensor2_ch4_list
+        context['sensor2_volt']     = sensor2_volt_list
+        context['sensor2_temp']     = sensor2_temp_list
+        context['sensor2_labels']   = sensor2_labels
+        context['sensor2_co_val']   = int(sensor2_co_list[-1])
+        context['sensor2_o2_val']   = round(sensor2_o2_list[-1],1)
+        context['sensor2_ch4_val']   = int(sensor2_ch4_list[-1])
+        context['sensor2_temp_val']   = round(sensor2_temp_list[-1],1)
+        context['sensor2_humid_val']   = int(sensor2_humid_list[-1])
+        context['sensor2_power_per'] = int((sensor2_volt_list[-1]-3.3) / 0.9 * 100.0)
+        context['sensor2_datenow'] = sensor2_labels[-1][0:16]
+
+        latitude_1  = sensor1_locs[1]
+        longitude_1 = sensor1_locs[2]
+        datetime_1  = timezone.localtime(sensor1_locs[3])
+
+        latitude_2  = sensor2_locs[1]
+        longitude_2 = sensor2_locs[2]
+        datetime_2  = timezone.localtime(sensor2_locs[3])
 
         return context
 

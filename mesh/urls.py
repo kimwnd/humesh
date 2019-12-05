@@ -37,4 +37,5 @@ urlpatterns = [
     path('control/switch/', views.ControlSwitchView.as_view(), name='control_switch'),
     path('cloud/test/', views.CloudTestTemplateView.as_view(), name='cloud_test_template'),
     path('map/test/', views.MapTestview.as_view(), name='map_test_view'),
+    path('lte/dashboard/', views.LTEDashboardView.as_view(), name='lte_databoard'),
 ]
