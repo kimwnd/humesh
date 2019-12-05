@@ -190,9 +190,9 @@ def test_notification(request):
             device_name = received['device_name']
             data_type = received['data_type']
             timestamp = received['timestamp']
-            fromtimetamp = datetime.datetime.fromtimestamp(timestamp)
+            published = datetime.datetime.fromtimestamp(timestamp)
             # mytimezone = pytz.timezone("Asia/Seoul")
-            published = timezone.localtime(fromtimetamp)
+            # published = timezone.localtime(fromtimetamp)
 
             shipname = 'Ship1'
 
