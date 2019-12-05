@@ -1430,6 +1430,11 @@ class LTEDashboardView(TemplateView):
         longitude_2 = sensor2_locs[2]
         datetime_2  = timezone.localtime(sensor2_locs[3])
 
+        context['sensor1_latitude'] = latitude_1
+        context['sensor1_longitude'] = longitude_1
+        context['sensor2_latitude'] = latitude_2
+        context['sensor2_longitude'] = longitude_2
+
         return context
 
 

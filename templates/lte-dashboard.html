@@ -29,7 +29,7 @@
 
     </head>
 
-    <body class="center-menu">
+    <body class="boxed-layout">
 
         <!-- Pre-loader -->
         <div id="preloader">
@@ -185,20 +185,6 @@
                                         <td style="text-align: center; font-size: medium;">{{ sensor2_temp_val }}&#8451;/{{ sensor2_humid_val }}%</td>
                                         <td style="text-align: center; font-size: medium;">{{ sensor2_datenow }}</td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row" style="text-align: center; font-size: medium;">Sensor #3</th>
-                                        <td style="text-align: center; font-size: medium;"> </td>
-                                        <td style="text-align: center; font-size: medium;"> </td>
-                                        <td style="text-align: center; font-size: medium;"> </td>
-                                        <td style="text-align: center; font-size: medium;"> </td>
-                                        <td style="text-align: center; font-size: medium;"> </td>
-                                    </tr>
-{#                                    <tr>#}
-{#                                        <th scope="row">4</th>#}
-{#                                        <td colspan="5" style="text-align: right; font-size: medium;">Larry the Bird</td>#}
-{#                                        <td>@twitter</td>#}
-{#                                        <td>@twitter</td>#}
-{#                                    </tr>#}
                                     </tbody>
                                 </table>
                             </div> <!-- end .table-responsive-->
@@ -278,7 +264,7 @@
 
                                 <div id="cardCollpase2" class="collapse pt-3 show" dir="ltr">
 {#                                    <div id="apex-order-analytics" class="apex-charts"></div>#}
-                                    <div id="map" style="width:740px;height:450px;"></div>
+                                    <div id="map" style="width:100%!important;height:450px;"></div>
 
                                 </div> <!-- collapsed end -->
                             </div> <!-- end card-body -->
@@ -296,7 +282,7 @@
                 </div>
                 <!-- end page title -->
                 <div class="row">
-                    <div class="col-xl-4">
+                    <div class="col-xl-6">
                         <div class="card-box">
                             <h4 class="header-title">센서노드 #1</h4>
                             <p class="text-muted">{{ sensor1_datenow }}</p>
@@ -340,7 +326,7 @@
                         </div> <!-- end card-box -->
                     </div> <!-- end col -->
 
-                    <div class="col-xl-4">
+                    <div class="col-xl-6">
                         <div class="card-box">
                             <h4 class="header-title">센서노드 #2</h4>
                             <p class="text-muted">{{ sensor2_datenow }}</p>
@@ -385,49 +371,49 @@
                         </div> <!-- end card-box -->
                     </div> <!-- end col -->
 
-                    <div class="col-xl-4">
-                        <div class="card-box">
-                            <h4 class="header-title">센서노드 #3</h4>
-                            <p class="text-muted"> </p>
+{#                    <div class="col-xl-4">#}
+{#                        <div class="card-box">#}
+{#                            <h4 class="header-title">센서노드 #3</h4>#}
+{#                            <p class="text-muted"> </p>#}
 {#                            <h2 class="mb-4"><i class="mdi mdi-currency-usd text-primary"></i>25,632.78</h2>#}
-
-                            <div class="row mb-4">
-                                <div class="col-4">
-                                    <p class="text-muted mb-1">CO(ppm)</p>
-                                    <h3 class="mt-0 font-20">  </h3>
-                                </div>
-
-                                <div class="col-4">
-                                    <p class="text-muted mb-1">O2(%)</p>
-                                    <h3 class="mt-0 font-20"> </h3>
-                                </div>
-                                <div class="col-4">
-                                    <p class="text-muted mb-1">LEL(%)</p>
-                                    <h3 class="mt-0 font-20">  </h3>
-                                </div>
-                            </div>
-
-                             <div class="mt-1 col-10">
-                                <div class="float-left" dir="ltr">
-                                    <input data-plugin="knob" data-width="64" data-height="64" data-fgColor="#f05050 "
-                                        data-bgColor="#F9B9B9" value=" "
-                                        data-skin="tron" data-angleOffset="180" data-readOnly=true
-                                        data-thickness=".15"/>
-                                    <p class="text-muted mb-0">베터리잔량</p>
-                                </div>
-                                <div class="text-right">
-                                    <h2 class="mt-3 pt-1 mb-1">   </h2>
-                                    <p class="text-muted mb-0">온도/습도</p>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="mt-5">
-                                <span data-plugin="peity-bar" data-colors="#784ff7,#ebeff2" data-width="100%" data-height="80">5,3,9,6,5,9,7,3,5,2,9,7,2,1,3,5,2,9,7,2,5,3,9,6,5,9,7</span>
-                            </div>
-
-                        </div> <!-- end card-box -->
-                    </div> <!-- end col -->
-                </div>
+{##}
+{#                            <div class="row mb-4">#}
+{#                                <div class="col-4">#}
+{#                                    <p class="text-muted mb-1">CO(ppm)</p>#}
+{#                                    <h3 class="mt-0 font-20">  </h3>#}
+{#                                </div>#}
+{##}
+{#                                <div class="col-4">#}
+{#                                    <p class="text-muted mb-1">O2(%)</p>#}
+{#                                    <h3 class="mt-0 font-20"> </h3>#}
+{#                                </div>#}
+{#                                <div class="col-4">#}
+{#                                    <p class="text-muted mb-1">LEL(%)</p>#}
+{#                                    <h3 class="mt-0 font-20">  </h3>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                             <div class="mt-1 col-10">#}
+{#                                <div class="float-left" dir="ltr">#}
+{#                                    <input data-plugin="knob" data-width="64" data-height="64" data-fgColor="#f05050 "#}
+{#                                        data-bgColor="#F9B9B9" value=" "#}
+{#                                        data-skin="tron" data-angleOffset="180" data-readOnly=true#}
+{#                                        data-thickness=".15"/>#}
+{#                                    <p class="text-muted mb-0">베터리잔량</p>#}
+{#                                </div>#}
+{#                                <div class="text-right">#}
+{#                                    <h2 class="mt-3 pt-1 mb-1">   </h2>#}
+{#                                    <p class="text-muted mb-0">온도/습도</p>#}
+{#                                </div>#}
+{#                                <div class="clearfix"></div>#}
+{#                            </div>#}
+{#                            <div class="mt-5">#}
+{#                                <span data-plugin="peity-bar" data-colors="#784ff7,#ebeff2" data-width="100%" data-height="80">5,3,9,6,5,9,7,3,5,2,9,7,2,1,3,5,2,9,7,2,5,3,9,6,5,9,7</span>#}
+{#                            </div>#}
+{##}
+{#                        </div> <!-- end card-box -->#}
+{#                    </div> <!-- end col -->#}
+{#                </div>#}
                 <!-- end row -->
                 <!-- start row -->
 {#                <div class="row">#}
@@ -874,54 +860,6 @@
     </body>
 </html>
 
-
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6009e5ca6db2046685059bdbbb2e3f1e&libraries=services"></script>
-<script>
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-    mapOption = {
-        center: new kakao.maps.LatLng(35.884338, 128.595566), // 지도의 중심좌표
-        level: 4 // 지도의 확대 레벨
-    };
-
-var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
-// 마커를 표시할 위치와 title 객체 배열입니다
-var positions = [
-    {
-        title: '센서노드1',
-        latlng: new kakao.maps.LatLng(35.884338, 128.595466)
-    },
-    {
-        title: '센서노드2',
-        latlng: new kakao.maps.LatLng(35.885338, 128.592566)
-    },
-    {
-        title: '센서노드3',
-        latlng: new kakao.maps.LatLng(35.883338, 128.591566)
-    }
-];
-
-// 마커 이미지의 이미지 주소입니다
-var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-for (var i = 0; i < positions.length; i ++) {
-
-    // 마커 이미지의 이미지 크기 입니다
-    var imageSize = new kakao.maps.Size(24, 35);
-
-    // 마커 이미지를 생성합니다
-    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-
-    // 마커를 생성합니다
-    var marker = new kakao.maps.Marker({
-        map: map, // 마커를 표시할 지도
-        position: positions[i].latlng, // 마커를 표시할 위치
-        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-        image : markerImage // 마커 이미지
-    });
-}
-
-</script>
 
  <script type="text/javascript">
 
@@ -1460,5 +1398,58 @@ for (var i = 0; i < positions.length; i ++) {
     var interval = setInterval(function() {
         Plotly.extendTraces('graph_temp', temp_update(), [0, 1])
     }, 100000)
+
+</script>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6009e5ca6db2046685059bdbbb2e3f1e&libraries=services"></script>
+<script>
+
+var latitude1 = {{ sensor1_latitude }};
+var longitude1 = {{ sensor1_longitude }};
+var latitude2 = {{ sensor2_latitude }};
+var longitude2 = {{ sensor2_longitude }};
+
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+    mapOption = {
+        center: new kakao.maps.LatLng(latitude1, longitude1), // 지도의 중심좌표
+        level: 4 // 지도의 확대 레벨
+    };
+
+var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+// 마커를 표시할 위치와 title 객체 배열입니다
+// LatLng(35.884338, 128.595466)
+
+var positions = [
+    {
+        title: '센서노드1',
+        latlng: new kakao.maps.LatLng(latitude1, longitude1)
+    },
+    {
+        title: '센서노드2',
+        latlng: new kakao.maps.LatLng(latitude2, longitude2)
+    }
+
+];
+
+// 마커 이미지의 이미지 주소입니다
+var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+for (var i = 0; i < positions.length; i ++) {
+
+    // 마커 이미지의 이미지 크기 입니다
+    var imageSize = new kakao.maps.Size(24, 35);
+
+    // 마커 이미지를 생성합니다
+    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+    // 마커를 생성합니다
+    var marker = new kakao.maps.Marker({
+        map: map, // 마커를 표시할 지도
+        position: positions[i].latlng, // 마커를 표시할 위치
+        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+        image : markerImage // 마커 이미지
+    });
+}
 
 </script>
