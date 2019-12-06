@@ -1238,11 +1238,11 @@ class LTEDashboardView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' order by created asc")
+            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' order by created asc limit 5000;")
             sensor1_data = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' order by created asc")
+            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' order by created asc limit 5000;")
             sensor2_data = cursor.fetchall()
 
         with connection.cursor() as cursor:
