@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse, JsonResponse
 from .models import ( MeshDataModel, WifiDataModel, MultipleMeshDataMdodel, CloudMeshDataMdodel, CatM1SensorDataMdodel,
-                      CatM1LocationMdodel)
+                      CatM1LocationMdodel )
 from .forms import ControlLEDForm
 
 from django.db import connection
@@ -927,9 +927,9 @@ class CloudDashboardView(TemplateView):
         # df_sensor4['datetime'] = pd.to_datetime(df_sensor4['created'])
         # df_sensor4=df_sensor4.set_index(pd.DatetimeIndex(df_sensor4['datetime']))
 
-        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-10-09 13:00']
-        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-10-09 13:00']
-        df_sensor3 = df_sensor3[df_sensor3['datetime']>'2019-10-09 13:00']
+        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-11-01 10:00']
+        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-11-01 10:00']
+        df_sensor3 = df_sensor3[df_sensor3['datetime']>'2019-11-01 10:00']
         # df_sensor4 = df_sensor4[df_sensor4['datetime']>'2019-04-25 15:00']
 
         # df_sensor1 = df_sensor1[df_sensor1['datetime']<'2019-10-15 15:50']
@@ -1238,11 +1238,11 @@ class LTEDashboardView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' order by created asc;")
+            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' and created > '2019-12-10' order by created asc;")
             sensor1_data = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' order by created asc;")
+            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor002' and created > '2019-12-10' order by created asc;")
             sensor2_data = cursor.fetchall()
 
         with connection.cursor() as cursor:
@@ -1250,8 +1250,15 @@ class LTEDashboardView(TemplateView):
             sensor1_locs = cursor.fetchone()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, latitude, longitude, created from device_location_data where device_name = 'sensor001' order by created desc limit 5")
+            cursor.execute("select id, latitude, longitude, created from device_location_data where device_name = 'sensor002' order by created desc limit 5")
             sensor2_locs = cursor.fetchone()
+
+        locs1 = CatM1LocationMdodel.objects.filter(device_name = 'sensor001').order_by('-created').values('id', 'latitude', 'longitude', 'created')[:5]
+        sensor1_locs = [ e for e in locs1 ]
+
+        locs2 = CatM1LocationMdodel.objects.filter(
+            device_name='sensor002').order_by('-created').values('id', 'latitude', 'longitude', 'created')[:5]
+        sensor2_locs = [e for e in locs2]
 
         df_sensor1              = pd.DataFrame(sensor1_data)
         df_sensor1.columns      = ['id', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt', 'created']
@@ -1265,8 +1272,8 @@ class LTEDashboardView(TemplateView):
         df_sensor2['datetime']  = dtime2.dt.tz_convert('Asia/Seoul')
         df_sensor2              = df_sensor2.set_index(pd.DatetimeIndex(df_sensor2['datetime']))
 
-        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-04 01:00']
-        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-04 01:00']
+        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-10 01:00']
+        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-10 01:00']
 
         # For Sensor1
         df_sensor1_co       = df_sensor1['data_co'].resample("20s").median().fillna(0)
@@ -1422,13 +1429,15 @@ class LTEDashboardView(TemplateView):
         context['sensor2_power_per'] = int((sensor2_volt_list[-1]-3.3) / 0.9 * 100.0)
         context['sensor2_datenow'] = sensor2_labels[-1][0:16]
 
-        latitude_1  = sensor1_locs[1]
-        longitude_1 = sensor1_locs[2]
-        datetime_1  = timezone.localtime(sensor1_locs[3])
+        print(sensor1_locs[-1].items())
 
-        latitude_2  = sensor2_locs[1]
-        longitude_2 = sensor2_locs[2]
-        datetime_2  = timezone.localtime(sensor2_locs[3])
+        latitude_1  = sensor1_locs[-1]['latitude']
+        longitude_1 = sensor1_locs[-1]['longitude']
+        datetime_1  = timezone.localtime(sensor1_locs[-1]['created'])
+
+        latitude_2  = sensor2_locs[-1]['latitude']
+        longitude_2 = sensor2_locs[-1]['longitude']
+        datetime_2  = timezone.localtime(sensor2_locs[-1]['created'])
 
         context['sensor1_latitude'] = latitude_1
         context['sensor1_longitude'] = longitude_1
@@ -2599,3 +2608,17 @@ class CloudTestTemplateView(TemplateView):
 
 class MapTestview(TemplateView):
     template_name = 'map_view.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        data = CatM1SensorDataMdodel.objects.order_by('-created').values('id', 'device_name', 'created')[:5]
+        locs = CatM1LocationMdodel.objects.order_by('-created').values('id', 'device_name', 'latitude', 'longitude', 'created')[:5]
+
+        sensor_data = [ (d['id'], d['device_name'], str(d['created']+datetime.timedelta(hours=9))[:19] ) for d in data ]
+        loc_data = [ (l['id'], l['device_name'], l['latitude'], l['longitude'], str(l['created']+datetime.timedelta(hours=9))[:19] ) for l in locs ]
+
+        context['data'] = sensor_data
+        context['locations'] = loc_data
+
+        return context
