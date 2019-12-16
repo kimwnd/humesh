@@ -1259,6 +1259,7 @@ class LTEDashboardView(TemplateView):
         locs2 = CatM1LocationMdodel.objects.filter(
             device_name='sensor002').order_by('-created').values('id', 'latitude', 'longitude', 'created')[:5]
         sensor2_locs = [e for e in locs2]
+        sensor2_locs = sensor1_locs
 
         df_sensor1              = pd.DataFrame(sensor1_data)
         df_sensor1.columns      = ['id', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt', 'created']
@@ -1272,8 +1273,8 @@ class LTEDashboardView(TemplateView):
         df_sensor2['datetime']  = dtime2.dt.tz_convert('Asia/Seoul')
         df_sensor2              = df_sensor2.set_index(pd.DatetimeIndex(df_sensor2['datetime']))
 
-        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-10 01:00']
-        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-10 01:00']
+        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-15 01:00']
+        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-15 01:00']
 
         # For Sensor1
         df_sensor1_co       = df_sensor1['data_co'].resample("20s").median().fillna(0)
