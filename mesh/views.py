@@ -2613,8 +2613,8 @@ class MapTestview(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        data = CatM1SensorDataMdodel.objects.order_by('-created').values('id', 'device_name', 'created')[:5]
-        locs = CatM1LocationMdodel.objects.order_by('-created').values('id', 'device_name', 'latitude', 'longitude', 'created')[:5]
+        data = CatM1SensorDataMdodel.objects.order_by('-created').values('id', 'device_name', 'created')[:10]
+        locs = CatM1LocationMdodel.objects.order_by('-created').values('id', 'device_name', 'latitude', 'longitude', 'created')[:10]
 
         sensor_data = [ (d['id'], d['device_name'], str(d['created']+datetime.timedelta(hours=9))[:19] ) for d in data ]
         loc_data = [ (l['id'], l['device_name'], l['latitude'], l['longitude'], str(l['created']+datetime.timedelta(hours=9))[:19] ) for l in locs ]
