@@ -927,9 +927,9 @@ class CloudDashboardView(TemplateView):
         # df_sensor4['datetime'] = pd.to_datetime(df_sensor4['created'])
         # df_sensor4=df_sensor4.set_index(pd.DatetimeIndex(df_sensor4['datetime']))
 
-        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-11-01 10:00']
-        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-11-01 10:00']
-        df_sensor3 = df_sensor3[df_sensor3['datetime']>'2019-11-01 10:00']
+        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-16 10:00']
+        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-16 10:00']
+        df_sensor3 = df_sensor3[df_sensor3['datetime']>'2019-12-16 10:00']
         # df_sensor4 = df_sensor4[df_sensor4['datetime']>'2019-04-25 15:00']
 
         # df_sensor1 = df_sensor1[df_sensor1['datetime']<'2019-10-15 15:50']
