@@ -937,12 +937,12 @@ class CloudDashboardView(TemplateView):
         # df_sensor3 = df_sensor3[df_sensor3['datetime']<'2019-10-15 15:50']
 
         # For Sensor1
-        df_sensor1_co       = df_sensor1['data_co'].resample("600s").median().fillna(0)
-        df_sensor1_o2       = df_sensor1['data_o2'].resample("600s").median().fillna(0)
-        df_sensor1_ch4      = df_sensor1['data_ch4'].resample("600s").median().fillna(0)
-        df_sensor1_temp     = df_sensor1['data_temp'].resample("600s").median().fillna(0)
-        df_sensor1_humid    = df_sensor1['data_humid'].resample("600s").median().fillna(0)
-        df_sensor1_volt     = df_sensor1['volt'].resample("600s").median().fillna(0)
+        df_sensor1_co       = df_sensor1['data_co'].resample("300s").median().fillna(0)
+        df_sensor1_o2       = df_sensor1['data_o2'].resample("300s").median().fillna(0)
+        df_sensor1_ch4      = df_sensor1['data_ch4'].resample("300s").median().fillna(0)
+        df_sensor1_temp     = df_sensor1['data_temp'].resample("300s").median().fillna(0)
+        df_sensor1_humid    = df_sensor1['data_humid'].resample("300s").median().fillna(0)
+        df_sensor1_volt     = df_sensor1['volt'].resample("300s").median().fillna(0)
 
         df_sensor1_co   = df_sensor1_co.reset_index()
         df_sensor1_o2   = df_sensor1_o2.reset_index()
@@ -952,12 +952,12 @@ class CloudDashboardView(TemplateView):
         df_sensor1_humid = df_sensor1_humid.reset_index()
 
         # For Sensor2
-        df_sensor2_co       = df_sensor2['data_co'].resample("600s").median().fillna(0)
-        df_sensor2_o2       = df_sensor2['data_o2'].resample("600s").median().fillna(0)
-        df_sensor2_ch4      = df_sensor2['data_ch4'].resample("600s").median().fillna(0)
-        df_sensor2_temp     = df_sensor2['data_temp'].resample("600s").median().fillna(0)
-        df_sensor2_humid    = df_sensor2['data_humid'].resample("600s").median().fillna(0)
-        df_sensor2_volt     = df_sensor2['volt'].resample("600s").median().fillna(0)
+        df_sensor2_co       = df_sensor2['data_co'].resample("300s").median().fillna(0)
+        df_sensor2_o2       = df_sensor2['data_o2'].resample("300s").median().fillna(0)
+        df_sensor2_ch4      = df_sensor2['data_ch4'].resample("300s").median().fillna(0)
+        df_sensor2_temp     = df_sensor2['data_temp'].resample("300s").median().fillna(0)
+        df_sensor2_humid    = df_sensor2['data_humid'].resample("300s").median().fillna(0)
+        df_sensor2_volt     = df_sensor2['volt'].resample("300s").median().fillna(0)
 
         df_sensor2_co   = df_sensor2_co.reset_index()
         df_sensor2_o2   = df_sensor2_o2.reset_index()
@@ -967,12 +967,12 @@ class CloudDashboardView(TemplateView):
         df_sensor2_humid = df_sensor2_humid.reset_index()
 
         # For Sensor3
-        df_sensor3_co       = df_sensor3['data_co'].resample("600s").median().fillna(0)
-        df_sensor3_o2       = df_sensor3['data_o2'].resample("600s").median().fillna(0)
-        df_sensor3_ch4      = df_sensor3['data_ch4'].resample("600s").median().fillna(0)
-        df_sensor3_temp     = df_sensor3['data_temp'].resample("600s").median().fillna(0)
-        df_sensor3_humid    = df_sensor3['data_humid'].resample("600s").median().fillna(0)
-        df_sensor3_volt     = df_sensor3['volt'].resample("600s").median().fillna(0)
+        df_sensor3_co       = df_sensor3['data_co'].resample("300s").median().fillna(0)
+        df_sensor3_o2       = df_sensor3['data_o2'].resample("300s").median().fillna(0)
+        df_sensor3_ch4      = df_sensor3['data_ch4'].resample("300s").median().fillna(0)
+        df_sensor3_temp     = df_sensor3['data_temp'].resample("300s").median().fillna(0)
+        df_sensor3_humid    = df_sensor3['data_humid'].resample("300s").median().fillna(0)
+        df_sensor3_volt     = df_sensor3['volt'].resample("300s").median().fillna(0)
 
         df_sensor3_co       = df_sensor3_co.reset_index()
         df_sensor3_o2       = df_sensor3_o2.reset_index()
