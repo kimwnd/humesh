@@ -891,16 +891,16 @@ class CloudDashboardView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' order by created asc")
+            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' and created > '2019-12-16' order by created asc")
             sensor1_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon2' order by created asc")
+            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon2' and created > '2019-12-16' order by created asc")
             sensor2_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
             cursor.execute(
-                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' order by created asc")
+                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' and created > '2019-12-16' order by created asc")
             sensor3_meshes = cursor.fetchall()
 
         # with connection.cursor() as cursor:
