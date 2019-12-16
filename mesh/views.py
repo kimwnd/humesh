@@ -179,10 +179,10 @@ def test_notification(request):
     try:
         data = request.POST
         logger.debug("data: {}".format(data))
-        # f = open('demo1.txt', 'a')
-        # f.write('POST data is new added\n\n')
-        # f.write("{}".format(request.body))
-        # f.write("----\n\n")
+        f = open('demo1.txt', 'a')
+        f.write('POST data is new added\n\n')
+        f.write("{}".format(request.body))
+        f.write("----\n\n")
         received = (request.body).decode('ascii')
         received = ast.literal_eval(received)
         if received.get('dock_name', None) and received.get('data_type', None) :
