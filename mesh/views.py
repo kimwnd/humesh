@@ -219,7 +219,7 @@ def test_notification(request):
                 catm1_data.save()
 
             if data_type == 'location' :
-                locations = received['gps']
+                locations = received['location']
                 lat_temp = float(locations['latitude'])
                 lat_do = int(lat_temp/100)
                 latitude = lat_do * 1.0 + (lat_temp - lat_do * 100)/60.0
