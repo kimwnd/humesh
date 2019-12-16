@@ -1238,11 +1238,11 @@ class LTEDashboardView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' and created > '2019-12-10' order by created asc;")
+            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' and created > '2019-12-16' order by created asc;")
             sensor1_data = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor002' and created > '2019-12-10' order by created asc;")
+            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor002' and created > '2019-12-16' order by created asc;")
             sensor2_data = cursor.fetchall()
 
         with connection.cursor() as cursor:
@@ -1273,8 +1273,8 @@ class LTEDashboardView(TemplateView):
         df_sensor2['datetime']  = dtime2.dt.tz_convert('Asia/Seoul')
         df_sensor2              = df_sensor2.set_index(pd.DatetimeIndex(df_sensor2['datetime']))
 
-        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-15 01:00']
-        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-15 01:00']
+        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-16 01:00']
+        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-16 01:00']
 
         # For Sensor1
         df_sensor1_co       = df_sensor1['data_co'].resample("20s").median().fillna(0)
