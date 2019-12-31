@@ -891,16 +891,16 @@ class CloudDashboardView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' and created > '2019-12-16' order by created asc")
+            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon1' and created > '2019-12-24' order by created asc")
             sensor1_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon2' and created > '2019-12-16' order by created asc")
+            cursor.execute("select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon2' and created > '2019-12-24' order by created asc")
             sensor2_meshes = cursor.fetchall()
 
         with connection.cursor() as cursor:
             cursor.execute(
-                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' and created > '2019-12-16' order by created asc")
+                "select id, event, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from cloud_mesh_data where device_name = 'xenon3' and created > '2019-12-24' order by created asc")
             sensor3_meshes = cursor.fetchall()
 
         # with connection.cursor() as cursor:
@@ -927,9 +927,9 @@ class CloudDashboardView(TemplateView):
         # df_sensor4['datetime'] = pd.to_datetime(df_sensor4['created'])
         # df_sensor4=df_sensor4.set_index(pd.DatetimeIndex(df_sensor4['datetime']))
 
-        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-16 10:00']
-        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-16 10:00']
-        df_sensor3 = df_sensor3[df_sensor3['datetime']>'2019-12-16 10:00']
+        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-24 10:00']
+        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-24 10:00']
+        df_sensor3 = df_sensor3[df_sensor3['datetime']>'2019-12-24 10:00']
         # df_sensor4 = df_sensor4[df_sensor4['datetime']>'2019-04-25 15:00']
 
         # df_sensor1 = df_sensor1[df_sensor1['datetime']<'2019-10-15 15:50']
