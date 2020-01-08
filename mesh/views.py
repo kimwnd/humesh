@@ -1242,11 +1242,11 @@ class LTEDashboardView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' and created > '2019-12-16' order by created asc;")
+            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor001' and created > '2019-12-31' order by created asc;")
             sensor1_data = cursor.fetchall()
 
         with connection.cursor() as cursor:
-            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor002' and created > '2019-12-16' order by created asc;")
+            cursor.execute("select id, data_co, data_o2, data_ch4, data_temp, data_humid, volt, created from catm1_sensor_data where device_name = 'sensor002' and created > '2019-12-31' order by created asc;")
             sensor2_data = cursor.fetchall()
 
         with connection.cursor() as cursor:
@@ -1277,16 +1277,16 @@ class LTEDashboardView(TemplateView):
         df_sensor2['datetime']  = dtime2.dt.tz_convert('Asia/Seoul')
         df_sensor2              = df_sensor2.set_index(pd.DatetimeIndex(df_sensor2['datetime']))
 
-        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-16 01:00']
-        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-16 01:00']
+        df_sensor1 = df_sensor1[df_sensor1['datetime']>'2019-12-31 01:00']
+        df_sensor2 = df_sensor2[df_sensor2['datetime']>'2019-12-31 01:00']
 
         # For Sensor1
-        df_sensor1_co       = df_sensor1['data_co'].resample("20s").median().fillna(0)
-        df_sensor1_o2       = df_sensor1['data_o2'].resample("20s").median().fillna(0)
-        df_sensor1_ch4      = df_sensor1['data_ch4'].resample("20s").median().fillna(0)
-        df_sensor1_temp     = df_sensor1['data_temp'].resample("20s").median().fillna(0)
-        df_sensor1_humid    = df_sensor1['data_humid'].resample("20s").median().fillna(0)
-        df_sensor1_volt     = df_sensor1['volt'].resample("20s").median().fillna(0)
+        df_sensor1_co       = df_sensor1['data_co'].resample("30s").median().fillna(0)
+        df_sensor1_o2       = df_sensor1['data_o2'].resample("30s").median().fillna(0)
+        df_sensor1_ch4      = df_sensor1['data_ch4'].resample("30s").median().fillna(0)
+        df_sensor1_temp     = df_sensor1['data_temp'].resample("30s").median().fillna(0)
+        df_sensor1_humid    = df_sensor1['data_humid'].resample("30s").median().fillna(0)
+        df_sensor1_volt     = df_sensor1['volt'].resample("30s").median().fillna(0)
 
         df_sensor1_co   = df_sensor1_co.reset_index()
         df_sensor1_o2   = df_sensor1_o2.reset_index()
@@ -1296,12 +1296,12 @@ class LTEDashboardView(TemplateView):
         df_sensor1_humid = df_sensor1_humid.reset_index()
 
         # For Sensor2
-        df_sensor2_co       = df_sensor2['data_co'].resample("20s").median().fillna(0)
-        df_sensor2_o2       = df_sensor2['data_o2'].resample("20s").median().fillna(0)
-        df_sensor2_ch4      = df_sensor2['data_ch4'].resample("20s").median().fillna(0)
-        df_sensor2_temp     = df_sensor2['data_temp'].resample("20s").median().fillna(0)
-        df_sensor2_humid    = df_sensor2['data_humid'].resample("20s").median().fillna(0)
-        df_sensor2_volt     = df_sensor2['volt'].resample("20s").median().fillna(0)
+        df_sensor2_co       = df_sensor2['data_co'].resample("30s").median().fillna(0)
+        df_sensor2_o2       = df_sensor2['data_o2'].resample("30s").median().fillna(0)
+        df_sensor2_ch4      = df_sensor2['data_ch4'].resample("30s").median().fillna(0)
+        df_sensor2_temp     = df_sensor2['data_temp'].resample("30s").median().fillna(0)
+        df_sensor2_humid    = df_sensor2['data_humid'].resample("30s").median().fillna(0)
+        df_sensor2_volt     = df_sensor2['volt'].resample("30s").median().fillna(0)
 
         df_sensor2_co   = df_sensor2_co.reset_index()
         df_sensor2_o2   = df_sensor2_o2.reset_index()
