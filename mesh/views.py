@@ -1257,13 +1257,13 @@ class LTEDashboardView(TemplateView):
             cursor.execute("select id, latitude, longitude, created from device_location_data where device_name = 'sensor002' order by created desc limit 5")
             sensor2_locs = cursor.fetchone()
 
-        locs1 = CatM1LocationMdodel.objects.filter(device_name = 'sensor001').order_by('-created').values('id', 'latitude', 'longitude', 'created')[:5]
+        locs1 = CatM1LocationMdodel.objects.filter(device_name = 'sensor001').order_by('-created').values('id', 'latitude', 'longitude', 'created')[:1]
         sensor1_locs = [ e for e in locs1 ]
 
         locs2 = CatM1LocationMdodel.objects.filter(
-            device_name='sensor002').order_by('-created').values('id', 'latitude', 'longitude', 'created')[:5]
+            device_name='sensor002').order_by('-created').values('id', 'latitude', 'longitude', 'created')[:1]
         sensor2_locs = [e for e in locs2]
-        sensor2_locs = sensor1_locs
+        sensor2_locs = sensor2_locs
 
         df_sensor1              = pd.DataFrame(sensor1_data)
         df_sensor1.columns      = ['id', 'data_co', 'data_o2', 'data_ch4', 'data_temp', 'data_humid', 'volt', 'created']
