@@ -5,7 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse, JsonResponse
 from .models import ( MeshDataModel, WifiDataModel, MultipleMeshDataMdodel, CloudMeshDataMdodel, CatM1SensorDataMdodel,
-                      CatM1LocationMdodel )
+                      CatM1LocationMdodel, CatM1SensorDataMdodelNew, CatM1LocationMdodelNew )
+
 from .forms import ControlLEDForm
 
 from django.db import connection
@@ -209,7 +210,7 @@ def test_notification(request):
                 data_humid  = values['humid']
                 volt        = values['volt']/10.0
 
-                catm1_data = CatM1SensorDataMdodel( device_name = device_name,
+                catm1_data = CatM1SensorDataMdodelNew( device_name = device_name,
                                                     data_co = data_co,
                                                     data_o2 = data_o2,
                                                     data_ch4 = data_ch4,
@@ -242,7 +243,7 @@ def test_notification(request):
                 # f.write("----\n\n")
                 # f.write("{}".format(longitude))
 
-                device_location = CatM1LocationMdodel(device_name = device_name,
+                device_location = CatM1LocationMdodelNew(device_name = device_name,
                                                       latitude = latitude,
                                                       longitude = longitude,
                                                       created=published )
