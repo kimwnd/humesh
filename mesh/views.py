@@ -199,7 +199,7 @@ def test_notification(request):
 
             if data_type == 'data' :
                 values      = received['value']
-                c = values['co']
+                co_value = values['co']
                 if values['co'] <= 3.0 :
                     co_value = 0.0
 
