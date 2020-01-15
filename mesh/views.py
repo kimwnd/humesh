@@ -200,11 +200,11 @@ def test_notification(request):
             if data_type == 'data' :
                 values      = received['value']
                 co_value = values['co']
-                if values['co'] <= 3.0 :
+                if values['co'] <= 2.0 :
                     co_value = 0.0
 
                 data_co     = co_value
-                data_o2     = values['o2']/10.0
+                data_o2     = values['o2']/10.0 - 0.7
                 data_ch4    = values['ch4']
                 data_temp   = values['temp']
                 data_humid  = values['humid']
